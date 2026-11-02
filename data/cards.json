@@ -358,7 +358,7 @@
 "name": "Freizeit|kurse (ohne Sport)",
 "dg": true,
 "status": "deck",
-"desc": "Leander besucht Kurse jenseits des Sports – Musik, Kreatives, Lernen.",
+"desc": "Leander besucht Kurse jenseits des Sports – Musik, Kreatives, Hobbys.",
 "c": "Merkt, was Leander interessiert, und denkt an Anmeldefristen.",
 "p": "Sucht Kurse aus, meldet an und plant Zeiten und Material.",
 "e": "Bringt hin oder sorgt fürs Hinkommen, zahlt Beiträge und hält Kontakt zur Kursleitung.",
@@ -494,13 +494,13 @@
 "id": "O21",
 "cat": "out",
 "orig": "Tutoring & Coaching",
-"name": "Nachhilfe & Förderung",
+"name": "Fördern & Fordern",
 "status": "deck",
-"desc": "Leander bekommt Unterstützung, wo er sie braucht.",
-"c": "Merkt, wo es in der Schule hakt oder wo Leander mehr will.",
-"p": "Sucht Nachhilfe oder Förderangebote und koordiniert die Termine.",
-"e": "Bringt hin, zahlt und hält Kontakt zu Lehrkraft oder Coach.",
-"motif": "ein aufgeschlagenes Heft mit Bleistift, darüber eine leuchtende Glühbirne als Idee"
+"desc": "Leander bekommt, was er gerade braucht: Unterstützung, wo es hakt, und Herausforderung, wo er mehr will.",
+"c": "Merkt, wo Leander unter- oder überfordert ist, und hat Fristen für Kurse, Wettbewerbe, Begabtenwerkstätten oder Nachhilfe im Blick.",
+"p": "Sucht passende Angebote aus, meldet an, stimmt sich bei Bedarf mit der Schule ab und plant die Termine.",
+"e": "Bringt hin, zahlt, hält Kontakt zu Lehrkräften und Kursleitung und fragt Leander, was ihm gefällt und was nicht.",
+"motif": "eine kleine Holzleiter, die an einen Bücherstapel gelehnt ist, oben eine leuchtende Glühbirne als Idee, daneben ein Bleistift"
 },
 {
 "id": "O22",
