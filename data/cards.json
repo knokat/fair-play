@@ -377,7 +377,7 @@
 "c": "Denkt an Training, Turniere, Ausrüstung und Mitgliedsbeiträge.",
 "p": "Sucht Verein oder Kurs aus, meldet an und koordiniert Termine.",
 "e": "Bringt hin, holt ab, wäscht das Trikot und ist bei Wettkämpfen dabei.",
-"motif": "ein Rugbyball, ein Turnbeutel und eine Trinkflasche, in Honiggelb und Anthrazit",
+"motif": "ein heller Turnbeutel mit gelben Kordeln, ein Rugbyball und eine Trinkflasche",
 "img": "O9.png"
 },
 {
@@ -561,7 +561,8 @@
 "desc": "Leander kommt entspannt und rechtzeitig ins Bett.",
 "c": "Hat die Uhrzeit im Blick und weiß, was abends noch ansteht.",
 "p": "Kennt den Ablauf – Essen, Zähne, Lesen, Licht aus – und passt ihn an Tage mit Terminen an.",
-"e": "Begleitet den Abend nach dem vereinbarten Ablauf bis Licht aus."
+"e": "Begleitet den Abend nach dem vereinbarten Ablauf bis Licht aus.",
+"motif": "ein Kind mit blonden Haaren schläft im Bett, eine Katze kuschelt sich an, darüber Mond und Sterne"
 },
 {
 "id": "C4",
@@ -595,7 +596,7 @@
 "c": "Denkt an Kontrolltermine, Prophylaxe und Zahnspange.",
 "p": "Macht Termine und klärt die Kosten.",
 "e": "Geht mit hin und kümmert sich um die Nachsorge.",
-"motif": "ein lachender Junge beim Zähneputzen, daneben kleine Glanz-Sterne",
+"motif": "ein lachender Backenzahn mit Zahnarztspiegel und Zahnbürste",
 "img": "C6.png"
 },
 {
@@ -751,7 +752,7 @@
 "c": "Merkt, was sie braucht: Sport, Schlaf, Arzttermine, Pausen.",
 "p": "Blockt feste Zeiten dafür im Kalender.",
 "e": "Nimmt sich die Zeit – und hält sie.",
-"motif": "eine Badewanne mit Schaum und einem Handtuch, davor eine Kurzhantel",
+"motif": "eine große Kurzhantel, dahinter eine Badewanne mit einer entspannten Frau mit blonden Locken",
 "img": "C19.png"
 },
 {
@@ -820,7 +821,7 @@
 "c": "Merkt, wen er lange nicht gesehen hat.",
 "p": "Verabredet sich und plant Treffen.",
 "e": "Trifft sich, ruft an, ist da.",
-"motif": "ein Fußball, darüber ein rot-schwarzer Fanschal ohne Wappen, daneben zwei Becher, die anstoßen",
+"motif": "ein Fußball, ein ziegelroter Fanschal ohne Wappen und zwei Bierkrüge, die anstoßen",
 "img": "M2.png"
 },
 {
@@ -953,7 +954,8 @@
 "desc": "Christkind, Osterhase, Nikolaus und Zahnfee bringen Zauber in unser Jahr.",
 "c": "Denkt an Wunschzettel, Nikolaussackerl, Osternest und Zahnfee.",
 "p": "Plant Geschenke, Verstecke und die passende Geschichte.",
-"e": "Füllt, versteckt und hält den Zauber aufrecht."
+"e": "Füllt, versteckt und hält den Zauber aufrecht.",
+"motif": "ein Christkind mit Stern, ein Wichtel mit Zipfelmütze und ein Osterhase mit Osterei"
 },
 {
 "id": "M15",
