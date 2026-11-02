@@ -246,7 +246,8 @@
 "c": "Hat Konten, Budget, Sparziele und Steuern im Blick.",
 "p": "Plant Budget und Rücklagen und bereitet die Steuererklärung vor.",
 "e": "Überweist, spart, legt ab und reicht die Steuer ein.",
-"motif": "ein Sparschwein mit ein paar Münzen und ein kleines Notizbuch mit Häkchen"
+"motif": "ein Sparschwein mit ein paar Münzen und ein kleines Notizbuch mit Häkchen",
+"img": "H20.png"
 },
 {
 "id": "H21",
@@ -268,7 +269,8 @@
 "c": "Sieht Chaos-Ecken und Dinge, die zu klein sind oder nicht mehr benutzt werden.",
 "p": "Entscheidet, wo was hinkommt und was verschenkt, verkauft oder entsorgt wird.",
 "e": "Räumt auf, sortiert aus und bringt Spenden weg.",
-"motif": "ein Umzugskarton mit herausschauendem Spielzeug und Pulli, daneben ein ordentlicher Bücherstapel"
+"motif": "ein Umzugskarton mit herausschauendem Spielzeug und Pulli, daneben ein ordentlicher Bücherstapel",
+"img": "H22.png"
 },
 {
 "id": "O1",
@@ -280,7 +282,8 @@
 "c": "Denkt an Service, Pickerl bzw. TÜV, Reifenwechsel und Tankstand.",
 "p": "Macht Werkstatttermine und vergleicht Versicherungen.",
 "e": "Bringt das Auto hin, wechselt Reifen, tankt und wäscht es.",
-"motif": "ein kleines, rundliches Auto mit einem Schraubenschlüssel daneben"
+"motif": "ein kleines, rundliches Auto mit einem Schraubenschlüssel daneben",
+"img": "O1.png"
 },
 {
 "id": "O2",
@@ -315,7 +318,8 @@
 "c": "Merkt, wann Rechnungen kommen und wann Bargeld oder Taschengeld gebraucht wird.",
 "p": "Richtet Daueraufträge ein und behält Fälligkeiten im Blick.",
 "e": "Zahlt, hebt ab und legt Belege ab.",
-"motif": "eine Geldbörse mit Scheinen und Münzen und eine Rechnung mit Häkchen"
+"motif": "eine Geldbörse mit Scheinen und Münzen und eine Rechnung mit Häkchen",
+"img": "O4.png"
 },
 {
 "id": "O5",
