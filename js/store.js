@@ -41,6 +41,17 @@ async function loadDemo() {
   };
   return demo;
 }
+function demoExtras(d) {
+  d.settings = d.settings || {};
+  d.steps = d.steps || [1, 2, 3, 4, 5, 6, 7, 8].map((step) => ({ step, done_at: step === 1 ? '2026-11-01T19:00:00Z' : null, done_by: null, confirmed: {} }));
+  d.notes = d.notes || [];
+  d.checkins = d.checkins || [];
+  d.events = d.events || [];
+  return d;
+}
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : `id-${Date.now()}-${Math.random().toString(16).slice(2)}`);
+const nowIso = () => new Date().toISOString();
+
 function saveDemo() { try { localStorage.setItem(DEMO_KEY, JSON.stringify(demo)); } catch (e) { /* ok */ } }
 
 // ---------- Anmeldung ----------
@@ -66,19 +77,32 @@ export async function onAuthChange(cb) {
 // ---------- Laden ----------
 export async function loadAll() {
   if (DEMO) {
-    const d = await loadDemo();
-    return { persons: d.persons, cards: d.cards, meId: d.me };
+    const d = demoExtras(await loadDemo());
+    const settings = {};
+    Object.entries(d.settings).forEach(([k, v]) => { settings[k] = v; });
+    return {
+      persons: d.persons, cards: d.cards, meId: d.me, settings, steps: d.steps,
+      notes: d.notes.filter((n) => n.author === d.me), checkins: d.checkins,
+    };
   }
   const c = await client();
-  const [{ data: persons, error: e1 }, { data: cards, error: e2 }, { data: user }] = await Promise.all([
+  const [r1, r2, { data: user }, r3, r4, r5, r6] = await Promise.all([
     c.from('fp_person').select('*').order('sort'),
     c.from('fp_card').select('*').order('sort'),
     c.auth.getUser(),
+    c.from('fp_setting').select('*'),
+    c.from('fp_step').select('*').order('step'),
+    c.from('fp_note').select('*').order('created_at', { ascending: false }),
+    c.from('fp_checkin').select('*').order('started_at', { ascending: false }),
   ]);
-  if (e1 || e2) throw new Error((e1 || e2).message);
+  const err = [r1, r2, r3, r4, r5, r6].find((r) => r.error);
+  if (err) throw new Error(err.error.message);
+  const persons = r1.data;
   const me = persons.find((p) => p.user_id === user.user?.id);
   if (!me) throw new Error('Dein Login ist noch keiner Person zugeordnet. Siehe README, Schritt 4.');
-  return { persons, cards, meId: me.id };
+  const settings = {};
+  r3.data.forEach((row) => { settings[row.key] = row.value; });
+  return { persons, cards: r2.data, meId: me.id, settings, steps: r4.data, notes: r5.data, checkins: r6.data };
 }
 
 export function setDemoMe(id) { if (demo) { demo.me = id; saveDemo(); } }
@@ -88,6 +112,7 @@ async function patchCard(card, patch, events, meId) {
   const full = { ...patch, updated_by: meId, updated_at: new Date().toISOString() };
   if (DEMO) {
     Object.assign(demo.cards.find((x) => x.id === card.id), full);
+    demoExtras(demo).events.push(...events.map((e) => ({ card_id: card.id, by_person: meId, at: nowIso(), ...e })));
     saveDemo();
     return;
   }
@@ -117,4 +142,73 @@ export function updateTexts(card, patch, meId) {
   const p = {};
   changed.forEach((k) => { p[k] = patch[k]; });
   return patchCard(card, p, changed.map((f) => ({ action: 'edited', field: f })), meId);
+}
+
+// ---------- Verlauf ----------
+export async function loadEvents(since) {
+  if (DEMO) return demoExtras(demo).events.filter((e) => !since || e.at > since);
+  const c = await client();
+  let q = c.from('fp_card_event').select('*').order('at');
+  if (since) q = q.gt('at', since);
+  const { data, error } = await q;
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+// ---------- Einstellungen und Unser Weg ----------
+export async function saveSetting(key, value, meId) {
+  if (DEMO) { demoExtras(demo).settings[key] = value; saveDemo(); return; }
+  const { error } = await (await client()).from('fp_setting')
+    .upsert({ key, value, updated_by: meId, updated_at: nowIso() });
+  if (error) throw new Error(error.message);
+}
+
+export async function saveStep(step, patch) {
+  if (DEMO) { Object.assign(demoExtras(demo).steps.find((s) => s.step === step), patch); saveDemo(); return; }
+  const { error } = await (await client()).from('fp_step').update(patch).eq('step', step);
+  if (error) throw new Error(error.message);
+}
+
+// ---------- Notizen (privat) ----------
+export async function addNote(text, cardId, meId) {
+  const row = { text, card_id: cardId || null, author: meId };
+  if (DEMO) { demoExtras(demo).notes.unshift({ id: uid(), created_at: nowIso(), done_at: null, checkin_id: null, ...row }); saveDemo(); return; }
+  const { error } = await (await client()).from('fp_note').insert(row);
+  if (error) throw new Error(error.message);
+}
+
+export async function updateNote(id, patch) {
+  if (DEMO) { Object.assign(demoExtras(demo).notes.find((n) => n.id === id), patch); saveDemo(); return; }
+  const { error } = await (await client()).from('fp_note').update(patch).eq('id', id);
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteNote(id) {
+  if (DEMO) { const d = demoExtras(demo); d.notes = d.notes.filter((n) => n.id !== id); saveDemo(); return; }
+  const { error } = await (await client()).from('fp_note').delete().eq('id', id);
+  if (error) throw new Error(error.message);
+}
+
+// ---------- Check-in ----------
+export async function startCheckin(meId, since) {
+  const row = { by_person: meId, since: since || null, notes: {}, unicorn: {}, stuck: [] };
+  if (DEMO) {
+    const full = { id: uid(), started_at: nowIso(), finished_at: null, ...row };
+    demoExtras(demo).checkins.unshift(full); saveDemo(); return full;
+  }
+  const { data, error } = await (await client()).from('fp_checkin').insert(row).select().single();
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function saveCheckin(id, patch) {
+  if (DEMO) { Object.assign(demoExtras(demo).checkins.find((x) => x.id === id), patch); saveDemo(); return; }
+  const { error } = await (await client()).from('fp_checkin').update(patch).eq('id', id);
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteCheckin(id) {
+  if (DEMO) { const d = demoExtras(demo); d.checkins = d.checkins.filter((x) => x.id !== id); saveDemo(); return; }
+  const { error } = await (await client()).from('fp_checkin').delete().eq('id', id);
+  if (error) throw new Error(error.message);
 }

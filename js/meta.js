@@ -22,3 +22,32 @@ export function fmtDate(iso) {
   const d = new Date(iso);
   return d.toLocaleDateString('de-AT', { day: 'numeric', month: 'numeric', year: 'numeric' });
 }
+
+// ---------- Check-in-Termin ----------
+// day: 0 = Sonntag … 6 = Samstag (wie Date.getDay)
+export const WEEKDAYS = [[1, 'Mo', 'Montag'], [2, 'Di', 'Dienstag'], [3, 'Mi', 'Mittwoch'], [4, 'Do', 'Donnerstag'], [5, 'Fr', 'Freitag'], [6, 'Sa', 'Samstag'], [0, 'So', 'Sonntag']];
+export const dayName = (d) => (WEEKDAYS.find(([n]) => n === d) || [])[2] || '';
+
+export function nextCheckin(setting, from = new Date()) {
+  if (!setting || setting.day == null || !setting.time) return null;
+  const [h, m] = setting.time.split(':').map(Number);
+  const d = new Date(from);
+  d.setHours(h, m, 0, 0);
+  d.setDate(d.getDate() + ((setting.day - d.getDay() + 7) % 7));
+  const end = new Date(d.getTime() + (setting.duration || 30) * 60000);
+  if (end < from) d.setDate(d.getDate() + 7);
+  return d;
+}
+
+export function fmtWhen(d) {
+  if (!d) return '';
+  const day = d.toLocaleDateString('de-AT', { weekday: 'short', day: 'numeric', month: 'numeric' });
+  const t = d.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
+  return `${day} · ${t}`;
+}
+
+export function daysUntil(d, from = new Date()) {
+  const a = new Date(from); a.setHours(0, 0, 0, 0);
+  const b = new Date(d); b.setHours(0, 0, 0, 0);
+  return Math.round((b - a) / 86400000);
+}

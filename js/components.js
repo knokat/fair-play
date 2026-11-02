@@ -1,5 +1,5 @@
 // Kartendarstellung (klein im Deck, groß im Detail) und Icons.
-import { html } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
+import { html, useEffect } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import { CATS, cardName, plainName, isTrio } from './meta.js';
 
 // ---------- Icons ----------
@@ -23,6 +23,13 @@ export const IconPark = () => icon(html`<rect x="4" y="4" width="16" height="16"
 export const IconEdit = () => icon(html`<path d="M4 20h4L19 9l-4-4L4 16v4z"/>`);
 export const IconMenu = () => icon(html`<path d="M4 7h16M4 12h16M4 17h16"/>`, 24);
 export const IconFlip = () => icon(html`<path d="M4 12a8 8 0 0 1 14-5.3L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M4 20v-5h5"/>`, 16);
+export const IconRoute = () => icon(html`<circle cx="6" cy="19" r="2.2"/><path d="M8.2 19H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h7"/><path d="M16 2.5v6"/><path d="M16 2.5h4.5l-1.3 1.6 1.3 1.6H16"/>`, 24);
+export const IconNote = () => icon(html`<path d="M6 3.5h9l4 4v13H6z"/><path d="M14.5 3.5V8H19"/><path d="M9 12.5h6M9 16h4"/>`, 24);
+export const IconCheck = ({ size = 18 }) => icon(html`<path d="M5 12.5l4.5 4.5L19 7.5"/>`, size);
+export const IconChevron = () => icon(html`<path d="M9 6l6 6-6 6"/>`, 20);
+export const IconTrash = () => icon(html`<path d="M5 7h14"/><path d="M10 7V4.5h4V7"/><path d="M7 7l1 13h8l1-13"/>`);
+export const IconPlus = () => icon(html`<path d="M12 5v14M5 12h14"/>`);
+export const IconPeople = () => icon(html`<circle cx="8" cy="8" r="3"/><circle cx="16.5" cy="8" r="3"/><path d="M2.5 19a5.5 5.5 0 0 1 11 0"/><path d="M13 14.2A5.5 5.5 0 0 1 22 19"/>`, 22);
 export const IconHand = () => icon(html`<path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V4.5a1.5 1.5 0 0 1 3 0V11"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v6"/><path d="M17 11a1.5 1.5 0 0 1 3 0v3a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-2.7L4.3 15a1.5 1.5 0 0 1 2.4-1.8L8 15"/>`);
 
 // ---------- Owner ----------
@@ -117,5 +124,25 @@ export function BigCard({ card, persons, flipped, onFlip }) {
           </div>
         </div>
       </button>
+    </div>`;
+}
+
+// ---------- Raster und Bottom Sheet (überall genutzt) ----------
+export function Grid({ cards, persons, onOpen, markId }) {
+  return html`<div class="grid">${cards.map((c) => html`<${SmallCard} key=${c.id} card=${c} persons=${persons} onClick=${() => onOpen(c)} mark=${markId === c.id}/>`)}</div>`;
+}
+
+export function Sheet({ title, onClose, children }) {
+  useEffect(() => {
+    const k = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', k);
+    return () => window.removeEventListener('keydown', k);
+  }, []);
+  return html`
+    <div class="sheet-bg" onClick=${(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div class="sheet" role="dialog" aria-modal="true" aria-label=${title}>
+        <h2 class="sheet-title">${title}</h2>
+        ${children}
+      </div>
     </div>`;
 }

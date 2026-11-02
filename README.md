@@ -12,7 +12,8 @@ js/config.js        Supabase-Zugang (leer = Demo-Modus)
 js/store.js         Laden und Speichern (Supabase oder Demo im Browser)
 js/meta.js          Kategorien, Farben, Helfer
 js/components.js    Kartendarstellung klein und groß, Icons
-js/app.js           Ansichten: Meine, Matthias, Deck, Parkplatz, Kartendetail
+js/app.js           Ansichten: Meine, Matthias, Deck, Parkplatz, Kartendetail, Menü
+js/journey.js       Unser Weg (8 Schritte), geführter Check-in, vergangene Check-ins, private Notizen
 data/cards.json     Startdeck: alle 100 Karten mit Status und Texten
 img/                Illustrationen, Dateiname = Kartennummer (H6.png …)
 sql/schema.sql      Tabellen und Zugriffsregeln
@@ -23,7 +24,7 @@ tools/              Skripte, die seed.sql und die Prompt-Seite erzeugen
 ## Wo was läuft
 
 - **App:** https://knokat.github.io/fair-play/ (GitHub Pages, Branch `main`, Ordner `/`)
-- **Datenbank:** Supabase-Projekt „Workout Tracker“ (`zkqfeqtnoxgoepmykupd`), Tabellen `fp_person`, `fp_card`, `fp_card_event`
+- **Datenbank:** Supabase-Projekt „Workout Tracker“ (`zkqfeqtnoxgoepmykupd`), Tabellen `fp_person`, `fp_card`, `fp_card_event`, `fp_setting`, `fp_step`, `fp_checkin`, `fp_note` (Notizen sieht nur die Person, die sie schreibt)
 - **Logins:** Supabase Auth mit E-Mail und Passwort. Jede Person in `fp_person` ist über `user_id` mit ihrem Login verknüpft; nur verknüpfte Logins sehen Daten.
 
 ## Matthias freischalten

@@ -2,7 +2,8 @@
 import { html, render, useState, useEffect, useMemo, useCallback } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import * as store from './store.js';
 import { CATS, CAT_ORDER, plainName, isTrio, fmtDate, ORIGINAL_URL } from './meta.js';
-import { SmallCard, BigCard, OwnerDot, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand } from './components.js';
+import { Grid, Sheet, BigCard, OwnerDot, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand, IconRoute, IconNote } from './components.js';
+import { WegPage, CheckinPage, HistoryPage, NotesPage, NoteSheet, NextCheckinBar, RunningCheckinBar, sinceForNewCheckin, openSteps } from './journey.js';
 
 const bySort = (a, b) => a.sort - b.sort;
 const groupByCat = (cards) => CAT_ORDER.map((cat) => [cat, cards.filter((c) => c.cat === cat).sort(bySort)]).filter(([, l]) => l.length);
@@ -32,11 +33,6 @@ function Login({ onDone }) {
         <button class="btn primary" type="submit" disabled=${busy}>${busy ? 'Anmelden …' : 'Anmelden'}</button>
       </form>
     </main>`;
-}
-
-// ---------- Kartenraster ----------
-function Grid({ cards, persons, onOpen, markId }) {
-  return html`<div class="grid">${cards.map((c) => html`<${SmallCard} key=${c.id} card=${c} persons=${persons} onClick=${() => onOpen(c)} mark=${markId === c.id}/>`)}</div>`;
 }
 
 function CatSections({ cards, persons, onOpen, markId }) {
@@ -113,22 +109,6 @@ function ParkedView({ cards, persons, onOpen }) {
     </div>`;
 }
 
-// ---------- Bottom Sheet ----------
-function Sheet({ title, onClose, children }) {
-  useEffect(() => {
-    const k = (e) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', k);
-    return () => window.removeEventListener('keydown', k);
-  }, []);
-  return html`
-    <div class="sheet-bg" onClick=${(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div class="sheet" role="dialog" aria-modal="true" aria-label=${title}>
-        <h2 class="sheet-title">${title}</h2>
-        ${children}
-      </div>
-    </div>`;
-}
-
 function EditSheet({ card, onSave, onClose }) {
   const [f, setF] = useState({
     name: card.name, descr: card.descr, conception: card.conception,
@@ -174,7 +154,7 @@ function ParkSheet({ card, onPark, onClose }) {
 }
 
 // ---------- Kartendetail ----------
-function Detail({ card, persons, meId, onClose, act }) {
+function Detail({ card, persons, meId, onClose, act, onNote }) {
   const [flipped, setFlipped] = useState(false);
   const [sheet, setSheet] = useState(null);
   const me = persons.find((p) => p.id === meId);
@@ -220,8 +200,9 @@ function Detail({ card, persons, meId, onClose, act }) {
             </label>`}`}
       </div>
 
-      <div class="row">
+      <div class="row wrap">
         <button type="button" class="btn ghost" onClick=${() => setSheet('edit')}><${IconEdit}/> Texte bearbeiten</button>
+        <button type="button" class="btn ghost" onClick=${() => onNote(card)}><${IconNote}/> Für Check-in notieren</button>
       </div>
       <div class="meta">
         ${editor && html`<span>Zuletzt geändert von ${editor.name} am ${fmtDate(card.updated_at)}</span>`}
@@ -236,7 +217,7 @@ function Detail({ card, persons, meId, onClose, act }) {
 }
 
 // ---------- Menü ----------
-function Menu({ me, persons, onClose, onSwitch, onSignOut, onReload }) {
+function Menu({ me, persons, onClose, onSwitch, onSignOut, onReload, onGo, onCheckin, running, openSteps: stepsOpen, openNotes }) {
   const hardRefresh = async () => {
     try {
       if ('serviceWorker' in navigator) (await navigator.serviceWorker.getRegistrations()).forEach((r) => r.unregister());
@@ -247,6 +228,12 @@ function Menu({ me, persons, onClose, onSwitch, onSignOut, onReload }) {
   return html`
     <${Sheet} title="Menü" onClose=${onClose}>
       <p class="muted">Angemeldet als ${me.name}${store.DEMO ? ' (Demo-Modus)' : ''}.</p>
+      <nav class="menu-list" aria-label="Fair-Play-Begleiter">
+        <button type="button" onClick=${() => onGo('weg')}><span class="mi-title">Unser Weg</span><span class="mi-sub">${stepsOpen ? `${8 - stepsOpen} von 8 Schritten erledigt` : 'Alle Schritte erledigt'}</span></button>
+        <button type="button" onClick=${onCheckin}><span class="mi-title">${running ? 'Check-in fortsetzen' : 'Check-in starten'}</span><span class="mi-sub">Geführt in 8 Punkten</span></button>
+        <button type="button" onClick=${() => onGo('history')}><span class="mi-title">Vergangene Check-ins</span><span class="mi-sub">Zum Nachlesen</span></button>
+        <button type="button" onClick=${() => onGo('notes')}><span class="mi-title">Meine Notizen</span><span class="mi-sub">${openNotes ? `${openNotes} offen` : 'Keine offenen'} · nur für dich</span></button>
+      </nav>
       ${store.DEMO && html`
         <p class="field-hint">Im Demo-Modus werden Änderungen nur in diesem Browser gespeichert.</p>
         <div class="row wrap">${persons.filter((p) => p.id !== me.id).map((p) => html`
@@ -263,7 +250,10 @@ function Menu({ me, persons, onClose, onSwitch, onSignOut, onReload }) {
 function App() {
   const [phase, setPhase] = useState('loading'); // loading | login | ready | error
   const [error, setError] = useState('');
-  const [data, setData] = useState({ persons: [], cards: [], meId: null });
+  const [data, setData] = useState({ persons: [], cards: [], meId: null, settings: {}, steps: [], notes: [], checkins: [] });
+  const [page, setPage] = useState(null); // null | weg | checkin | history | notes
+  const [ciStep, setCiStep] = useState(1);
+  const [noteFor, setNoteFor] = useState(null); // { card } öffnet das Notiz-Sheet
   const [view, setView] = useState('mine');
   const [detailId, setDetailId] = useState(null);
   const [dealMode, setDealMode] = useState(false);
@@ -292,16 +282,16 @@ function App() {
     return () => document.removeEventListener('visibilitychange', vis);
   }, []);
 
-  useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(''), 2200); return () => clearTimeout(t); }, [toast]);
+  useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(''), Math.max(2200, toast.length * 55)); return () => clearTimeout(t); }, [toast]);
 
-  const { persons, cards, meId } = data;
+  const { persons, cards, meId, settings, steps, notes, checkins } = data;
   const me = persons.find((p) => p.id === meId);
   const other = persons.find((p) => p.id !== meId && p.role === 'adult');
   const name = (id) => persons.find((p) => p.id === id)?.name;
 
   const act = async (type, card, arg) => {
     try {
-      if (type === 'deal') { await store.setHolder(card, arg, meId); setToast(arg === meId ? 'Du hältst jetzt diese Karte' : `An ${name(arg)} gegeben`); }
+      if (type === 'deal') { await store.setHolder(card, arg, meId); setToast(handoverText(card, arg) || (arg === meId ? 'Du hältst jetzt diese Karte' : `An ${name(arg)} gegeben`)); }
       if (type === 'park') { await store.park(card, arg, meId); setToast(card.status === 'parked' ? 'Notiz gespeichert' : 'Geparkt'); }
       if (type === 'unpark') { await store.unpark(card, meId); setToast('Zurück im Deck, noch ohne Owner'); }
       if (type === 'onlyMe') { await store.setOnlyMe(card, arg, meId); }
@@ -310,13 +300,19 @@ function App() {
     } catch (e) { setToast(`Hat nicht geklappt: ${e.message}`); }
   };
 
+  // Übergabe-Moment: wechselt eine Karte von einer Person zur anderen, daran erinnern.
+  function handoverText(card, to) {
+    if (!card.holder || !to || card.holder === to) return '';
+    return `${plainName(card.name)} → ${name(to)}. Zeit für den Übergabe-Moment: ${name(card.holder)} erzählt kurz, wie es bisher lief.`;
+  }
+
   const cycle = async (card) => {
     const adults = persons.filter((p) => p.role === 'adult');
     const i = adults.findIndex((p) => p.id === card.holder);
     const next = i === -1 ? adults[0].id : (adults[i + 1]?.id ?? null);
     setMarkId(card.id);
     await act('deal', card, next);
-    setToast(next ? `${plainName(card.name)} → ${name(next)}` : `${plainName(card.name)} → frei`);
+    setToast(handoverText(card, next) || (next ? `${plainName(card.name)} → ${name(next)}` : `${plainName(card.name)} → frei`));
   };
 
   if (phase === 'loading') return html`<p class="loading">Lade Karten …</p>`;
@@ -324,17 +320,45 @@ function App() {
   if (phase === 'error') return html`<main class="login"><h1 class="brand">Fair Play</h1><p class="error" role="alert">${error}</p><button class="btn primary" onClick=${load}>Nochmal versuchen</button></main>`;
 
   const detail = cards.find((c) => c.id === detailId);
+  const running = checkins.find((c) => !c.finished_at) || null;
+  const go = (p) => { setPage(p); setMenu(false); window.scrollTo(0, 0); };
+  const startCheckin = async () => {
+    setMenu(false);
+    try {
+      if (!running) { await store.startCheckin(meId, sinceForNewCheckin(checkins, steps)); setCiStep(1); await load(); }
+      go('checkin');
+    } catch (e) { setToast(`Hat nicht geklappt: ${e.message}`); }
+  };
+  const ctx = {
+    persons, cards, meId, me, settings, steps, notes, checkins, running,
+    reload: load, toast: setToast, go, startCheckin,
+    openCard: (c) => setDetailId(c.id),
+    goDeck: ({ dg, deal }) => { setPage(null); setView('deck'); setDgOnly(!!dg); setDealMode(!!deal); window.scrollTo(0, 0); },
+  };
+  const stepsOpen = openSteps(steps);
+  const openNotes = notes.filter((n) => !n.done_at).length;
+  const pageEl = page === 'weg' ? html`<${WegPage} ctx=${ctx} onBack=${() => go(null)}/>`
+    : page === 'checkin' && running ? html`<${CheckinPage} key=${running.id} ctx=${ctx} checkin=${running} step=${ciStep} setStep=${setCiStep} onBack=${() => go(null)}/>`
+    : page === 'history' ? html`<${HistoryPage} ctx=${ctx} onBack=${() => go(null)}/>`
+    : page === 'notes' ? html`<${NotesPage} ctx=${ctx} onBack=${() => go(null)}/>`
+    : null;
   const tabs = [['mine', 'Meine'], ['other', other?.name || 'Partner'], ['deck', 'Deck'], ['parked', 'Parkplatz']];
 
   return html`
     <div class="app">
       ${detail
-        ? html`<${Detail} card=${detail} persons=${persons} meId=${meId} onClose=${() => setDetailId(null)} act=${act}/>`
-        : html`
+        ? html`<${Detail} card=${detail} persons=${persons} meId=${meId} onClose=${() => setDetailId(null)} act=${act} onNote=${(c) => setNoteFor({ card: c })}/>`
+        : pageEl || html`
           <header class="top">
             <div class="top-row">
               <h1 class="brand">Fair Play</h1>
-              <button type="button" class="icon-btn" onClick=${() => setMenu(true)} aria-label="Menü öffnen"><${IconMenu}/></button>
+              <div class="top-icons">
+                <button type="button" class="icon-btn badge-wrap" onClick=${() => go('notes')} aria-label=${`Meine Notizen${openNotes ? `, ${openNotes} offen` : ''}`}>
+                  <${IconNote}/>${openNotes > 0 && html`<span class="badge">${openNotes}</span>`}</button>
+                <button type="button" class="icon-btn badge-wrap" onClick=${() => go('weg')} aria-label=${`Unser Weg${stepsOpen ? `, ${8 - stepsOpen} von 8 Schritten erledigt` : ''}`}>
+                  <${IconRoute}/>${stepsOpen > 0 && html`<span class="dot"></span>`}</button>
+                <button type="button" class="icon-btn" onClick=${() => setMenu(true)} aria-label="Menü öffnen"><${IconMenu}/></button>
+              </div>
             </div>
             <nav class="tabs" aria-label="Ansichten">
               ${tabs.map(([id, label]) => html`
@@ -342,13 +366,17 @@ function App() {
                   onClick=${() => { setView(id); setDealMode(false); window.scrollTo(0, 0); }}>${label}</button>`)}
             </nav>
           </header>
+          <${RunningCheckinBar} ctx=${ctx} step=${ciStep}/>
+          ${view === 'mine' && html`<${NextCheckinBar} ctx=${ctx}/>`}
           ${view === 'mine' && html`<${PersonView} person=${me} isMe=${true} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
           ${view === 'other' && other && html`<${PersonView} person=${other} isMe=${false} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
           ${view === 'deck' && html`<${DeckView} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)} onCycle=${cycle}
               dealMode=${dealMode} setDealMode=${setDealMode} dgOnly=${dgOnly} setDgOnly=${setDgOnly} markId=${markId}/>`}
           ${view === 'parked' && html`<${ParkedView} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
         `}
+      ${noteFor && html`<${NoteSheet} ctx=${ctx} card=${noteFor.card} onClose=${() => setNoteFor(null)}/>`}
       ${menu && html`<${Menu} me=${me} persons=${persons} onClose=${() => setMenu(false)}
+        onGo=${go} onCheckin=${startCheckin} running=${running} openSteps=${stepsOpen} openNotes=${openNotes}
         onSwitch=${(id) => { store.setDemoMe(id); setMenu(false); load(); }}
         onReload=${() => { setMenu(false); load(); }}
         onSignOut=${async () => { setMenu(false); await store.signOut(); setPhase('login'); }}/>`}
