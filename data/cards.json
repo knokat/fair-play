@@ -146,7 +146,8 @@
 "c": "Merkt, wann der Wäschekorb voll ist und was bis wann gebraucht wird, etwa das Trikot.",
 "p": "Sortiert nach Farben und Programmen und plant Wasch- und Trockenzeiten.",
 "e": "Wäscht, hängt auf oder trocknet, legt zusammen und räumt ein.",
-"motif": "eine Wäscheleine mit Socken und T-Shirt an Wäscheklammern über einem Wäschekorb"
+"motif": "eine Wäscheleine mit Socken und T-Shirt an Wäscheklammern über einem Wäschekorb",
+"img": "H12.png"
 },
 {
 "id": "H13",
@@ -158,7 +159,8 @@
 "c": "Sieht, was gegossen, geschnitten oder umgetopft werden muss, und denkt an die Jahreszeit.",
 "p": "Plant Pflege und Einkäufe und klärt, wer im Urlaub gießt.",
 "e": "Gießt, mäht, schneidet und pflanzt.",
-"motif": "eine Gießkanne neben einer Topfpflanze und einem Paar Gartenhandschuhe"
+"motif": "eine Gießkanne neben einer Topfpflanze und einem Paar Gartenhandschuhe",
+"img": "H13.png"
 },
 {
 "id": "H14",
@@ -181,7 +183,8 @@
 "c": "Weiß, was morgens gebraucht wird und was fehlt.",
 "p": "Plant, was es gibt, damit es in den Morgenablauf passt.",
 "e": "Macht das Frühstück und räumt danach ab.",
-"motif": "eine Müslischüssel, zwei Toastscheiben, ein dampfender Becher und ein kleiner Wecker"
+"motif": "eine Müslischüssel, zwei Toastscheiben, ein dampfender Becher und ein kleiner Wecker",
+"img": "H15.png"
 },
 {
 "id": "H16",
@@ -194,7 +197,8 @@
 "c": "Weiß, was Leander mag und was in der Box war und wieder zurückkam.",
 "p": "Plant die Jausen für die Woche und sorgt für die Zutaten.",
 "e": "Richtet die Jausenbox her, füllt die Flasche und spült beides abends.",
-"motif": "eine offene Jausenbox mit Brot, Apfelspalten und Gurke, daneben eine Trinkflasche"
+"motif": "eine offene Jausenbox mit Brot, Apfelspalten und Gurke, daneben eine Trinkflasche",
+"img": "H16.png"
 },
 {
 "id": "H17",
@@ -207,7 +211,8 @@
 "c": "Denkt rechtzeitig daran, was es heute und diese Woche gibt.",
 "p": "Plant die Mahlzeiten passend zu Terminen und Vorräten.",
 "e": "Kocht oder sorgt dafür, dass gekocht wird, und deckt den Tisch.",
-"motif": "ein Kochtopf mit Dampf, ein Kochlöffel und ein paar frische Kräuter"
+"motif": "ein Kochtopf mit Dampf, ein Kochlöffel und ein paar frische Kräuter",
+"img": "H17.png"
 },
 {
 "id": "H18",
@@ -219,7 +224,8 @@
 "c": "Denkt an die Mahlzeiten am Wochenende, auch bei Ausflügen und Besuch.",
 "p": "Plant, was gekocht wird oder wohin es geht.",
 "e": "Kocht, reserviert oder bestellt.",
-"motif": "ein Stapel Pfannkuchen mit Beeren und Sirup auf einem Teller"
+"motif": "ein Stapel Pfannkuchen mit Beeren und Sirup auf einem Teller",
+"img": "H18.png"
 },
 {
 "id": "H19",
