@@ -820,7 +820,8 @@
 "c": "Merkt, wen er lange nicht gesehen hat.",
 "p": "Verabredet sich und plant Treffen.",
 "e": "Trifft sich, ruft an, ist da.",
-"motif": "ein Fußball, darüber ein rot-schwarzer Fanschal ohne Wappen, daneben zwei Becher, die anstoßen"
+"motif": "ein Fußball, darüber ein rot-schwarzer Fanschal ohne Wappen, daneben zwei Becher, die anstoßen",
+"img": "M2.png"
 },
 {
 "id": "M3",
@@ -832,7 +833,8 @@
 "c": "Denkt rechtzeitig an Wünsche, Gäste und Feier.",
 "p": "Plant Feier, Einladungen, Geschenke und Kuchen.",
 "e": "Lädt ein, backt, dekoriert, feiert und räumt auf.",
-"motif": "eine Geburtstagstorte mit Kerzen, zwei Luftballons und ein kleines Geschenk"
+"motif": "eine Geburtstagstorte mit Kerzen, zwei Luftballons und ein kleines Geschenk",
+"img": "M3.png"
 },
 {
 "id": "M4",
@@ -845,7 +847,8 @@
 "c": "Merkt, wo Regeln fehlen, unklar sind oder nicht mehr passen.",
 "p": "Legt die Regeln gemeinsam fest und hält fest, was streng gilt und was locker.",
 "e": "Setzt die Regeln konsequent um, auch wenn es unbequem ist.",
-"motif": "eine Sanduhr neben einem Tablet mit Pause-Symbol"
+"motif": "eine Sanduhr neben einem Tablet mit Pause-Symbol",
+"img": "M4.png"
 },
 {
 "id": "M5",
@@ -866,7 +869,8 @@
 "c": "Merkt, wann es Zeit für Spaß ist und worauf Leander Lust hat.",
 "p": "Plant Spieleabende, Ausflüge und Überraschungen.",
 "e": "Spielt mit – mit vollem Einsatz.",
-"motif": "ein Brettspiel mit Spielfiguren und zwei Würfeln"
+"motif": "ein Brettspiel mit Spielfiguren und zwei Würfeln",
+"img": "M6.png"
 },
 {
 "id": "M7",
@@ -923,7 +927,8 @@
 "c": "Denkt an anstehende Feste und was dafür dazugehört.",
 "p": "Plant Deko, Essen, Besuche und Rituale.",
 "e": "Dekoriert, kocht, backt und feiert.",
-"motif": "ein Adventkranz mit vier Kerzen, daneben ein paar Zimtsterne"
+"motif": "ein Adventkranz mit vier Kerzen, daneben ein paar Zimtsterne",
+"img": "M12.png"
 },
 {
 "id": "M13",
@@ -935,7 +940,8 @@
 "c": "Merkt, was Leander gerade interessiert.",
 "p": "Sucht passende Bücher, Ausflüge und Experimente.",
 "e": "Geht hin, liest vor und experimentiert mit.",
-"motif": "eine Lupe über einem Blatt, daneben ein aufgeschlagenes Buch und ein Reagenzglas"
+"motif": "eine Lupe über einem Blatt, daneben ein aufgeschlagenes Buch und ein Reagenzglas",
+"img": "M13.png"
 },
 {
 "id": "M14",
@@ -959,7 +965,8 @@
 "c": "Merkt, wann es Zeit für uns ist.",
 "p": "Plant Date Nights, organisiert den Babysitter und reserviert.",
 "e": "Sorgt dafür, dass es stattfindet – und ist ganz da.",
-"motif": "zwei Weingläser, die anstoßen, eine Kerze und ein kleines Herz"
+"motif": "zwei Weingläser, die anstoßen, eine Kerze und ein kleines Herz",
+"img": "M15.png"
 },
 {
 "id": "M16",
@@ -1127,7 +1134,8 @@
 "c": "Merkt, was sie begeistert und sprühen lässt.",
 "p": "Plant feste Zeit, Geld und Betreuung dafür ein.",
 "e": "Macht es – und teilt es mit anderen.",
-"motif": "ein kleines, fröhliches Einhorn mit langer, wehender Mähne, umgeben von Funken"
+"motif": "ein kleines, fröhliches Einhorn mit langer, wehender Mähne, umgeben von Funken",
+"img": "U1.png"
 },
 {
 "id": "U2",
@@ -1140,6 +1148,7 @@
 "c": "Merkt, was ihn begeistert und sprühen lässt.",
 "p": "Plant feste Zeit, Geld und Betreuung dafür ein.",
 "e": "Macht es – und teilt es mit anderen.",
-"motif": "ein kleines, fröhliches Einhorn mit kurzer, struppiger Mähne, umgeben von Funken"
+"motif": "ein kleines, fröhliches Einhorn mit kurzer, struppiger Mähne, umgeben von Funken",
+"img": "U2.png"
 }
 ]
