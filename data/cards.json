@@ -595,7 +595,8 @@
 "c": "Denkt an Kontrolltermine, Prophylaxe und Zahnspange.",
 "p": "Macht Termine und klärt die Kosten.",
 "e": "Geht mit hin und kümmert sich um die Nachsorge.",
-"motif": "ein lachender Zahn mit Gesicht, daneben eine Zahnbürste mit Zahnpasta"
+"motif": "ein lachender Junge beim Zähneputzen, daneben kleine Glanz-Sterne",
+"img": "C6.png"
 },
 {
 "id": "C7",
@@ -617,7 +618,8 @@
 "c": "Denkt an Testament, Vollmachten, Sorgerechtsverfügung und Versicherungen.",
 "p": "Holt Beratung ein, vergleicht und bereitet Entscheidungen vor.",
 "e": "Unterschreibt, hinterlegt und hält die Unterlagen aktuell.",
-"motif": "ein aufgespannter Regenschirm über einem kleinen Haus mit Herz, daneben ein gerolltes Dokument"
+"motif": "ein aufgespannter Regenschirm über einem kleinen Haus mit Herz, daneben ein gerolltes Dokument",
+"img": "C8.png"
 },
 {
 "id": "C9",
@@ -630,7 +632,8 @@
 "c": "Hat im Blick, mit wem Leander Zeit verbringt und was online passiert.",
 "p": "Organisiert Treffen und spricht Regeln für Handy und Chats ab.",
 "e": "Bringt zu Verabredungen, lädt Freunde ein und schaut bei Chats hin.",
-"motif": "zwei lachende Kinder nebeneinander, eines davon mit längeren blonden Haaren wie das Kind in der Abendroutine, darüber eine Sprechblase mit Herz"
+"motif": "zwei lachende Kinder nebeneinander, eines davon mit längeren blonden Haaren wie das Kind in der Abendroutine, darüber eine Sprechblase mit Herz",
+"img": "C9.png"
 },
 {
 "id": "C10",
@@ -642,7 +645,8 @@
 "c": "Merkt, was fehlt oder ersetzt werden muss.",
 "p": "Plant Einkäufe und Friseurtermine.",
 "e": "Kauft ein und geht zu den Terminen.",
-"motif": "ein Kleiderbügel mit einem Kapuzenpulli, daneben ein Kamm und ein Rasierpinsel"
+"motif": "ein Kleiderbügel mit einem Kapuzenpulli, daneben ein Kamm und ein Rasierpinsel",
+"img": "C10.png"
 },
 {
 "id": "C11",
@@ -664,7 +668,8 @@
 "c": "Weiß, welche HÜ, Tests und Projekte anstehen und welches Material fehlt.",
 "p": "Plant Lernzeiten und Reihenfolge und besorgt Schulsachen.",
 "e": "Begleitet die HÜ, kontrolliert, unterschreibt und packt fertig.",
-"motif": "ein aufgeschlagenes Schulheft, ein Becher mit Buntstiften, ein Lineal und ein Radiergummi"
+"motif": "ein aufgeschlagenes Schulheft, ein Becher mit Buntstiften, ein Lineal und ein Radiergummi",
+"img": "C12.png"
 },
 {
 "id": "C13",
@@ -687,7 +692,8 @@
 "c": "Hat die Zeit im Blick und weiß, was heute dabei sein muss.",
 "p": "Kennt den Ablauf – Aufstehen, Anziehen, Frühstück, Zähne, Losgehen – und passt ihn an.",
 "e": "Weckt, begleitet und sorgt dafür, dass es pünktlich losgeht.",
-"motif": "ein klingelnder Wecker vor einer aufgehenden Sonne, daneben ein Zahnputzbecher mit Zahnbürste"
+"motif": "ein klingelnder Wecker vor einer aufgehenden Sonne, daneben ein Zahnputzbecher mit Zahnbürste",
+"img": "C14.png"
 },
 {
 "id": "C15",
@@ -709,7 +715,8 @@
 "c": "Denkt an Futter, Katzenklo, Impfungen und Tierarzt.",
 "p": "Hält den Futtervorrat, macht Tierarzttermine und organisiert die Urlaubsbetreuung.",
 "e": "Füttert, putzt das Klo und bringt die Katzen zum Tierarzt.",
-"motif": "zwei eingerollte, schlafende Katzen nebeneinander und ein Futternapf"
+"motif": "zwei eingerollte, schlafende Katzen nebeneinander und ein Futternapf",
+"img": "C16.png"
 },
 {
 "id": "C17",
@@ -730,7 +737,8 @@
 "c": "Denkt an Anmeldung, Probeunterricht, Schulweg und Eingewöhnung.",
 "p": "Vergleicht Schulen, hält Fristen ein und bereitet Leander vor.",
 "e": "Meldet an, begleitet die ersten Tage und hält Kontakt zur neuen Schule.",
-"motif": "eine Schultasche vor einem kleinen Schulgebäude, daneben ein Wegweiser mit Pfeil"
+"motif": "eine Schultasche vor einem kleinen Schulgebäude, daneben ein Wegweiser mit Pfeil",
+"img": "C18.png"
 },
 {
 "id": "C19",
@@ -743,7 +751,8 @@
 "c": "Merkt, was sie braucht: Sport, Schlaf, Arzttermine, Pausen.",
 "p": "Blockt feste Zeiten dafür im Kalender.",
 "e": "Nimmt sich die Zeit – und hält sie.",
-"motif": "eine Kurzhantel, eine Trinkflasche und ein Paar Turnschuhe auf einer eingerollten Matte"
+"motif": "eine Badewanne mit Schaum und einem Handtuch, davor eine Kurzhantel",
+"img": "C19.png"
 },
 {
 "id": "C20",
@@ -756,7 +765,8 @@
 "c": "Merkt, was er braucht: Sport, Schlaf, Arzttermine, Pausen.",
 "p": "Blockt feste Zeiten dafür im Kalender.",
 "e": "Nimmt sich die Zeit – und hält sie.",
-"motif": "ein Rennrad mit Helm am Lenker und einer Trinkflasche im Halter"
+"motif": "ein Rennrad mit Helm am Lenker und einer Trinkflasche im Halter",
+"img": "C20.png"
 },
 {
 "id": "C21",
@@ -769,7 +779,8 @@
 "c": "Hat Termine, Medikation, Rezepte und Gespräche mit Schule und Therapie im Blick, auch allgemeine Arzttermine.",
 "p": "Sucht Fachleute, koordiniert Termine und Kosten und plant die Unterstützung.",
 "e": "Geht zu Terminen, holt Rezepte und Medikamente und setzt Absprachen im Alltag um.",
-"motif": "zwei schützende Hände um eine kleine, wachsende Pflanze"
+"motif": "zwei schützende Hände um eine kleine, wachsende Pflanze",
+"img": "C21.png"
 },
 {
 "id": "C22",
@@ -781,7 +792,8 @@
 "c": "Liest Nachrichten und merkt, wann ein Gespräch nötig ist.",
 "p": "Vereinbart Sprechstunden und bereitet Gespräche vor.",
 "e": "Führt Gespräche, antwortet und gibt Infos an den anderen weiter.",
-"motif": "ein roter Apfel auf einem kleinen Bücherstapel, darüber zwei Sprechblasen"
+"motif": "ein Lehrerpult, darüber zwei Sprechblasen, dahinter eine grüne Schultafel",
+"img": "C22.png"
 },
 {
 "id": "M1",
@@ -794,7 +806,8 @@
 "c": "Merkt, wen sie lange nicht gesehen hat.",
 "p": "Verabredet sich und plant Treffen.",
 "e": "Trifft sich, ruft an, ist da.",
-"motif": "zwei Kaffeebecher, die miteinander anstoßen, daneben ein Ball, darüber kleine Herzen"
+"motif": "zwei Kaffeebecher, die anstoßen, daneben ein Ball für Catch'n Serve, darüber kleine Herzen",
+"img": "M1.png"
 },
 {
 "id": "M2",
@@ -807,7 +820,7 @@
 "c": "Merkt, wen er lange nicht gesehen hat.",
 "p": "Verabredet sich und plant Treffen.",
 "e": "Trifft sich, ruft an, ist da.",
-"motif": "zwei Fahrradhelme nebeneinander und zwei Kaffeebecher, die anstoßen"
+"motif": "ein Fußball, darüber ein rot-schwarzer Fanschal ohne Wappen, daneben zwei Becher, die anstoßen"
 },
 {
 "id": "M3",
@@ -1114,7 +1127,7 @@
 "c": "Merkt, was sie begeistert und sprühen lässt.",
 "p": "Plant feste Zeit, Geld und Betreuung dafür ein.",
 "e": "Macht es – und teilt es mit anderen.",
-"motif": "ein kleines, fröhliches Einhorn, das Ukulele spielt, umgeben von ein paar Noten und Funken"
+"motif": "ein kleines, fröhliches Einhorn mit langer, wehender Mähne, umgeben von Funken"
 },
 {
 "id": "U2",
@@ -1127,6 +1140,6 @@
 "c": "Merkt, was ihn begeistert und sprühen lässt.",
 "p": "Plant feste Zeit, Geld und Betreuung dafür ein.",
 "e": "Macht es – und teilt es mit anderen.",
-"motif": "ein kleines, fröhliches Einhorn auf einem Fahrrad, umgeben von ein paar Funken"
+"motif": "ein kleines, fröhliches Einhorn mit kurzer, struppiger Mähne, umgeben von Funken"
 }
 ]
