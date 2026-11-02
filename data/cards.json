@@ -377,7 +377,7 @@
 "c": "Denkt an Training, Turniere, Ausrüstung und Mitgliedsbeiträge.",
 "p": "Sucht Verein oder Kurs aus, meldet an und koordiniert Termine.",
 "e": "Bringt hin, holt ab, wäscht das Trikot und ist bei Wettkämpfen dabei.",
-"motif": "ein Rugbyball, ein Turnbeutel und eine Trinkflasche, überwiegend in Orange und Anthrazit",
+"motif": "ein Rugbyball, ein Turnbeutel und eine Trinkflasche, in Honiggelb und Anthrazit",
 "img": "O9.png"
 },
 {
@@ -534,7 +534,8 @@
 "c": "Hat Duschen, Haarewaschen, Nägel und Friseur im Blick.",
 "p": "Legt Routinen fest und sorgt für Shampoo, Zahnpasta und Co.",
 "e": "Erinnert, hilft und begleitet, bis Leander es selbst schafft.",
-"motif": "eine kleine Badewanne mit Schaum und Gummiente, daneben eine Shampooflasche und ein gefaltetes Handtuch"
+"motif": "eine kleine Badewanne mit Schaum und Gummiente, daneben eine Shampooflasche und ein gefaltetes Handtuch",
+"img": "C1.png"
 },
 {
 "id": "C2",
@@ -546,7 +547,8 @@
 "c": "Merkt, was fehlt oder ersetzt werden muss.",
 "p": "Plant Einkäufe und Friseurtermine.",
 "e": "Kauft ein und geht zu den Terminen.",
-"motif": "ein Kleiderbügel mit einem gemütlichen Strickpulli, daneben ein runder Handspiegel"
+"motif": "ein Kleiderbügel mit einem gemütlichen Strickpulli, daneben ein runder Handspiegel",
+"img": "C2.png"
 },
 {
 "id": "C3",
@@ -580,7 +582,8 @@
 "c": "Merkt, was zu klein, kaputt oder für die nächste Saison nötig ist.",
 "p": "Kennt Größen und Bezugsquellen und entscheidet: neu, gebraucht oder geerbt.",
 "e": "Kauft, lässt anprobieren, sortiert aus und gibt weiter.",
-"motif": "ein kleiner Stapel Kinderkleidung mit Pulli und Hose, obendrauf ein Paar bunte Sportsocken"
+"motif": "ein kleiner Stapel Kinderkleidung mit Pulli und Hose, obendrauf ein Paar bunte Sportsocken",
+"img": "C5.png"
 },
 {
 "id": "C6",

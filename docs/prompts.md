@@ -1,55 +1,13 @@
 # Illustrations-Prompts
 
-25 Prompts, je einer pro Karte, fertig zum Kopieren. Schick sie im selben ChatGPT-Chat wie die bisherigen Illustrationen, damit der Stil gleich bleibt.
+22 Prompts, je einer pro Karte, fertig zum Kopieren. Schick sie im selben ChatGPT-Chat wie die bisherigen Illustrationen, damit der Stil gleich bleibt.
 
 - Speichere jede Grafik am besten unter der Kartennummer, z. B. **H2.png** – dann kann ich sie ohne Raten zuordnen.
 - Schick sie mir gesammelt, gern kategorienweise.
 - Wenn eine Grafik nicht passt, einfach im ChatGPT-Chat nachbessern lassen.
 - Die Motive für Self-Care, Freundschaften und Unicorn Space sind persönlich gedacht. Ändere sie gern, bevor du sie abschickst.
 
-## Fürsorge (15)
-
-### C1 · Körperpflege (Kind)
-
-```
-Neue Illustration für unser Kartendeck: „Körperpflege (Kind)“, Kategorie „Fürsorge“.
-
-Motiv: eine kleine Badewanne mit Schaum und Gummiente, daneben eine Shampooflasche und ein gefaltetes Handtuch.
-
-Stil: exakt wie die bisherigen Illustrationen in diesem Chat – Tusche-Linien in warmem Anthrazit (#3A3932), leicht versetzte flächige Farben, gleiche Strichstärke, kleine Bewegungsstriche.
-
-Farben: Akzentfarbe Apricot (#E9B69A) für ausgewählte Flächen, dazu Creme (#FBF1E8) und höchstens eine Nebenfarbe aus Honiggelb (#FEB742), Taubenblau (#AFC4D6), Salbeigrün (#A7A471) oder Altrosa (#C77F91).
-
-Nur die Illustration: keine Karte, kein Rahmen, kein Text, transparenter Hintergrund, quadratisch 1024 × 1024 px.
-```
-
-### C2 · Pflege & Kleidung (Katja)
-
-```
-Neue Illustration für unser Kartendeck: „Pflege & Kleidung (Katja)“, Kategorie „Fürsorge“.
-
-Motiv: ein Kleiderbügel mit einem gemütlichen Strickpulli, daneben ein runder Handspiegel.
-
-Stil: exakt wie die bisherigen Illustrationen in diesem Chat – Tusche-Linien in warmem Anthrazit (#3A3932), leicht versetzte flächige Farben, gleiche Strichstärke, kleine Bewegungsstriche.
-
-Farben: Akzentfarbe Apricot (#E9B69A) für ausgewählte Flächen, dazu Creme (#FBF1E8) und höchstens eine Nebenfarbe aus Honiggelb (#FEB742), Taubenblau (#AFC4D6), Salbeigrün (#A7A471) oder Altrosa (#C77F91).
-
-Nur die Illustration: keine Karte, kein Rahmen, kein Text, transparenter Hintergrund, quadratisch 1024 × 1024 px.
-```
-
-### C5 · Kinderkleidung
-
-```
-Neue Illustration für unser Kartendeck: „Kinderkleidung“, Kategorie „Fürsorge“.
-
-Motiv: ein kleiner Stapel Kinderkleidung mit Pulli und Hose, obendrauf ein Paar bunte Sportsocken.
-
-Stil: exakt wie die bisherigen Illustrationen in diesem Chat – Tusche-Linien in warmem Anthrazit (#3A3932), leicht versetzte flächige Farben, gleiche Strichstärke, kleine Bewegungsstriche.
-
-Farben: Akzentfarbe Apricot (#E9B69A) für ausgewählte Flächen, dazu Creme (#FBF1E8) und höchstens eine Nebenfarbe aus Honiggelb (#FEB742), Taubenblau (#AFC4D6), Salbeigrün (#A7A471) oder Altrosa (#C77F91).
-
-Nur die Illustration: keine Karte, kein Rahmen, kein Text, transparenter Hintergrund, quadratisch 1024 × 1024 px.
-```
+## Fürsorge (12)
 
 ### C6 · Zahnarzt (Kind)
 
