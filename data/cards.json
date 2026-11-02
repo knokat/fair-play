@@ -349,7 +349,8 @@
 "c": "Merkt, wenn etwas hakt, und denkt an Updates, Backups und Passwörter.",
 "p": "Wählt Geräte und Verträge aus und plant Einrichtung oder Austausch.",
 "e": "Richtet ein, repariert, aktualisiert und hilft bei Problemen.",
-"motif": "ein aufgeklappter Laptop mit WLAN-Symbol, daneben ein Tablet und ein geringeltes Ladekabel"
+"motif": "ein aufgeklappter Laptop mit WLAN-Symbol, daneben ein Tablet und ein geringeltes Ladekabel",
+"img": "O7.png"
 },
 {
 "id": "O8",
@@ -362,7 +363,8 @@
 "c": "Merkt, was Leander interessiert, und denkt an Anmeldefristen.",
 "p": "Sucht Kurse aus, meldet an und plant Zeiten und Material.",
 "e": "Bringt hin oder sorgt fürs Hinkommen, zahlt Beiträge und hält Kontakt zur Kursleitung.",
-"motif": "eine Malpalette mit Pinseln und ein aufgeschlagenes Notenheft"
+"motif": "eine Malpalette mit Pinseln und ein aufgeschlagenes Notenheft",
+"img": "O8.png"
 },
 {
 "id": "O9",
@@ -375,7 +377,8 @@
 "c": "Denkt an Training, Turniere, Ausrüstung und Mitgliedsbeiträge.",
 "p": "Sucht Verein oder Kurs aus, meldet an und koordiniert Termine.",
 "e": "Bringt hin, holt ab, wäscht das Trikot und ist bei Wettkämpfen dabei.",
-"motif": "ein Fußball, ein Turnbeutel und eine Trinkflasche"
+"motif": "ein Rugbyball, ein Turnbeutel und eine Trinkflasche, überwiegend in Orange und Anthrazit",
+"img": "O9.png"
 },
 {
 "id": "O10",
@@ -387,7 +390,8 @@
 "c": "Denkt an Hausapotheke, Rauchmelder, Notfallnummern und Erste-Hilfe-Kurse.",
 "p": "Prüft Ablaufdaten, plant Kurse und legt Notfallpläne fest.",
 "e": "Füllt auf, tauscht Batterien und hängt die Nummern sichtbar auf.",
-"motif": "eine Erste-Hilfe-Tasche mit Kreuz, ein paar Pflaster und ein Rauchmelder"
+"motif": "eine Erste-Hilfe-Tasche mit Kreuz, ein paar Pflaster und ein Rauchmelder",
+"img": "O10.png"
 },
 {
 "id": "O11",
@@ -400,7 +404,8 @@
 "c": "Denkt an Turnsachen, Schwimmzeug, Hausschuhe und Regenjacke.",
 "p": "Legt fest, was wann eingepackt wird, und macht Checklisten.",
 "e": "Packt ein, kontrolliert und packt abends wieder aus.",
-"motif": "ein Schulrucksack, aus dem ein Turnbeutel und eine Regenjacke schauen"
+"motif": "ein Schulrucksack, aus dem ein Turnbeutel und eine Regenjacke schauen",
+"img": "O11.png"
 },
 {
 "id": "O12",
@@ -439,7 +444,8 @@
 "c": "Hat die Ferientermine und Betreuungslücken im Blick.",
 "p": "Plant Betreuung, Ausflüge, Besuche bei den Großeltern oder Kurse.",
 "e": "Bucht, meldet an und sorgt für den Ablauf.",
-"motif": "ein kleiner Holzschlitten mit Schal, daneben ein buntes Herbstblatt und ein bemaltes Osterei"
+"motif": "ein kleiner Holzschlitten mit Schal, daneben ein buntes Herbstblatt und ein bemaltes Osterei",
+"img": "O15.png"
 },
 {
 "id": "O16",
@@ -460,7 +466,8 @@
 "c": "Schaut Mitteilungsheft, Schul-App und Postfach durch.",
 "p": "Weiß, was bis wann zurück muss und was dafür nötig ist.",
 "e": "Füllt aus, unterschreibt, zahlt und gibt rechtzeitig ab.",
-"motif": "ein aufgeschlagenes Mitteilungsheft mit Füllfeder, Unterschrift-Schnörkel und Büroklammer"
+"motif": "ein aufgeschlagenes Mitteilungsheft mit Füllfeder, Unterschrift-Schnörkel und Büroklammer",
+"img": "O17.png"
 },
 {
 "id": "O18",
@@ -500,7 +507,8 @@
 "c": "Merkt, wo Leander unter- oder überfordert ist, und hat Fristen für Kurse, Wettbewerbe, Begabtenwerkstätten oder Nachhilfe im Blick.",
 "p": "Sucht passende Angebote aus, meldet an, stimmt sich bei Bedarf mit der Schule ab und plant die Termine.",
 "e": "Bringt hin, zahlt, hält Kontakt zu Lehrkräften und Kursleitung und fragt Leander, was ihm gefällt und was nicht.",
-"motif": "eine kleine Holzleiter, die an einen Bücherstapel gelehnt ist, oben eine leuchtende Glühbirne als Idee, daneben ein Bleistift"
+"motif": "eine kleine Holzleiter, die an einen Bücherstapel gelehnt ist, oben eine leuchtende Glühbirne als Idee, daneben ein Bleistift",
+"img": "O21.png"
 },
 {
 "id": "O22",
@@ -512,7 +520,8 @@
 "c": "Denkt rechtzeitig an das kommende Wochenende, an Wetter und Wünsche.",
 "p": "Schlägt Ausflüge vor, stimmt ab und reserviert.",
 "e": "Packt, bucht Tickets und sorgt dafür, dass es losgeht.",
-"motif": "ein kleiner Wanderrucksack vor sanften Hügeln mit Sonne und einer gefalteten Wanderkarte"
+"motif": "ein kleiner Wanderrucksack vor sanften Hügeln mit Sonne und einer gefalteten Wanderkarte",
+"img": "O22.png"
 },
 {
 "id": "C1",
