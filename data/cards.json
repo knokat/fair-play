@@ -1073,11 +1073,11 @@
 "orig": "Partner Coach",
 "name": "Füreinander da sein",
 "status": "parked",
-"note": "Noch besprechen. Bisher: Wir coachen uns ohnehin gegenseitig.",
+"note": "Machen wir gegenseitig – keine eigene Karte.",
 "desc": "Einander zuhören und unterstützen.",
 "motif": "zwei Teetassen nebeneinander, darüber eine Sprechblase mit Herz",
 "img": "M17.png",
-"group": "open"
+"group": "never"
 },
 {
 "id": "M18",
@@ -1085,11 +1085,11 @@
 "orig": "Showing Up & Participating",
 "name": "Dabei sein",
 "status": "parked",
-"note": "Noch besprechen: Was heißt das bei uns?",
+"note": "Läuft über die Karten für Sport, Freizeitkurse und Schule – keine eigene Karte.",
 "desc": "Bei Aufführungen, Spielen und Schulveranstaltungen dabei sein.",
 "motif": "zwei klatschende Hände vor einer kleinen Bühne mit Vorhang",
 "img": "M18.png",
-"group": "open"
+"group": "never"
 },
 {
 "id": "M19",
@@ -1190,10 +1190,11 @@
 "orig": "Home Renovation",
 "name": "Renovierung",
 "status": "parked",
-"note": "",
+"note": "Wir sanieren das Haus in Augsburg. Idee: eigene Unterkarten mit je einem Owner, so wenden wir Fair Play gleich auf das Projekt an.\nVorschlag für Unterkarten:\n• Planung & Architekt – Entwurf, Bauvoranfrage, Genehmigungen\n• Finanzierung & Förderung – Kredit, Förderungen, Budget im Blick (hängt an „Wohnen: Kauf, Miete, Kredit & Versicherung“)\n• Handwerker & Angebote – einholen, vergleichen, beauftragen\n• Bauablauf & Termine – Zeitplan, Abstimmung vor Ort, Abnahmen, Mängel (schwierig aus Villach)\n• Küche & Einrichtung – hängt an „Einrichtung“\n• Anschlüsse & Versicherungen – Strom, Wasser, Internet, Gebäudeversicherung\nOffen für den Check-in: Owner heißt bei Fair Play Dran-Denken, Planen und Erledigen. Geht das bei der Renovierung pro Unterkarte, oder entscheiden wir gemeinsam und der Owner bereitet vor und hakt nach?",
 "desc": "Umbau oder Renovierung des Zuhauses.",
 "motif": "eine Farbrolle mit Farbeimer und eine kleine Leiter",
-"img": "W5.png"
+"img": "W5.png",
+"group": "soon"
 },
 {
 "id": "W6",
@@ -1212,10 +1213,11 @@
 "orig": "Moving",
 "name": "Umzug",
 "status": "parked",
-"note": "Mit Augsburg ins Deck holen",
+"note": "Umzug nach Augsburg, voraussichtlich Sommer 2027. Auch hier Unterkarten mit je einem Owner?\nVorschlag:\n• Schulwechsel Leander – läuft über „Schulwechsel“ und wird bald relevant (Aufnahmeprüfung, Anmeldung)\n• Wohnen in Villach – Kündigung bzw. Verkauf, Übergabe\n• Umzugsfirma & Packen – Angebote, Termin, vorher ausmisten (inkl. Keller)\n• Ummelden & Behörden – Abmeldung in Österreich, Anmeldung in Augsburg, Auto, Steuer\n• Verträge & Versicherungen – Strom, Internet, Handy, Krankenkasse in Deutschland\n• Ankommen in Augsburg – Ärzte, Vereine, Kontakte (Katjas Cousin und Cousine)\nOffen für den Check-in: Wie gehen wir damit um – eigene Kategorie „Umzug“ mit eigenen Karten?",
 "desc": "Umzug in ein neues Zuhause.",
 "motif": "ein kleiner Umzugswagen mit Kartons auf der Ladefläche, daneben ein Wegweiser",
-"img": "W7.png"
+"img": "W7.png",
+"group": "soon"
 },
 {
 "id": "W8",
@@ -1223,10 +1225,11 @@
 "orig": "New Job",
 "name": "Neuer Job",
 "status": "parked",
-"note": "Mit Augsburg ins Deck holen",
+"note": "Betrifft Matthias: Die Jobsuche läuft schon und ist eine Belastung, gleichzeitig arbeitet er insgesamt weniger Stunden. Im Check-in kurz ansprechen, damit jeder seine Sicht sagen kann.",
 "desc": "Jobwechsel oder Wiedereinstieg.",
 "motif": "eine Aktentasche, ein Namensschild an einem Band und eine Kaffeetasse",
-"img": "W8.png"
+"img": "W8.png",
+"group": "open"
 },
 {
 "id": "W9",

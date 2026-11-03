@@ -85,8 +85,8 @@ Was uns abhält: viel Arbeit und gefühlt zu wenig Platz.', 'later', 'H11.png'),
 ('M14', 80, 'magic', 'Magical Beings', 'Christkind, Oster|hase & Co.', false, null, 'Christkind, Osterhase, Nikolaus und Zahnfee bringen Zauber in unser Jahr.', 'Denkt an Wunschzettel, Nikolaussackerl, Osternest und Zahnfee.', 'Plant Geschenke, Verstecke und die passende Geschichte.', 'Füllt, versteckt und hält den Zauber aufrecht.', 'deck', null, '', null, 'M14.png'),
 ('M15', 81, 'magic', 'Marriage & Romance', 'Partner|schaft & Date Nights', false, null, 'Wir haben regelmäßig Zeit zu zweit.', 'Merkt, wann es Zeit für uns ist.', 'Plant Date Nights, organisiert den Babysitter und reserviert.', 'Sorgt dafür, dass es stattfindet – und ist ganz da.', 'deck', null, '', null, 'M15.png'),
 ('M16', 82, 'magic', 'Middle-of-the-Night Comfort', 'Nächtliches Trösten', true, null, 'Nachts aufstehen, wenn Leander schlecht träumt oder krank ist.', '', '', '', 'parked', null, 'Leander ist alt genug.', 'never', 'M16.png'),
-('M17', 83, 'magic', 'Partner Coach', 'Füreinander da sein', false, null, 'Einander zuhören und unterstützen.', '', '', '', 'parked', null, 'Noch besprechen. Bisher: Wir coachen uns ohnehin gegenseitig.', 'open', 'M17.png'),
-('M18', 84, 'magic', 'Showing Up & Participating', 'Dabei sein', false, null, 'Bei Aufführungen, Spielen und Schulveranstaltungen dabei sein.', '', '', '', 'parked', null, 'Noch besprechen: Was heißt das bei uns?', 'open', 'M18.png'),
+('M17', 83, 'magic', 'Partner Coach', 'Füreinander da sein', false, null, 'Einander zuhören und unterstützen.', '', '', '', 'parked', null, 'Machen wir gegenseitig – keine eigene Karte.', 'never', 'M17.png'),
+('M18', 84, 'magic', 'Showing Up & Participating', 'Dabei sein', false, null, 'Bei Aufführungen, Spielen und Schulveranstaltungen dabei sein.', '', '', '', 'parked', null, 'Läuft über die Karten für Sport, Freizeitkurse und Schule – keine eigene Karte.', 'never', 'M18.png'),
 ('M19', 85, 'magic', 'Spirituality', 'Spiritualität', false, null, 'Glauben, Rituale und Sinnfragen in der Familie.', '', '', '', 'parked', null, 'Kein Thema für uns.', 'never', 'M19.png'),
 ('M20', 86, 'magic', 'Thank-You Notes', 'Dankes|karten', false, null, 'Danke sagen – schriftlich.', '', '', '', 'parked', null, 'Kein Thema für uns.', 'never', 'M20.png'),
 ('M21', 87, 'magic', 'Values & Good Deeds (Kids)', 'Werte & gute Taten (Kind)', false, null, 'Werte vermitteln und gemeinsam Gutes tun.', '', '', '', 'parked', null, 'Werte leben wir im Alltag vor – keine Karte. Idee für einmal: Werte-Kärtchen auslegen und gemeinsam aussuchen, was unsere Familienwerte sind.', 'never', 'M21.png'),
@@ -95,10 +95,26 @@ Was uns abhält: viel Arbeit und gefühlt zu wenig Platz.', 'later', 'H11.png'),
 ('W2', 90, 'wild', 'Death', 'Todesfall', false, null, 'Wenn ein naher Mensch stirbt.', '', '', '', 'parked', null, '', null, 'W2.png'),
 ('W3', 91, 'wild', 'First Year of Infant''s Life', 'Erstes Babyjahr', false, null, 'Das erste Jahr mit einem Baby.', '', '', '', 'parked', null, '', null, 'W3.png'),
 ('W4', 92, 'wild', 'Glitch in the Matrix / Daily Disruption', 'Alltags|störung', false, null, 'Wenn der Alltag unerwartet aus den Fugen gerät.', '', '', '', 'parked', null, '', null, 'W4.png'),
-('W5', 93, 'wild', 'Home Renovation', 'Renovierung', false, null, 'Umbau oder Renovierung des Zuhauses.', '', '', '', 'parked', null, '', null, 'W5.png'),
+('W5', 93, 'wild', 'Home Renovation', 'Renovierung', false, null, 'Umbau oder Renovierung des Zuhauses.', '', '', '', 'parked', null, 'Wir sanieren das Haus in Augsburg. Idee: eigene Unterkarten mit je einem Owner, so wenden wir Fair Play gleich auf das Projekt an.
+Vorschlag für Unterkarten:
+• Planung & Architekt – Entwurf, Bauvoranfrage, Genehmigungen
+• Finanzierung & Förderung – Kredit, Förderungen, Budget im Blick (hängt an „Wohnen: Kauf, Miete, Kredit & Versicherung“)
+• Handwerker & Angebote – einholen, vergleichen, beauftragen
+• Bauablauf & Termine – Zeitplan, Abstimmung vor Ort, Abnahmen, Mängel (schwierig aus Villach)
+• Küche & Einrichtung – hängt an „Einrichtung“
+• Anschlüsse & Versicherungen – Strom, Wasser, Internet, Gebäudeversicherung
+Offen für den Check-in: Owner heißt bei Fair Play Dran-Denken, Planen und Erledigen. Geht das bei der Renovierung pro Unterkarte, oder entscheiden wir gemeinsam und der Owner bereitet vor und hakt nach?', 'soon', 'W5.png'),
 ('W6', 94, 'wild', 'Job Loss & Money Problems', 'Jobverlust & Geld|sorgen', false, null, 'Wenn ein Job wegfällt oder das Geld knapp wird.', '', '', '', 'parked', null, '', null, 'W6.png'),
-('W7', 95, 'wild', 'Moving', 'Umzug', false, null, 'Umzug in ein neues Zuhause.', '', '', '', 'parked', null, 'Mit Augsburg ins Deck holen', null, 'W7.png'),
-('W8', 96, 'wild', 'New Job', 'Neuer Job', false, null, 'Jobwechsel oder Wiedereinstieg.', '', '', '', 'parked', null, 'Mit Augsburg ins Deck holen', null, 'W8.png'),
+('W7', 95, 'wild', 'Moving', 'Umzug', false, null, 'Umzug in ein neues Zuhause.', '', '', '', 'parked', null, 'Umzug nach Augsburg, voraussichtlich Sommer 2027. Auch hier Unterkarten mit je einem Owner?
+Vorschlag:
+• Schulwechsel Leander – läuft über „Schulwechsel“ und wird bald relevant (Aufnahmeprüfung, Anmeldung)
+• Wohnen in Villach – Kündigung bzw. Verkauf, Übergabe
+• Umzugsfirma & Packen – Angebote, Termin, vorher ausmisten (inkl. Keller)
+• Ummelden & Behörden – Abmeldung in Österreich, Anmeldung in Augsburg, Auto, Steuer
+• Verträge & Versicherungen – Strom, Internet, Handy, Krankenkasse in Deutschland
+• Ankommen in Augsburg – Ärzte, Vereine, Kontakte (Katjas Cousin und Cousine)
+Offen für den Check-in: Wie gehen wir damit um – eigene Kategorie „Umzug“ mit eigenen Karten?', 'soon', 'W7.png'),
+('W8', 96, 'wild', 'New Job', 'Neuer Job', false, null, 'Jobwechsel oder Wiedereinstieg.', '', '', '', 'parked', null, 'Betrifft Matthias: Die Jobsuche läuft schon und ist eine Belastung, gleichzeitig arbeitet er insgesamt weniger Stunden. Im Check-in kurz ansprechen, damit jeder seine Sicht sagen kann.', 'open', 'W8.png'),
 ('W9', 97, 'wild', 'Pregnancy & Baby''s Birth', 'Schwanger|schaft & Geburt', false, null, 'Schwangerschaft und Geburt eines Kindes.', '', '', '', 'parked', null, '', null, 'W9.png'),
 ('W10', 98, 'wild', 'Serious Illness', 'Schwere Krankheit', false, null, 'Wenn jemand in der Familie schwer krank wird.', '', '', '', 'parked', null, '', null, 'W10.png'),
 ('U1', 99, 'unicorn', 'Unicorn Space (Her)', 'Unicorn Space (Katja)', false, '00000000-0000-4000-8000-00000000000a', 'Zeit für das, was Katja jenseits von Mama-, Partner- und Berufsrolle ausmacht.', 'Merkt, was sie begeistert und sprühen lässt.', 'Plant feste Zeit, Geld und Betreuung dafür ein.', 'Macht es – und teilt es mit anderen.', 'deck', '00000000-0000-4000-8000-00000000000a', '', null, 'U1.png'),
