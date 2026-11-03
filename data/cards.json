@@ -7,7 +7,8 @@
 "dg": true,
 "status": "parked",
 "note": "",
-"desc": "Babysitter, Nanny oder Haushaltshilfe finden, einweisen und koordinieren."
+"desc": "Babysitter, Nanny oder Haushaltshilfe finden, einweisen und koordinieren.",
+"motif": "ein Klemmbrett mit Notizen für den Babysitter, daneben ein Haustürschlüssel und eine Kinder-Trinkflasche"
 },
 {
 "id": "H2",
@@ -83,7 +84,8 @@
 "name": "Einrichtung",
 "status": "parked",
 "note": "",
-"desc": "Möbel und Einrichtung aussuchen, kaufen und aufstellen."
+"desc": "Möbel und Einrichtung aussuchen, kaufen und aufstellen.",
+"motif": "ein gemütlicher Sessel neben einer Stehlampe, davor ein aufgefächerter Farbmusterfächer"
 },
 {
 "id": "H8",
@@ -133,7 +135,8 @@
 "name": "Gäste einladen",
 "status": "parked",
 "note": "",
-"desc": "Besuch einladen, bewirten und beherbergen."
+"desc": "Besuch einladen, bewirten und beherbergen.",
+"motif": "ein Tablett mit Teekanne, zwei Tassen und einem Kuchen, daneben ein Stapel frisch bezogenes Gästebettzeug"
 },
 {
 "id": "H12",
@@ -170,7 +173,8 @@
 "dg": true,
 "status": "parked",
 "note": "",
-"desc": "Briefkasten leeren, Post sortieren und bearbeiten."
+"desc": "Briefkasten leeren, Post sortieren und bearbeiten.",
+"motif": "ein Briefkasten, aus dem Briefe und ein Paketzettel herausschauen"
 },
 {
 "id": "H15",
@@ -234,7 +238,8 @@
 "name": "Erinnerungen & Fotos",
 "status": "parked",
 "note": "",
-"desc": "Fotos sortieren, Alben gestalten, Erinnerungen aufbewahren."
+"desc": "Fotos sortieren, Alben gestalten, Erinnerungen aufbewahren.",
+"motif": "ein aufgeschlagenes Fotoalbum mit eingeklebten Fotos, daneben eine Sofortbildkamera"
 },
 {
 "id": "H20",
@@ -256,7 +261,8 @@
 "name": "Keller, Garage & Saisonales",
 "status": "parked",
 "note": "",
-"desc": "Keller und Garage ordnen, Saisonales ein- und ausräumen."
+"desc": "Keller und Garage ordnen, Saisonales ein- und ausräumen.",
+"motif": "zwei gestapelte Aufbewahrungskisten, aus der einen schauen Weihnachtskugeln, aus der anderen ein Sonnenhut, daneben ein aufgerollter Gartenschlauch"
 },
 {
 "id": "H22",
@@ -292,7 +298,8 @@
 "name": "Kinder|geburtstage anderer Kinder",
 "status": "parked",
 "note": "",
-"desc": "Einladungen beantworten, Geschenke besorgen, hinbringen und abholen."
+"desc": "Einladungen beantworten, Geschenke besorgen, hinbringen und abholen.",
+"motif": "ein eingepacktes Geschenk mit großer Schleife und eine Einladungskarte mit Luftballon-Motiv"
 },
 {
 "id": "O3",
@@ -328,7 +335,8 @@
 "name": "Ehrenamt & Spenden",
 "status": "parked",
 "note": "",
-"desc": "Sich engagieren und entscheiden, wofür wir spenden."
+"desc": "Sich engagieren und entscheiden, wofür wir spenden.",
+"motif": "ein Glas mit Münzen und einem Herz-Etikett, daneben ein Karton mit gespendeter Kleidung"
 },
 {
 "id": "O6",
@@ -337,7 +345,8 @@
 "name": "Gesellschaft & Kultur",
 "status": "parked",
 "note": "",
-"desc": "Wählen gehen, Kultur erleben, informiert bleiben."
+"desc": "Wählen gehen, Kultur erleben, informiert bleiben.",
+"motif": "eine Wahlurne mit eingeworfenem Umschlag, daneben zwei Theaterkarten und eine gefaltete Zeitung"
 },
 {
 "id": "O7",
@@ -414,7 +423,8 @@
 "name": "Packen für Reisen",
 "status": "parked",
 "note": "Momentan nicht relevant",
-"desc": "Für Urlaube und Reisen packen und wieder auspacken."
+"desc": "Für Urlaube und Reisen packen und wieder auspacken.",
+"motif": "ein offener Koffer mit gefalteter Kleidung, Sonnenbrille und Kulturbeutel"
 },
 {
 "id": "O13",
@@ -423,7 +433,8 @@
 "name": "Bonuspunkte & Gutscheine",
 "status": "parked",
 "note": "",
-"desc": "Bonusprogramme und Gutscheine nutzen, bevor sie verfallen."
+"desc": "Bonusprogramme und Gutscheine nutzen, bevor sie verfallen.",
+"motif": "ein Gutschein mit Schleife, eine Kundenkarte und ein paar Coupons mit Prozentzeichen"
 },
 {
 "id": "O14",
@@ -432,7 +443,8 @@
 "name": "Rück|sendungen & Gutschriften",
 "status": "parked",
 "note": "",
-"desc": "Rücksendungen erledigen und Gutschriften einlösen."
+"desc": "Rücksendungen erledigen und Gutschriften einlösen.",
+"motif": "ein Paket mit Rücksendeetikett und Pfeil-Symbol, daneben ein langer Kassenbon"
 },
 {
 "id": "O15",
@@ -454,7 +466,8 @@
 "name": "Sommer|ferien",
 "status": "parked",
 "note": "Momentan nicht relevant",
-"desc": "Die Sommerferien planen: Betreuung, Camps, Urlaub."
+"desc": "Die Sommerferien planen: Betreuung, Camps, Urlaub.",
+"motif": "ein Sonnenhut, eine Sandschaufel und ein Eis am Stiel vor einer kleinen Sonne"
 },
 {
 "id": "O17",
@@ -476,7 +489,8 @@
 "name": "Treffen mit anderen Paaren",
 "status": "parked",
 "note": "",
-"desc": "Gemeinsame Unternehmungen mit befreundeten Paaren planen."
+"desc": "Gemeinsame Unternehmungen mit befreundeten Paaren planen.",
+"motif": "ein Picknickkorb auf einer Decke mit vier Bechern, die anstoßen"
 },
 {
 "id": "O19",
@@ -486,7 +500,8 @@
 "dg": true,
 "status": "parked",
 "note": "",
-"desc": "Leander zu Schule, Training und Terminen bringen und abholen."
+"desc": "Leander zu Schule, Training und Terminen bringen und abholen.",
+"motif": "ein Autoschlüssel, eine kleine Straßenkarte mit drei Stecknadeln und eine Uhr"
 },
 {
 "id": "O20",
@@ -495,7 +510,8 @@
 "name": "Reisen",
 "status": "parked",
 "note": "Momentan nicht relevant",
-"desc": "Urlaube und Reisen planen und buchen."
+"desc": "Urlaube und Reisen planen und buchen.",
+"motif": "ein kleines Flugzeug über einer Weltkugel, daneben ein Reisepass mit Bordkarte"
 },
 {
 "id": "O21",
@@ -571,7 +587,8 @@
 "name": "Verhütung",
 "status": "parked",
 "note": "",
-"desc": "Verhütung gemeinsam verantworten."
+"desc": "Verhütung gemeinsam verantworten.",
+"motif": "zwei ineinander verschränkte Herzen und ein kleiner Kalender mit Häkchen"
 },
 {
 "id": "C5",
@@ -607,7 +624,8 @@
 "dg": true,
 "status": "parked",
 "note": "",
-"desc": "Windeln und Töpfchentraining."
+"desc": "Windeln und Töpfchentraining.",
+"motif": "ein Töpfchen und eine gefaltete Windel"
 },
 {
 "id": "C8",
@@ -656,7 +674,8 @@
 "name": "Kranken|versicherung",
 "status": "parked",
 "note": "",
-"desc": "Krankenversicherung abschließen, prüfen und Leistungen abrechnen."
+"desc": "Krankenversicherung abschließen, prüfen und Leistungen abrechnen.",
+"motif": "eine Versichertenkarte mit Kreuz-Symbol, ein Schutzschild und ein Formular mit Häkchen"
 },
 {
 "id": "C12",
@@ -680,7 +699,8 @@
 "dg": true,
 "status": "parked",
 "note": "Abgedeckt über Besondere Bedürfnisse & psychische Gesundheit und Zahnarzt",
-"desc": "Arzttermine, Impfungen und gesunde Lebensweise."
+"desc": "Arzttermine, Impfungen und gesunde Lebensweise.",
+"motif": "ein Stethoskop, ein Apfel und ein Terminkärtchen"
 },
 {
 "id": "C14",
@@ -703,7 +723,8 @@
 "name": "Eltern & Schwieger|eltern",
 "status": "parked",
 "note": "",
-"desc": "Kontakt halten und unterstützen, wo die Großeltern Hilfe brauchen."
+"desc": "Kontakt halten und unterstützen, wo die Großeltern Hilfe brauchen.",
+"motif": "eine Lesebrille, eine Teetasse und ein altes Telefon mit kleinem Herz"
 },
 {
 "id": "C16",
@@ -726,7 +747,8 @@
 "name": "Mithilfe in der Schule",
 "status": "parked",
 "note": "",
-"desc": "Elternverein, Ausflüge begleiten, Schulfeste unterstützen."
+"desc": "Elternverein, Ausflüge begleiten, Schulfeste unterstützen.",
+"motif": "ein Kuchen auf einer Platte für das Schulfest, darüber eine kleine Wimpelkette"
 },
 {
 "id": "C18",
@@ -858,7 +880,8 @@
 "name": "Verwandtschaft",
 "status": "parked",
 "note": "",
-"desc": "Kontakt zur erweiterten Familie pflegen."
+"desc": "Kontakt zur erweiterten Familie pflegen.",
+"motif": "ein kleiner Stammbaum mit Bilderrahmen an den Ästen"
 },
 {
 "id": "M6",
@@ -880,7 +903,8 @@
 "name": "Kleine Liebes|beweise (Kind)",
 "status": "parked",
 "note": "",
-"desc": "Zettel in der Jausenbox, kleine Überraschungen."
+"desc": "Zettel in der Jausenbox, kleine Überraschungen.",
+"motif": "eine Jausenbox, auf dem Deckel ein gefalteter Zettel mit Herz"
 },
 {
 "id": "M8",
@@ -889,7 +913,8 @@
 "name": "Geschenke (Familie)",
 "status": "parked",
 "note": "",
-"desc": "Geschenke für die Familie besorgen und verpacken."
+"desc": "Geschenke für die Familie besorgen und verpacken.",
+"motif": "drei gestapelte Geschenke mit Schleifen und eine Rolle Geschenkpapier"
 },
 {
 "id": "M9",
@@ -898,7 +923,8 @@
 "name": "Geschenke (Lehr|kräfte & Helfer)",
 "status": "parked",
 "note": "",
-"desc": "Ein Dankeschön für Lehrkräfte, Trainer und Helfer."
+"desc": "Ein Dankeschön für Lehrkräfte, Trainer und Helfer.",
+"motif": "ein kleiner Blumenstrauß und eine Dankeskarte mit Herz"
 },
 {
 "id": "M10",
@@ -907,7 +933,8 @@
 "name": "Schwierige Fragen",
 "status": "parked",
 "note": "",
-"desc": "Auf große Fragen von Leander eingehen – Tod, Liebe, Gerechtigkeit."
+"desc": "Auf große Fragen von Leander eingehen – Tod, Liebe, Gerechtigkeit.",
+"motif": "zwei Sprechblasen, in einer ein großes Fragezeichen, in der anderen ein kleines Herz, darunter ein aufgeschlagenes Buch"
 },
 {
 "id": "M11",
@@ -916,7 +943,8 @@
 "name": "Weihnachts|karten",
 "status": "parked",
 "note": "",
-"desc": "Weihnachtskarten schreiben und verschicken."
+"desc": "Weihnachtskarten schreiben und verschicken.",
+"motif": "ein Stapel Weihnachtskarten mit Stern, eine Briefmarke und ein Füller"
 },
 {
 "id": "M12",
@@ -978,7 +1006,8 @@
 "dg": true,
 "status": "parked",
 "note": "",
-"desc": "Nachts aufstehen, wenn Leander schlecht träumt oder krank ist."
+"desc": "Nachts aufstehen, wenn Leander schlecht träumt oder krank ist.",
+"motif": "eine Nachttischlampe mit warmem Licht, ein Kuscheltier und ein Glas Wasser, darüber ein Mond"
 },
 {
 "id": "M17",
@@ -987,7 +1016,8 @@
 "name": "Füreinander da sein",
 "status": "parked",
 "note": "Wir coachen uns ohnehin gegenseitig",
-"desc": "Einander zuhören und unterstützen."
+"desc": "Einander zuhören und unterstützen.",
+"motif": "zwei Teetassen nebeneinander, darüber eine Sprechblase mit Herz"
 },
 {
 "id": "M18",
@@ -996,7 +1026,8 @@
 "name": "Dabei sein",
 "status": "parked",
 "note": "",
-"desc": "Bei Aufführungen, Spielen und Schulveranstaltungen dabei sein."
+"desc": "Bei Aufführungen, Spielen und Schulveranstaltungen dabei sein.",
+"motif": "zwei klatschende Hände vor einer kleinen Bühne mit Vorhang"
 },
 {
 "id": "M19",
@@ -1005,7 +1036,8 @@
 "name": "Spiritualität",
 "status": "parked",
 "note": "",
-"desc": "Glauben, Rituale und Sinnfragen in der Familie."
+"desc": "Glauben, Rituale und Sinnfragen in der Familie.",
+"motif": "eine brennende Kerze, ein kleiner Turm aus gestapelten Steinen und ein Blatt"
 },
 {
 "id": "M20",
@@ -1014,7 +1046,8 @@
 "name": "Dankes|karten",
 "status": "parked",
 "note": "",
-"desc": "Danke sagen – schriftlich."
+"desc": "Danke sagen – schriftlich.",
+"motif": "eine Karte mit Herz in einem offenen Umschlag, daneben ein Füller"
 },
 {
 "id": "M21",
@@ -1023,7 +1056,8 @@
 "name": "Werte & gute Taten (Kind)",
 "status": "parked",
 "note": "",
-"desc": "Werte vermitteln und gemeinsam Gutes tun."
+"desc": "Werte vermitteln und gemeinsam Gutes tun.",
+"motif": "ein Kinder-Müllgreifer und ein kleiner Sack beim Aufräumen im Park, darüber ein Herz"
 },
 {
 "id": "M22",
@@ -1033,7 +1067,8 @@
 "dg": true,
 "status": "parked",
 "note": "",
-"desc": "Ein Auge auf Leander haben, wenn er spielt oder unterwegs ist."
+"desc": "Ein Auge auf Leander haben, wenn er spielt oder unterwegs ist.",
+"motif": "ein Fernglas, daneben eine Schaukel und ein Ball"
 },
 {
 "id": "W1",
@@ -1042,7 +1077,8 @@
 "name": "Pflege eines Eltern|teils",
 "status": "parked",
 "note": "",
-"desc": "Wenn ein Elternteil Pflege braucht."
+"desc": "Wenn ein Elternteil Pflege braucht.",
+"motif": "zwei Hände – eine junge hält eine ältere –, daneben ein Gehstock"
 },
 {
 "id": "W2",
@@ -1051,7 +1087,8 @@
 "name": "Todesfall",
 "status": "parked",
 "note": "",
-"desc": "Wenn ein naher Mensch stirbt."
+"desc": "Wenn ein naher Mensch stirbt.",
+"motif": "eine brennende Kerze, ein kleiner Blumenstrauß und eine Feder"
 },
 {
 "id": "W3",
@@ -1060,7 +1097,8 @@
 "name": "Erstes Babyjahr",
 "status": "parked",
 "note": "",
-"desc": "Das erste Jahr mit einem Baby."
+"desc": "Das erste Jahr mit einem Baby.",
+"motif": "ein Babyfläschchen, ein Schnuller und ein kleiner Strampler"
 },
 {
 "id": "W4",
@@ -1069,7 +1107,8 @@
 "name": "Alltags|störung",
 "status": "parked",
 "note": "",
-"desc": "Wenn der Alltag unerwartet aus den Fugen gerät."
+"desc": "Wenn der Alltag unerwartet aus den Fugen gerät.",
+"motif": "ein umgefallener Becher, ein Puzzleteil, das nicht passt, und ein kleiner Blitz"
 },
 {
 "id": "W5",
@@ -1078,7 +1117,8 @@
 "name": "Renovierung",
 "status": "parked",
 "note": "",
-"desc": "Umbau oder Renovierung des Zuhauses."
+"desc": "Umbau oder Renovierung des Zuhauses.",
+"motif": "eine Farbrolle mit Farbeimer und eine kleine Leiter"
 },
 {
 "id": "W6",
@@ -1087,7 +1127,8 @@
 "name": "Jobverlust & Geld|sorgen",
 "status": "parked",
 "note": "",
-"desc": "Wenn ein Job wegfällt oder das Geld knapp wird."
+"desc": "Wenn ein Job wegfällt oder das Geld knapp wird.",
+"motif": "eine leere, offene Geldbörse und ein Taschenrechner, darüber eine kleine Wolke"
 },
 {
 "id": "W7",
@@ -1096,7 +1137,8 @@
 "name": "Umzug",
 "status": "parked",
 "note": "Mit Augsburg ins Deck holen",
-"desc": "Umzug in ein neues Zuhause."
+"desc": "Umzug in ein neues Zuhause.",
+"motif": "ein kleiner Umzugswagen mit Kartons auf der Ladefläche, daneben ein Wegweiser"
 },
 {
 "id": "W8",
@@ -1105,7 +1147,8 @@
 "name": "Neuer Job",
 "status": "parked",
 "note": "Mit Augsburg ins Deck holen",
-"desc": "Jobwechsel oder Wiedereinstieg."
+"desc": "Jobwechsel oder Wiedereinstieg.",
+"motif": "eine Aktentasche, ein Namensschild an einem Band und eine Kaffeetasse"
 },
 {
 "id": "W9",
@@ -1114,7 +1157,8 @@
 "name": "Schwanger|schaft & Geburt",
 "status": "parked",
 "note": "",
-"desc": "Schwangerschaft und Geburt eines Kindes."
+"desc": "Schwangerschaft und Geburt eines Kindes.",
+"motif": "ein Storch mit einem Tuchbündel im Schnabel und ein kleines Herz"
 },
 {
 "id": "W10",
@@ -1123,7 +1167,8 @@
 "name": "Schwere Krankheit",
 "status": "parked",
 "note": "",
-"desc": "Wenn jemand in der Familie schwer krank wird."
+"desc": "Wenn jemand in der Familie schwer krank wird.",
+"motif": "eine Wärmflasche, eine Tasse Tee und ein Strauß Blumen, darüber ein Pflaster in Herzform"
 },
 {
 "id": "U1",

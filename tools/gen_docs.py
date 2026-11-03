@@ -23,8 +23,8 @@ def plain(name):
 
 
 # --- Prompts -------------------------------------------------------------
-order = ["home", "out", "care", "magic", "unicorn"]
-todo = [c for c in cards if c["status"] == "deck" and not c.get("img")]
+order = ["home", "out", "care", "magic", "unicorn", "wild"]
+todo = [c for c in cards if not c.get("img")]  # Deck und Parkplatz
 lines = [
     "# Illustrations-Prompts",
     "",
@@ -49,8 +49,9 @@ for cat in order:
         prompt = (
             f"Neue Illustration für unser Kartendeck: „{name}“, Kategorie „{label}“.\n\n"
             f"Motiv: {c['motif']}.\n\n"
-            "Stil: exakt wie die bisherigen Illustrationen in diesem Chat – Tusche-Linien in warmem Anthrazit (#3A3932), "
-            "leicht versetzte flächige Farben, gleiche Strichstärke, kleine Bewegungsstriche.\n\n"
+            "Stil: wie die Referenz H5 · Müll in diesem Chat – Tusche-Linien in warmem Anthrazit (#3A3932), gleiche Strichstärke, kleine Bewegungsstriche. "
+            "Farbe nur locker und unvollständig aufgetragen: breite, unregelmäßige Pinselstriche, die deutlich neben den Konturen liegen; große Teile der Flächen bleiben cremefarben frei. "
+            "Keine Verläufe, kein Glanz, keine sauber ausgemalten Flächen, keine feinen Details oder Schattierungen.\n\n"
             f"Farben: Akzentfarbe {accent_name} ({accent}) für ausgewählte Flächen, dazu Creme (#FBF1E8) "
             f"und höchstens eine Nebenfarbe aus {side}.\n\n"
             "Nur die Illustration: keine Karte, kein Rahmen, kein Text, transparenter Hintergrund, quadratisch 1024 × 1024 px."

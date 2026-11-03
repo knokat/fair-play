@@ -18,7 +18,7 @@ for sec in re.split(r"^## ", md, flags=re.M)[1:]:
     sections.append({"title": title.strip(), "items": items})
 total = sum(len(s["items"]) for s in sections)
 
-CAT_TOKEN = {"Zuhause": "home", "Unterwegs": "out", "Fürsorge": "care", "Magie": "magic", "Persönlicher": "unicorn"}
+CAT_TOKEN = {"Zuhause": "home", "Unterwegs": "out", "Fürsorge": "care", "Magie": "magic", "Persönlicher": "unicorn", "Große": "wild"}
 
 
 def cat_of(title):
@@ -58,18 +58,18 @@ page = f"""<title>Kartendeck-Prompts</title>
 /* Layout: eine ruhige Spalte wie ein Kartenstapel; jede Karte ein Prompt mit Kopieren-Knopf */
 :root {{
   --paper: #FBF1E8; --ground: #EFE6DC; --ink: #3A3932; --ink-soft: #5A574F; --line: #E3D5C6;
-  --home: #975E01; --out: #496E8F; --care: #A75324; --magic: #AA4A62; --unicorn: #766093;
-  --home-a: #FEB742; --out-a: #AFC4D6; --care-a: #E9B69A; --magic-a: #C77F91; --unicorn-a: #A99ABD;
+  --home: #975E01; --out: #496E8F; --care: #A75324; --magic: #AA4A62; --unicorn: #766093; --wild: #AD4D2B;
+  --home-a: #FEB742; --out-a: #AFC4D6; --care-a: #E9B69A; --magic-a: #C77F91; --unicorn-a: #A99ABD; --wild-a: #D77D5D;
   --done-bg: #E8EBDC; --btn-bg: #3A3932; --btn-fg: #FBF1E8;
   --display: 'Roboto Slab', Georgia, serif; --body: 'Nunito', system-ui, sans-serif;
 }}
 @media (prefers-color-scheme: dark) {{ :root:not([data-theme="light"]) {{
   --paper: #2B2925; --ground: #1F1D1A; --ink: #F1E8DE; --ink-soft: #C9BFB3; --line: #3D3A34;
-  --home: #F2B54E; --out: #A9C2D8; --care: #EDB596; --magic: #E3A2B3; --unicorn: #C4B6DA;
+  --home: #F2B54E; --out: #A9C2D8; --care: #EDB596; --magic: #E3A2B3; --unicorn: #C4B6DA; --wild: #E9A58C;
   --done-bg: #2F3328; --btn-bg: #F1E8DE; --btn-fg: #1F1D1A; color-scheme: dark; }} }}
 :root[data-theme="dark"] {{
   --paper: #2B2925; --ground: #1F1D1A; --ink: #F1E8DE; --ink-soft: #C9BFB3; --line: #3D3A34;
-  --home: #F2B54E; --out: #A9C2D8; --care: #EDB596; --magic: #E3A2B3; --unicorn: #C4B6DA;
+  --home: #F2B54E; --out: #A9C2D8; --care: #EDB596; --magic: #E3A2B3; --unicorn: #C4B6DA; --wild: #E9A58C;
   --done-bg: #2F3328; --btn-bg: #F1E8DE; --btn-fg: #1F1D1A; color-scheme: dark; }}
 body {{ background: var(--ground); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; }}
 .wrap {{ max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; display: flex; flex-direction: column; gap: 28px; }}
@@ -86,7 +86,7 @@ body::before {{ content: ""; position: fixed; inset: 0 0 auto; height: env(safe-
 .dot {{ width: 14px; height: 14px; border-radius: 50%; background: var(--ca); border: 1.5px solid var(--ink); }}
 .cat-home {{ --c: var(--home); --ca: var(--home-a); }} .cat-out {{ --c: var(--out); --ca: var(--out-a); }}
 .cat-care {{ --c: var(--care); --ca: var(--care-a); }} .cat-magic {{ --c: var(--magic); --ca: var(--magic-a); }}
-.cat-unicorn {{ --c: var(--unicorn); --ca: var(--unicorn-a); }}
+.cat-unicorn {{ --c: var(--unicorn); --ca: var(--unicorn-a); }} .cat-wild {{ --c: var(--wild); --ca: var(--wild-a); }}
 .list {{ display: flex; flex-direction: column; gap: 14px; }}
 .prompt {{ background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }}
 .prompt.is-done {{ background: var(--done-bg); }}
@@ -104,7 +104,7 @@ body::before {{ content: ""; position: fixed; inset: 0 0 auto; height: env(safe-
 <main class="wrap">
   <div class="intro">
     <h1>Kartendeck-Prompts</h1>
-    <p>{total} Prompts, einer pro Karte. Kopieren, im selben ChatGPT-Chat wie bisher einfügen, fertig.</p>
+    <p>{total} Prompts, einer pro Karte. Kopieren, im ChatGPT-Chat mit der Stilvorlage einfügen, fertig.</p>
     <ul>
       <li>Speichere jede Grafik unter ihrer Kartennummer, zum Beispiel H2.png.</li>
       <li>Schick mir die Bilder gesammelt, gern kategorienweise.</li>
