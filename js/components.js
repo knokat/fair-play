@@ -68,7 +68,10 @@ export function SmallCard({ card, persons, onClick, mark }) {
       </div>
       <${Illustration} card=${card}/>
       ${parked
-        ? html`<div class="card-bottom note">${card.parked_note || 'Geparkt'}</div>`
+        ? html`<div class="card-bottom note">
+            ${card.is_dg && html`<span class="ico"><${Cup} fill=${cat.accent} size=${22}/></span>`}
+            <span class="note-text">${card.parked_note || 'Geparkt'}</span>
+          </div>`
         : html`<div class="card-bottom">
             <span class="ico">${card.is_dg ? html`<${Cup} fill=${cat.accent} size=${22}/>` : isTrio(card) ? html`<${Smile} fill=${cat.accent} size=${22}/>` : ''}</span>
             ${card.only_me ? html`<span class="only-me" title="Nur mir wichtig">nur mir</span>` : ''}

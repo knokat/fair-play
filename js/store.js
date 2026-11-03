@@ -36,7 +36,7 @@ async function loadDemo() {
       trio_owner: c.trio ? pid[c.trio] : null,
       descr: c.desc || '', conception: c.c || '', planning: c.p || '', execution: c.e || '', msc: '',
       status: c.status, holder: c.trio ? pid[c.trio] : null, only_me: false,
-      parked_note: c.note || '', img: c.img || null, updated_by: null, updated_at: null,
+      parked_note: c.note || '', park_group: c.group || null, img: c.img || null, updated_by: null, updated_at: null,
     })),
   };
   return demo;
@@ -126,9 +126,16 @@ export const setHolder = (card, personId, meId) =>
   patchCard(card, { holder: personId, ...(personId ? {} : { only_me: false }) },
     [{ action: 'dealt', from_person: card.holder, to_person: personId }], meId);
 
-export const park = (card, note, meId) =>
-  patchCard(card, { status: 'parked', holder: null, only_me: false, parked_note: note || '' },
+export function park(card, note, group, meId) {
+  const info = { parked_note: note || '', park_group: group || null };
+  if (card.status === 'parked') {
+    const changed = Object.keys(info).filter((k) => (card[k] || null) !== (info[k] || null));
+    if (!changed.length) return Promise.resolve();
+    return patchCard(card, info, changed.map((f) => ({ action: 'edited', field: f })), meId);
+  }
+  return patchCard(card, { status: 'parked', holder: null, only_me: false, ...info },
     [{ action: 'parked', from_person: card.holder }], meId);
+}
 
 export const unpark = (card, meId) =>
   patchCard(card, { status: 'deck', holder: null }, [{ action: 'unparked' }], meId);

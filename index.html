@@ -93,7 +93,9 @@ button { font: inherit; color: inherit; }
 .card-s.is-marked { outline: 3px solid var(--card-ink); outline-offset: 2px; }
 .card-s.is-parked .illus { filter: grayscale(1); opacity: 0.6; }
 .card-s.is-parked { background: #F3EDE6; }
-.card-s .note { font-size: 11px; line-height: 1.3; color: var(--card-soft); font-style: italic; justify-content: flex-start; padding-left: 4px; }
+.card-s .note { font-size: 11px; line-height: 1.3; color: var(--card-soft); font-style: italic; justify-content: flex-start; align-items: center; gap: 6px; padding-left: 4px; }
+.card-s .note .ico { flex: none; }
+.card-s .note-text { min-width: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .card-s:focus-visible, .btn:focus-visible, .tab:focus-visible, .chip:focus-visible, .icon-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 
 /* Große Karte mit Umdrehen */
@@ -147,6 +149,16 @@ button { font: inherit; color: inherit; }
 .login { display: flex; flex-direction: column; gap: 12px; padding-block: 15vh 40px; max-width: 420px; }
 .form { display: flex; flex-direction: column; gap: 8px; }
 .form label { font-weight: 700; font-size: 14px; margin-top: 6px; }
+.form .label-text { font-weight: 700; font-size: 14px; margin-top: 6px; }
+.group-pick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.pick { display: flex; flex-direction: column; gap: 2px; align-items: flex-start; text-align: left; min-height: 64px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; }
+.pick strong { font-size: 14px; }
+.pick span { font-size: 12px; line-height: 1.3; color: var(--ink-soft); }
+.pick.on { border-color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.pick:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.sec-hint { margin: -2px 0 2px; font-size: 13px; color: var(--ink-soft); }
+.park-group { font-weight: 800; }
+.park-note { margin: 0; white-space: pre-wrap; line-height: 1.45; }
 .form input:not([type=checkbox]), .form textarea { width: 100%; min-height: 46px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; resize: vertical; }
 .form input:focus, .form textarea:focus { outline: 3px solid var(--ink-soft); outline-offset: 1px; }
 .form .row { margin-top: 12px; }

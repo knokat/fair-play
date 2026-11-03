@@ -6,10 +6,11 @@
 "name": "Kinder|betreuung & Hilfen",
 "dg": true,
 "status": "parked",
-"note": "",
+"note": "Aktuell haben wir nur unsere Babysitterin, und die brauchen wir für Date Nights – darum kümmert sich, wer „Partnerschaft & Date Nights“ hält. Kann wieder wichtig werden, z. B. in Augsburg (neue Babysitterin finden) oder wenn wir öfter beide Termine haben.\nOffen: Wo gehört unsere Familienintensivbetreuerin hin?",
 "desc": "Babysitter, Nanny oder Haushaltshilfe finden, einweisen und koordinieren.",
 "motif": "ein Klemmbrett mit Notizen für den Babysitter, daneben ein Haustürschlüssel und eine Kinder-Trinkflasche",
-"img": "H1.png"
+"img": "H1.png",
+"group": "later"
 },
 {
 "id": "H2",
@@ -84,10 +85,11 @@
 "orig": "Home Furnishings",
 "name": "Einrichtung",
 "status": "parked",
-"note": "",
+"note": "Noch besprechen: Worum geht es genau, und betrifft es uns?",
 "desc": "Möbel und Einrichtung aussuchen, kaufen und aufstellen.",
 "motif": "ein gemütlicher Sessel neben einer Stehlampe, davor ein aufgefächerter Farbmusterfächer",
-"img": "H7.png"
+"img": "H7.png",
+"group": "open"
 },
 {
 "id": "H8",
@@ -136,10 +138,11 @@
 "orig": "Hosting",
 "name": "Gäste einladen",
 "status": "parked",
-"note": "",
+"note": "Geparkt, weil wir gerade keinen Kopf dafür haben und in Villach kaum enge Freunde. In Augsburg holen wir sie zurück.\nEigentlich wäre es auch jetzt schön – für Entspannung und soziale Kontakte. Ideen: Theresa & Tobias (Nachbarn), Armin (hat uns schon eingeladen), Joro und seine Frau.\nWas uns abhält: viel Arbeit und gefühlt zu wenig Platz.",
 "desc": "Besuch einladen, bewirten und beherbergen.",
 "motif": "ein Tablett mit Teekanne, zwei Tassen und einem Kuchen, daneben ein Stapel frisch bezogenes Gästebettzeug",
-"img": "H11.png"
+"img": "H11.png",
+"group": "later"
 },
 {
 "id": "H12",
@@ -175,10 +178,11 @@
 "name": "Post",
 "dg": true,
 "status": "parked",
-"note": "",
+"note": "Es kommt wenig Post. Wer sie reinholt, kümmert sich darum – keine eigene Karte nötig.",
 "desc": "Briefkasten leeren, Post sortieren und bearbeiten.",
 "motif": "ein Briefkasten, aus dem Briefe und ein Paketzettel herausschauen",
-"img": "H14.png"
+"img": "H14.png",
+"group": "never"
 },
 {
 "id": "H15",
@@ -241,10 +245,11 @@
 "orig": "Memories & Photos",
 "name": "Erinnerungen & Fotos",
 "status": "parked",
-"note": "",
+"note": "Noch besprechen: Worum geht es genau, und betrifft es uns?",
 "desc": "Fotos sortieren, Alben gestalten, Erinnerungen aufbewahren.",
 "motif": "ein aufgeschlagenes Fotoalbum mit eingeklebten Fotos, daneben eine Sofortbildkamera",
-"img": "H19.png"
+"img": "H19.png",
+"group": "open"
 },
 {
 "id": "H20",
@@ -265,10 +270,11 @@
 "orig": "Storage, Garage & Seasonal Items",
 "name": "Keller, Garage & Saisonales",
 "status": "parked",
-"note": "",
+"note": "Noch besprechen: Was würde, wer die Karte hält, eigentlich tun? Für uns ist der Keller eher ein gemeinsames Aufräum-Projekt.",
 "desc": "Keller und Garage ordnen, Saisonales ein- und ausräumen.",
 "motif": "zwei gestapelte Aufbewahrungskisten, aus der einen schauen Weihnachtskugeln, aus der anderen ein Sonnenhut, daneben ein aufgerollter Gartenschlauch",
-"img": "H21.png"
+"img": "H21.png",
+"group": "open"
 },
 {
 "id": "H22",
@@ -303,10 +309,11 @@
 "orig": "Birthday Celebrations (Other Kids)",
 "name": "Kinder|geburtstage anderer Kinder",
 "status": "parked",
-"note": "",
+"note": "Leander wird gerade kaum eingeladen. Wir hoffen, dass sich das mit dem Umzug ändert.",
 "desc": "Einladungen beantworten, Geschenke besorgen, hinbringen und abholen.",
 "motif": "ein eingepacktes Geschenk mit großer Schleife und eine Einladungskarte mit Luftballon-Motiv",
-"img": "O2.png"
+"img": "O2.png",
+"group": "later"
 },
 {
 "id": "O3",
@@ -341,10 +348,11 @@
 "orig": "Charity, Community Service & Good Deeds (Adults)",
 "name": "Ehrenamt & Spenden",
 "status": "parked",
-"note": "",
+"note": "Wir spenden einmal im Jahr per Überweisung. Für ein Ehrenamt fehlt neben allem anderen die Zeit.",
 "desc": "Sich engagieren und entscheiden, wofür wir spenden.",
 "motif": "ein Glas mit Münzen und einem Herz-Etikett, daneben ein Karton mit gespendeter Kleidung",
-"img": "O5.png"
+"img": "O5.png",
+"group": "never"
 },
 {
 "id": "O6",
@@ -352,10 +360,11 @@
 "orig": "Civic Engagement & Cultural Enrichment",
 "name": "Gesellschaft & Kultur",
 "status": "parked",
-"note": "",
+"note": "Schaffen wir im Moment einfach nicht.",
 "desc": "Wählen gehen, Kultur erleben, informiert bleiben.",
 "motif": "eine Wahlurne mit eingeworfenem Umschlag, daneben zwei Theaterkarten und eine gefaltete Zeitung",
-"img": "O6.png"
+"img": "O6.png",
+"group": "later"
 },
 {
 "id": "O7",
@@ -431,10 +440,11 @@
 "orig": "Packing & Unpacking (Travel)",
 "name": "Packen für Reisen",
 "status": "parked",
-"note": "Momentan nicht relevant",
+"note": "Kommt mit dem Reisen zurück, frühestens Sommer 2027.",
 "desc": "Für Urlaube und Reisen packen und wieder auspacken.",
 "motif": "ein offener Koffer mit gefalteter Kleidung, Sonnenbrille und Kulturbeutel",
-"img": "O12.png"
+"img": "O12.png",
+"group": "later"
 },
 {
 "id": "O13",
@@ -442,10 +452,11 @@
 "orig": "Points, Miles & Coupons",
 "name": "Bonuspunkte & Gutscheine",
 "status": "parked",
-"note": "",
+"note": "Eher ein amerikanisches Thema – brauchen wir nicht.",
 "desc": "Bonusprogramme und Gutscheine nutzen, bevor sie verfallen.",
 "motif": "ein Gutschein mit Schleife, eine Kundenkarte und ein paar Coupons mit Prozentzeichen",
-"img": "O13.png"
+"img": "O13.png",
+"group": "never"
 },
 {
 "id": "O14",
@@ -453,10 +464,11 @@
 "orig": "Returns & Store Credits",
 "name": "Rück|sendungen & Gutschriften",
 "status": "parked",
-"note": "",
+"note": "Wer etwas bestellt, kümmert sich selbst um die Rücksendung.",
 "desc": "Rücksendungen erledigen und Gutschriften einlösen.",
 "motif": "ein Paket mit Rücksendeetikett und Pfeil-Symbol, daneben ein langer Kassenbon",
-"img": "O14.png"
+"img": "O14.png",
+"group": "never"
 },
 {
 "id": "O15",
@@ -477,10 +489,11 @@
 "orig": "School Breaks (Summer)",
 "name": "Sommer|ferien",
 "status": "parked",
-"note": "Momentan nicht relevant",
+"note": "Momentan nicht relevant, wird aber wieder wichtig.",
 "desc": "Die Sommerferien planen: Betreuung, Camps, Urlaub.",
 "motif": "ein Sonnenhut, eine Sandschaufel und ein Eis am Stiel vor einer kleinen Sonne",
-"img": "O16.png"
+"img": "O16.png",
+"group": "later"
 },
 {
 "id": "O17",
@@ -501,10 +514,11 @@
 "orig": "Social Plans (Couples)",
 "name": "Treffen mit anderen Paaren",
 "status": "parked",
-"note": "",
+"note": "Wie bei „Gäste einladen“: gerade keinen Kopf dafür, kommt hoffentlich wieder.",
 "desc": "Gemeinsame Unternehmungen mit befreundeten Paaren planen.",
 "motif": "ein Picknickkorb auf einer Decke mit vier Bechern, die anstoßen",
-"img": "O18.png"
+"img": "O18.png",
+"group": "later"
 },
 {
 "id": "O19",
@@ -513,10 +527,11 @@
 "name": "Fahrdienste (Kind)",
 "dg": true,
 "status": "parked",
-"note": "",
+"note": "Fahrten zu Kursen und Sport übernimmt, wer die Karte dafür hält. Schulweg: Matthias geht morgens mit, nach Hause geht Leander allein. In Augsburg schafft er den Weg wohl ganz allein.",
 "desc": "Leander zu Schule, Training und Terminen bringen und abholen.",
 "motif": "ein Autoschlüssel, eine kleine Straßenkarte mit drei Stecknadeln und eine Uhr",
-"img": "O19.png"
+"img": "O19.png",
+"group": "never"
 },
 {
 "id": "O20",
@@ -524,10 +539,11 @@
 "orig": "Travel",
 "name": "Reisen",
 "status": "parked",
-"note": "Momentan nicht relevant",
+"note": "Frühestens Sommer 2027, wenn alles rund um den Umzug geklärt ist.",
 "desc": "Urlaube und Reisen planen und buchen.",
 "motif": "ein kleines Flugzeug über einer Weltkugel, daneben ein Reisepass mit Bordkarte",
-"img": "O20.png"
+"img": "O20.png",
+"group": "later"
 },
 {
 "id": "O21",
@@ -602,10 +618,11 @@
 "orig": "Birth Control",
 "name": "Verhütung",
 "status": "parked",
-"note": "",
+"note": "Kein Thema für uns.",
 "desc": "Verhütung gemeinsam verantworten.",
 "motif": "zwei ineinander verschränkte Herzen und ein kleiner Kalender mit Häkchen",
-"img": "C4.png"
+"img": "C4.png",
+"group": "never"
 },
 {
 "id": "C5",
@@ -640,10 +657,11 @@
 "name": "Wickeln & Sauber|werden",
 "dg": true,
 "status": "parked",
-"note": "",
+"note": "Leander ist aus dem Alter heraus.",
 "desc": "Windeln und Töpfchentraining.",
 "motif": "ein Töpfchen und eine gefaltete Windel",
-"img": "C7.png"
+"img": "C7.png",
+"group": "never"
 },
 {
 "id": "C8",
@@ -691,10 +709,11 @@
 "orig": "Health Insurance",
 "name": "Kranken|versicherung",
 "status": "parked",
-"note": "",
+"note": "Läuft bei uns automatisch über die gesetzliche Versicherung – anders als in den USA.",
 "desc": "Krankenversicherung abschließen, prüfen und Leistungen abrechnen.",
 "motif": "eine Versichertenkarte mit Kreuz-Symbol, ein Schutzschild und ein Formular mit Häkchen",
-"img": "C11.png"
+"img": "C11.png",
+"group": "never"
 },
 {
 "id": "C12",
@@ -717,10 +736,11 @@
 "name": "Gesundheit & Arzt|termine",
 "dg": true,
 "status": "parked",
-"note": "Abgedeckt über Besondere Bedürfnisse & psychische Gesundheit und Zahnarzt",
+"note": "Abgedeckt über „Besondere Bedürfnisse & psychische Gesundheit“ und „Zahnarzt“. Bei Bedarf holen wir sie wieder heraus.",
 "desc": "Arzttermine, Impfungen und gesunde Lebensweise.",
 "motif": "ein Stethoskop, ein Apfel und ein Terminkärtchen",
-"img": "C13.png"
+"img": "C13.png",
+"group": "never"
 },
 {
 "id": "C14",
@@ -742,10 +762,11 @@
 "orig": "Parents & In-Laws",
 "name": "Eltern & Schwieger|eltern",
 "status": "parked",
-"note": "",
+"note": "Noch besprechen: Worum geht es genau, und betrifft es uns?",
 "desc": "Kontakt halten und unterstützen, wo die Großeltern Hilfe brauchen.",
 "motif": "eine Lesebrille, eine Teetasse und ein altes Telefon mit kleinem Herz",
-"img": "C15.png"
+"img": "C15.png",
+"group": "open"
 },
 {
 "id": "C16",
@@ -767,10 +788,11 @@
 "orig": "School Service",
 "name": "Mithilfe in der Schule",
 "status": "parked",
-"note": "",
+"note": "Gibt es bei uns nicht.",
 "desc": "Elternverein, Ausflüge begleiten, Schulfeste unterstützen.",
 "motif": "ein Kuchen auf einer Platte für das Schulfest, darüber eine kleine Wimpelkette",
-"img": "C17.png"
+"img": "C17.png",
+"group": "never"
 },
 {
 "id": "C18",
@@ -901,10 +923,11 @@
 "orig": "Extended Family",
 "name": "Verwandtschaft",
 "status": "parked",
-"note": "",
+"note": "Noch besprechen: Worum geht es genau, und betrifft es uns?",
 "desc": "Kontakt zur erweiterten Familie pflegen.",
 "motif": "ein kleiner Stammbaum mit Bilderrahmen an den Ästen",
-"img": "M5.png"
+"img": "M5.png",
+"group": "open"
 },
 {
 "id": "M6",
@@ -925,10 +948,11 @@
 "orig": "Gestures of Love (Kids)",
 "name": "Kleine Liebes|beweise (Kind)",
 "status": "parked",
-"note": "",
+"note": "Schaffen wir von der mentalen Belastung her gerade nicht – soll wiederkommen.",
 "desc": "Zettel in der Jausenbox, kleine Überraschungen.",
 "motif": "eine Jausenbox, auf dem Deckel ein gefalteter Zettel mit Herz",
-"img": "M7.png"
+"img": "M7.png",
+"group": "later"
 },
 {
 "id": "M8",
@@ -936,10 +960,11 @@
 "orig": "Gifts (Family)",
 "name": "Geschenke (Familie)",
 "status": "parked",
-"note": "",
+"note": "Bei uns bekommen nur die Kinder Geschenke, also geht es vor allem um Weihnachten – bald ins Deck holen.",
 "desc": "Geschenke für die Familie besorgen und verpacken.",
 "motif": "drei gestapelte Geschenke mit Schleifen und eine Rolle Geschenkpapier",
-"img": "M8.png"
+"img": "M8.png",
+"group": "soon"
 },
 {
 "id": "M9",
@@ -947,10 +972,11 @@
 "orig": "Gifts (VIPs)",
 "name": "Geschenke (Lehr|kräfte & Helfer)",
 "status": "parked",
-"note": "",
+"note": "Läuft meist über die WhatsApp-Gruppe: Eine Mutter organisiert, wir überweisen nur. Wenig Aufwand – Katja nimmt die Karte, wenn sie zurückkommt.",
 "desc": "Ein Dankeschön für Lehrkräfte, Trainer und Helfer.",
 "motif": "ein kleiner Blumenstrauß und eine Dankeskarte mit Herz",
-"img": "M9.png"
+"img": "M9.png",
+"group": "later"
 },
 {
 "id": "M10",

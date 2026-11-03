@@ -20,12 +20,12 @@ for i, c in enumerate(cards, start=1):
     rows.append(
         f"({q(c['id'])}, {i}, {q(c['cat'])}, {q(c['orig'])}, {q(c['name'])}, {'true' if c.get('dg') else 'false'}, "
         f"{trio}, {q(c.get('desc'))}, {q(c.get('c'))}, {q(c.get('p'))}, {q(c.get('e'))}, {q(c['status'])}, "
-        f"{holder}, {q(c.get('note'))}, {img})"
+        f"{holder}, {q(c.get('note'))}, {q(c['group']) if c.get('group') else 'null'}, {img})"
     )
 
 sql = (
     "-- Startdeck (Stand 1.11.2026). Nach schema.sql ausführen. Überschreibt nichts, was schon da ist.\n"
-    "insert into fp_card (id, sort, cat, orig, name, is_dg, trio_owner, descr, conception, planning, execution, status, holder, parked_note, img) values\n"
+    "insert into fp_card (id, sort, cat, orig, name, is_dg, trio_owner, descr, conception, planning, execution, status, holder, parked_note, park_group, img) values\n"
     + ",\n".join(rows)
     + "\non conflict (id) do nothing;\n"
 )

@@ -1,7 +1,7 @@
 // Hauptkomponente: Anmeldung, Ansichten (Meine, andere Person, Deck, Parkplatz) und Kartendetail.
 import { html, render, useState, useEffect, useMemo, useCallback } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import * as store from './store.js';
-import { CATS, CAT_ORDER, plainName, isTrio, fmtDate, ORIGINAL_URL } from './meta.js';
+import { CATS, CAT_ORDER, plainName, isTrio, fmtDate, origUrl, PARK_GROUPS, parkGroupLabel } from './meta.js';
 import { Grid, Sheet, BigCard, OwnerDot, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand, IconRoute, IconNote } from './components.js';
 import { WegPage, CheckinPage, HistoryPage, NotesPage, NoteSheet, NextCheckinBar, RunningCheckinBar, sinceForNewCheckin, openSteps } from './journey.js';
 
@@ -98,14 +98,25 @@ function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOn
 // ---------- Ansicht: Parkplatz ----------
 function ParkedView({ cards, persons, onOpen }) {
   const parked = cards.filter((c) => c.status === 'parked');
+  const dg = parked.filter((c) => c.is_dg).length;
+  const byCatSort = (a, b) => (CAT_ORDER.indexOf(a.cat) - CAT_ORDER.indexOf(b.cat)) || bySort(a, b);
   return html`
     <div class="view">
       <div class="summary">
         <span class="big-num">${parked.length}</span>
-        <span class="sum-text">Karten auf dem Parkplatz</span>
+        <span class="sum-text">Karten auf dem Parkplatz · ${dg} Daily ${dg === 1 ? 'Grind' : 'Grinds'}</span>
       </div>
-      <p class="muted">Geparkte Karten betreffen uns gerade nicht. Öffne eine Karte, um sie zurück ins Deck zu holen.</p>
-      <${CatSections} cards=${parked} persons=${persons} onOpen=${onOpen}/>
+      <p class="muted">Geparkte Karten brauchen wir gerade nicht. Öffne eine Karte, um die Notiz oder die Gruppe zu ändern oder sie zurück ins Deck zu holen.</p>
+      ${PARK_GROUPS.map((g) => {
+        const list = parked.filter((c) => (c.park_group || null) === g.key).sort(byCatSort);
+        if (!list.length) return null;
+        return html`
+          <section class="section" key=${g.key || 'none'}>
+            <h2 class=${`sec-title${g.key === 'soon' ? ' warn' : ''}`}>${g.label} <span class=${`count${g.key === 'soon' ? ' warn' : ''}`}>${list.length}</span></h2>
+            ${g.hint && html`<p class="sec-hint">${g.hint}</p>`}
+            <${Grid} cards=${list} persons=${persons} onOpen=${onOpen}/>
+          </section>`;
+      })}
     </div>`;
 }
 
@@ -139,11 +150,20 @@ function EditSheet({ card, onSave, onClose }) {
 
 function ParkSheet({ card, onPark, onClose }) {
   const [note, setNote] = useState(card.parked_note || '');
+  const [group, setGroup] = useState(card.park_group || null);
   return html`
-    <${Sheet} title=${card.status === 'parked' ? 'Notiz ändern' : 'Karte parken'} onClose=${onClose}>
-      <form class="form" onSubmit=${(e) => { e.preventDefault(); onPark(note.trim()); }}>
+    <${Sheet} title=${card.status === 'parked' ? 'Parkplatz-Notiz' : 'Karte parken'} onClose=${onClose}>
+      <form class="form" onSubmit=${(e) => { e.preventDefault(); onPark(note.trim(), group); }}>
+        <span class="label-text" id="park-group-label">Wohin damit?</span>
+        <div class="group-pick" role="radiogroup" aria-labelledby="park-group-label">
+          ${PARK_GROUPS.filter((g) => g.key).map((g) => html`
+            <button type="button" role="radio" aria-checked=${group === g.key} class=${`pick${group === g.key ? ' on' : ''}`}
+              onClick=${() => setGroup(group === g.key ? null : g.key)}>
+              <strong>${g.label}</strong><span>${g.hint}</span>
+            </button>`)}
+        </div>
         <label for="park-note">Warum parken wir sie? (optional)</label>
-        <input id="park-note" value=${note} onInput=${(e) => setNote(e.target.value)} placeholder="z. B. Mit Augsburg ins Deck holen"/>
+        <textarea id="park-note" rows="4" value=${note} onInput=${(e) => setNote(e.target.value)} placeholder="z. B. Mit Augsburg ins Deck holen"></textarea>
         ${card.status !== 'parked' && card.holder && html`<p class="field-hint">Die Karte verliert dabei ihren Owner.</p>`}
         <div class="row">
           <button type="button" class="btn ghost" onClick=${onClose}>Abbrechen</button>
@@ -176,10 +196,11 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
 
       <div class="panel">
         ${parked ? html`
-          <div class="panel-row"><span class="label">Parkplatz</span><span>${card.parked_note || 'Ohne Notiz'}</span></div>
+          <div class="panel-row"><span class="label">Parkplatz</span><span class="park-group">${parkGroupLabel(card.park_group)}</span></div>
+          ${card.parked_note ? html`<p class="park-note">${card.parked_note}</p>` : html`<p class="muted">Noch keine Notiz.</p>`}
           <div class="row">
             <button type="button" class="btn primary" onClick=${() => act('unpark', card)}>Ins Deck holen</button>
-            <button type="button" class="btn ghost" onClick=${() => setSheet('park')}>Notiz ändern</button>
+            <button type="button" class="btn ghost" onClick=${() => setSheet('park')}><${IconEdit}/> Notiz & Gruppe</button>
           </div>`
         : trio ? html`
           <div class="panel-row"><span class="label">Owner</span><span class="owner-inline"><${OwnerDot} person=${holder} size=${30}/>${holder?.name}</span></div>
@@ -206,13 +227,13 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
       </div>
       <div class="meta">
         ${editor && html`<span>Zuletzt geändert von ${editor.name} am ${fmtDate(card.updated_at)}</span>`}
-        <a href=${ORIGINAL_URL} target="_blank" rel="noopener">Originalkarte „${card.orig}“ auf fairplaypolicy.org</a>
+        <a href=${origUrl(card)} target="_blank" rel="noopener">Originalkarte „${card.orig}“ auf fairplaypolicy.org</a>
       </div>
 
       ${sheet === 'edit' && html`<${EditSheet} card=${card} onClose=${() => setSheet(null)}
         onSave=${async (f) => { await act('texts', card, f); setSheet(null); }}/>`}
       ${sheet === 'park' && html`<${ParkSheet} card=${card} onClose=${() => setSheet(null)}
-        onPark=${async (note) => { await act('park', card, note); setSheet(null); }}/>`}
+        onPark=${async (note, group) => { await act('park', card, { note, group }); setSheet(null); }}/>`}
     </div>`;
 }
 
@@ -292,7 +313,7 @@ function App() {
   const act = async (type, card, arg) => {
     try {
       if (type === 'deal') { await store.setHolder(card, arg, meId); setToast(handoverText(card, arg) || (arg === meId ? 'Du hältst jetzt diese Karte' : `An ${name(arg)} gegeben`)); }
-      if (type === 'park') { await store.park(card, arg, meId); setToast(card.status === 'parked' ? 'Notiz gespeichert' : 'Geparkt'); }
+      if (type === 'park') { await store.park(card, arg.note, arg.group, meId); setToast(card.status === 'parked' ? 'Gespeichert' : 'Geparkt'); }
       if (type === 'unpark') { await store.unpark(card, meId); setToast('Zurück im Deck, noch ohne Owner'); }
       if (type === 'onlyMe') { await store.setOnlyMe(card, arg, meId); }
       if (type === 'texts') { await store.updateTexts(card, arg, meId); setToast('Gespeichert'); }

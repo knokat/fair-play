@@ -29,6 +29,7 @@ create table if not exists fp_card (
   holder uuid references fp_person (id),     -- leer = noch nicht verteilt
   only_me boolean not null default false,    -- Stapel 3: nur dem Owner wichtig
   parked_note text not null default '',
+  park_group text check (park_group in ('soon','later','open','never')),  -- Gruppe auf dem Parkplatz, leer = noch nicht einsortiert
   img text,                                  -- Dateiname in img/
   updated_by uuid references fp_person (id),
   updated_at timestamptz not null default now()
