@@ -8,7 +8,8 @@
 "status": "parked",
 "note": "",
 "desc": "Babysitter, Nanny oder Haushaltshilfe finden, einweisen und koordinieren.",
-"motif": "ein Klemmbrett mit Notizen für den Babysitter, daneben ein Haustürschlüssel und eine Kinder-Trinkflasche"
+"motif": "ein Klemmbrett mit Notizen für den Babysitter, daneben ein Haustürschlüssel und eine Kinder-Trinkflasche",
+"img": "H1.png"
 },
 {
 "id": "H2",
@@ -85,7 +86,8 @@
 "status": "parked",
 "note": "",
 "desc": "Möbel und Einrichtung aussuchen, kaufen und aufstellen.",
-"motif": "ein gemütlicher Sessel neben einer Stehlampe, davor ein aufgefächerter Farbmusterfächer"
+"motif": "ein gemütlicher Sessel neben einer Stehlampe, davor ein aufgefächerter Farbmusterfächer",
+"img": "H7.png"
 },
 {
 "id": "H8",
@@ -136,7 +138,8 @@
 "status": "parked",
 "note": "",
 "desc": "Besuch einladen, bewirten und beherbergen.",
-"motif": "ein Tablett mit Teekanne, zwei Tassen und einem Kuchen, daneben ein Stapel frisch bezogenes Gästebettzeug"
+"motif": "ein Tablett mit Teekanne, zwei Tassen und einem Kuchen, daneben ein Stapel frisch bezogenes Gästebettzeug",
+"img": "H11.png"
 },
 {
 "id": "H12",
@@ -174,7 +177,8 @@
 "status": "parked",
 "note": "",
 "desc": "Briefkasten leeren, Post sortieren und bearbeiten.",
-"motif": "ein Briefkasten, aus dem Briefe und ein Paketzettel herausschauen"
+"motif": "ein Briefkasten, aus dem Briefe und ein Paketzettel herausschauen",
+"img": "H14.png"
 },
 {
 "id": "H15",
@@ -239,7 +243,8 @@
 "status": "parked",
 "note": "",
 "desc": "Fotos sortieren, Alben gestalten, Erinnerungen aufbewahren.",
-"motif": "ein aufgeschlagenes Fotoalbum mit eingeklebten Fotos, daneben eine Sofortbildkamera"
+"motif": "ein aufgeschlagenes Fotoalbum mit eingeklebten Fotos, daneben eine Sofortbildkamera",
+"img": "H19.png"
 },
 {
 "id": "H20",
@@ -262,7 +267,8 @@
 "status": "parked",
 "note": "",
 "desc": "Keller und Garage ordnen, Saisonales ein- und ausräumen.",
-"motif": "zwei gestapelte Aufbewahrungskisten, aus der einen schauen Weihnachtskugeln, aus der anderen ein Sonnenhut, daneben ein aufgerollter Gartenschlauch"
+"motif": "zwei gestapelte Aufbewahrungskisten, aus der einen schauen Weihnachtskugeln, aus der anderen ein Sonnenhut, daneben ein aufgerollter Gartenschlauch",
+"img": "H21.png"
 },
 {
 "id": "H22",
@@ -299,7 +305,8 @@
 "status": "parked",
 "note": "",
 "desc": "Einladungen beantworten, Geschenke besorgen, hinbringen und abholen.",
-"motif": "ein eingepacktes Geschenk mit großer Schleife und eine Einladungskarte mit Luftballon-Motiv"
+"motif": "ein eingepacktes Geschenk mit großer Schleife und eine Einladungskarte mit Luftballon-Motiv",
+"img": "O2.png"
 },
 {
 "id": "O3",
@@ -336,7 +343,8 @@
 "status": "parked",
 "note": "",
 "desc": "Sich engagieren und entscheiden, wofür wir spenden.",
-"motif": "ein Glas mit Münzen und einem Herz-Etikett, daneben ein Karton mit gespendeter Kleidung"
+"motif": "ein Glas mit Münzen und einem Herz-Etikett, daneben ein Karton mit gespendeter Kleidung",
+"img": "O5.png"
 },
 {
 "id": "O6",
@@ -346,7 +354,8 @@
 "status": "parked",
 "note": "",
 "desc": "Wählen gehen, Kultur erleben, informiert bleiben.",
-"motif": "eine Wahlurne mit eingeworfenem Umschlag, daneben zwei Theaterkarten und eine gefaltete Zeitung"
+"motif": "eine Wahlurne mit eingeworfenem Umschlag, daneben zwei Theaterkarten und eine gefaltete Zeitung",
+"img": "O6.png"
 },
 {
 "id": "O7",
@@ -424,7 +433,8 @@
 "status": "parked",
 "note": "Momentan nicht relevant",
 "desc": "Für Urlaube und Reisen packen und wieder auspacken.",
-"motif": "ein offener Koffer mit gefalteter Kleidung, Sonnenbrille und Kulturbeutel"
+"motif": "ein offener Koffer mit gefalteter Kleidung, Sonnenbrille und Kulturbeutel",
+"img": "O12.png"
 },
 {
 "id": "O13",
@@ -434,7 +444,8 @@
 "status": "parked",
 "note": "",
 "desc": "Bonusprogramme und Gutscheine nutzen, bevor sie verfallen.",
-"motif": "ein Gutschein mit Schleife, eine Kundenkarte und ein paar Coupons mit Prozentzeichen"
+"motif": "ein Gutschein mit Schleife, eine Kundenkarte und ein paar Coupons mit Prozentzeichen",
+"img": "O13.png"
 },
 {
 "id": "O14",
@@ -444,7 +455,8 @@
 "status": "parked",
 "note": "",
 "desc": "Rücksendungen erledigen und Gutschriften einlösen.",
-"motif": "ein Paket mit Rücksendeetikett und Pfeil-Symbol, daneben ein langer Kassenbon"
+"motif": "ein Paket mit Rücksendeetikett und Pfeil-Symbol, daneben ein langer Kassenbon",
+"img": "O14.png"
 },
 {
 "id": "O15",
@@ -467,7 +479,8 @@
 "status": "parked",
 "note": "Momentan nicht relevant",
 "desc": "Die Sommerferien planen: Betreuung, Camps, Urlaub.",
-"motif": "ein Sonnenhut, eine Sandschaufel und ein Eis am Stiel vor einer kleinen Sonne"
+"motif": "ein Sonnenhut, eine Sandschaufel und ein Eis am Stiel vor einer kleinen Sonne",
+"img": "O16.png"
 },
 {
 "id": "O17",
@@ -490,7 +503,8 @@
 "status": "parked",
 "note": "",
 "desc": "Gemeinsame Unternehmungen mit befreundeten Paaren planen.",
-"motif": "ein Picknickkorb auf einer Decke mit vier Bechern, die anstoßen"
+"motif": "ein Picknickkorb auf einer Decke mit vier Bechern, die anstoßen",
+"img": "O18.png"
 },
 {
 "id": "O19",
@@ -501,7 +515,8 @@
 "status": "parked",
 "note": "",
 "desc": "Leander zu Schule, Training und Terminen bringen und abholen.",
-"motif": "ein Autoschlüssel, eine kleine Straßenkarte mit drei Stecknadeln und eine Uhr"
+"motif": "ein Autoschlüssel, eine kleine Straßenkarte mit drei Stecknadeln und eine Uhr",
+"img": "O19.png"
 },
 {
 "id": "O20",
@@ -511,7 +526,8 @@
 "status": "parked",
 "note": "Momentan nicht relevant",
 "desc": "Urlaube und Reisen planen und buchen.",
-"motif": "ein kleines Flugzeug über einer Weltkugel, daneben ein Reisepass mit Bordkarte"
+"motif": "ein kleines Flugzeug über einer Weltkugel, daneben ein Reisepass mit Bordkarte",
+"img": "O20.png"
 },
 {
 "id": "O21",
@@ -588,7 +604,8 @@
 "status": "parked",
 "note": "",
 "desc": "Verhütung gemeinsam verantworten.",
-"motif": "zwei ineinander verschränkte Herzen und ein kleiner Kalender mit Häkchen"
+"motif": "zwei ineinander verschränkte Herzen und ein kleiner Kalender mit Häkchen",
+"img": "C4.png"
 },
 {
 "id": "C5",
@@ -625,7 +642,8 @@
 "status": "parked",
 "note": "",
 "desc": "Windeln und Töpfchentraining.",
-"motif": "ein Töpfchen und eine gefaltete Windel"
+"motif": "ein Töpfchen und eine gefaltete Windel",
+"img": "C7.png"
 },
 {
 "id": "C8",
@@ -675,7 +693,8 @@
 "status": "parked",
 "note": "",
 "desc": "Krankenversicherung abschließen, prüfen und Leistungen abrechnen.",
-"motif": "eine Versichertenkarte mit Kreuz-Symbol, ein Schutzschild und ein Formular mit Häkchen"
+"motif": "eine Versichertenkarte mit Kreuz-Symbol, ein Schutzschild und ein Formular mit Häkchen",
+"img": "C11.png"
 },
 {
 "id": "C12",
@@ -700,7 +719,8 @@
 "status": "parked",
 "note": "Abgedeckt über Besondere Bedürfnisse & psychische Gesundheit und Zahnarzt",
 "desc": "Arzttermine, Impfungen und gesunde Lebensweise.",
-"motif": "ein Stethoskop, ein Apfel und ein Terminkärtchen"
+"motif": "ein Stethoskop, ein Apfel und ein Terminkärtchen",
+"img": "C13.png"
 },
 {
 "id": "C14",
@@ -724,7 +744,8 @@
 "status": "parked",
 "note": "",
 "desc": "Kontakt halten und unterstützen, wo die Großeltern Hilfe brauchen.",
-"motif": "eine Lesebrille, eine Teetasse und ein altes Telefon mit kleinem Herz"
+"motif": "eine Lesebrille, eine Teetasse und ein altes Telefon mit kleinem Herz",
+"img": "C15.png"
 },
 {
 "id": "C16",
@@ -748,7 +769,8 @@
 "status": "parked",
 "note": "",
 "desc": "Elternverein, Ausflüge begleiten, Schulfeste unterstützen.",
-"motif": "ein Kuchen auf einer Platte für das Schulfest, darüber eine kleine Wimpelkette"
+"motif": "ein Kuchen auf einer Platte für das Schulfest, darüber eine kleine Wimpelkette",
+"img": "C17.png"
 },
 {
 "id": "C18",
@@ -881,7 +903,8 @@
 "status": "parked",
 "note": "",
 "desc": "Kontakt zur erweiterten Familie pflegen.",
-"motif": "ein kleiner Stammbaum mit Bilderrahmen an den Ästen"
+"motif": "ein kleiner Stammbaum mit Bilderrahmen an den Ästen",
+"img": "M5.png"
 },
 {
 "id": "M6",
@@ -904,7 +927,8 @@
 "status": "parked",
 "note": "",
 "desc": "Zettel in der Jausenbox, kleine Überraschungen.",
-"motif": "eine Jausenbox, auf dem Deckel ein gefalteter Zettel mit Herz"
+"motif": "eine Jausenbox, auf dem Deckel ein gefalteter Zettel mit Herz",
+"img": "M7.png"
 },
 {
 "id": "M8",
@@ -914,7 +938,8 @@
 "status": "parked",
 "note": "",
 "desc": "Geschenke für die Familie besorgen und verpacken.",
-"motif": "drei gestapelte Geschenke mit Schleifen und eine Rolle Geschenkpapier"
+"motif": "drei gestapelte Geschenke mit Schleifen und eine Rolle Geschenkpapier",
+"img": "M8.png"
 },
 {
 "id": "M9",
@@ -924,7 +949,8 @@
 "status": "parked",
 "note": "",
 "desc": "Ein Dankeschön für Lehrkräfte, Trainer und Helfer.",
-"motif": "ein kleiner Blumenstrauß und eine Dankeskarte mit Herz"
+"motif": "ein kleiner Blumenstrauß und eine Dankeskarte mit Herz",
+"img": "M9.png"
 },
 {
 "id": "M10",
@@ -934,7 +960,8 @@
 "status": "parked",
 "note": "",
 "desc": "Auf große Fragen von Leander eingehen – Tod, Liebe, Gerechtigkeit.",
-"motif": "zwei Sprechblasen, in einer ein großes Fragezeichen, in der anderen ein kleines Herz, darunter ein aufgeschlagenes Buch"
+"motif": "zwei Sprechblasen, in einer ein großes Fragezeichen, in der anderen ein kleines Herz, darunter ein aufgeschlagenes Buch",
+"img": "M10.png"
 },
 {
 "id": "M11",
@@ -944,7 +971,8 @@
 "status": "parked",
 "note": "",
 "desc": "Weihnachtskarten schreiben und verschicken.",
-"motif": "ein Stapel Weihnachtskarten mit Stern, eine Briefmarke und ein Füller"
+"motif": "ein Stapel Weihnachtskarten mit Stern, eine Briefmarke und ein Füller",
+"img": "M11.png"
 },
 {
 "id": "M12",
@@ -1007,7 +1035,8 @@
 "status": "parked",
 "note": "",
 "desc": "Nachts aufstehen, wenn Leander schlecht träumt oder krank ist.",
-"motif": "eine Nachttischlampe mit warmem Licht, ein Kuscheltier und ein Glas Wasser, darüber ein Mond"
+"motif": "eine Nachttischlampe mit warmem Licht, ein Kuscheltier und ein Glas Wasser, darüber ein Mond",
+"img": "M16.png"
 },
 {
 "id": "M17",
@@ -1017,7 +1046,8 @@
 "status": "parked",
 "note": "Wir coachen uns ohnehin gegenseitig",
 "desc": "Einander zuhören und unterstützen.",
-"motif": "zwei Teetassen nebeneinander, darüber eine Sprechblase mit Herz"
+"motif": "zwei Teetassen nebeneinander, darüber eine Sprechblase mit Herz",
+"img": "M17.png"
 },
 {
 "id": "M18",
@@ -1027,7 +1057,8 @@
 "status": "parked",
 "note": "",
 "desc": "Bei Aufführungen, Spielen und Schulveranstaltungen dabei sein.",
-"motif": "zwei klatschende Hände vor einer kleinen Bühne mit Vorhang"
+"motif": "zwei klatschende Hände vor einer kleinen Bühne mit Vorhang",
+"img": "M18.png"
 },
 {
 "id": "M19",
@@ -1037,7 +1068,8 @@
 "status": "parked",
 "note": "",
 "desc": "Glauben, Rituale und Sinnfragen in der Familie.",
-"motif": "eine brennende Kerze, ein kleiner Turm aus gestapelten Steinen und ein Blatt"
+"motif": "eine brennende Kerze, ein kleiner Turm aus gestapelten Steinen und ein Blatt",
+"img": "M19.png"
 },
 {
 "id": "M20",
@@ -1047,7 +1079,8 @@
 "status": "parked",
 "note": "",
 "desc": "Danke sagen – schriftlich.",
-"motif": "eine Karte mit Herz in einem offenen Umschlag, daneben ein Füller"
+"motif": "eine Karte mit Herz in einem offenen Umschlag, daneben ein Füller",
+"img": "M20.png"
 },
 {
 "id": "M21",
@@ -1057,7 +1090,8 @@
 "status": "parked",
 "note": "",
 "desc": "Werte vermitteln und gemeinsam Gutes tun.",
-"motif": "ein Kinder-Müllgreifer und ein kleiner Sack beim Aufräumen im Park, darüber ein Herz"
+"motif": "ein Kinder-Müllgreifer und ein kleiner Sack beim Aufräumen im Park, darüber ein Herz",
+"img": "M21.png"
 },
 {
 "id": "M22",
@@ -1068,7 +1102,8 @@
 "status": "parked",
 "note": "",
 "desc": "Ein Auge auf Leander haben, wenn er spielt oder unterwegs ist.",
-"motif": "ein Fernglas, daneben eine Schaukel und ein Ball"
+"motif": "ein Fernglas, daneben eine Schaukel und ein Ball",
+"img": "M22.png"
 },
 {
 "id": "W1",
@@ -1078,7 +1113,8 @@
 "status": "parked",
 "note": "",
 "desc": "Wenn ein Elternteil Pflege braucht.",
-"motif": "zwei Hände – eine junge hält eine ältere –, daneben ein Gehstock"
+"motif": "zwei Hände – eine junge hält eine ältere –, daneben ein Gehstock",
+"img": "W1.png"
 },
 {
 "id": "W2",
@@ -1088,7 +1124,8 @@
 "status": "parked",
 "note": "",
 "desc": "Wenn ein naher Mensch stirbt.",
-"motif": "eine brennende Kerze, ein kleiner Blumenstrauß und eine Feder"
+"motif": "eine brennende Kerze, ein kleiner Blumenstrauß und eine Feder",
+"img": "W2.png"
 },
 {
 "id": "W3",
@@ -1098,7 +1135,8 @@
 "status": "parked",
 "note": "",
 "desc": "Das erste Jahr mit einem Baby.",
-"motif": "ein Babyfläschchen, ein Schnuller und ein kleiner Strampler"
+"motif": "ein Babyfläschchen, ein Schnuller und ein kleiner Strampler",
+"img": "W3.png"
 },
 {
 "id": "W4",
@@ -1108,7 +1146,8 @@
 "status": "parked",
 "note": "",
 "desc": "Wenn der Alltag unerwartet aus den Fugen gerät.",
-"motif": "ein umgefallener Becher, ein Puzzleteil, das nicht passt, und ein kleiner Blitz"
+"motif": "ein umgefallener Becher, ein Puzzleteil, das nicht passt, und ein kleiner Blitz",
+"img": "W4.png"
 },
 {
 "id": "W5",
@@ -1118,7 +1157,8 @@
 "status": "parked",
 "note": "",
 "desc": "Umbau oder Renovierung des Zuhauses.",
-"motif": "eine Farbrolle mit Farbeimer und eine kleine Leiter"
+"motif": "eine Farbrolle mit Farbeimer und eine kleine Leiter",
+"img": "W5.png"
 },
 {
 "id": "W6",
@@ -1128,7 +1168,8 @@
 "status": "parked",
 "note": "",
 "desc": "Wenn ein Job wegfällt oder das Geld knapp wird.",
-"motif": "eine leere, offene Geldbörse und ein Taschenrechner, darüber eine kleine Wolke"
+"motif": "eine leere, offene Geldbörse und ein Taschenrechner, darüber eine kleine Wolke",
+"img": "W6.png"
 },
 {
 "id": "W7",
@@ -1138,7 +1179,8 @@
 "status": "parked",
 "note": "Mit Augsburg ins Deck holen",
 "desc": "Umzug in ein neues Zuhause.",
-"motif": "ein kleiner Umzugswagen mit Kartons auf der Ladefläche, daneben ein Wegweiser"
+"motif": "ein kleiner Umzugswagen mit Kartons auf der Ladefläche, daneben ein Wegweiser",
+"img": "W7.png"
 },
 {
 "id": "W8",
@@ -1148,7 +1190,8 @@
 "status": "parked",
 "note": "Mit Augsburg ins Deck holen",
 "desc": "Jobwechsel oder Wiedereinstieg.",
-"motif": "eine Aktentasche, ein Namensschild an einem Band und eine Kaffeetasse"
+"motif": "eine Aktentasche, ein Namensschild an einem Band und eine Kaffeetasse",
+"img": "W8.png"
 },
 {
 "id": "W9",
@@ -1158,7 +1201,8 @@
 "status": "parked",
 "note": "",
 "desc": "Schwangerschaft und Geburt eines Kindes.",
-"motif": "ein Storch mit einem Tuchbündel im Schnabel und ein kleines Herz"
+"motif": "ein Storch mit einem Tuchbündel im Schnabel und ein kleines Herz",
+"img": "W9.png"
 },
 {
 "id": "W10",
@@ -1168,7 +1212,8 @@
 "status": "parked",
 "note": "",
 "desc": "Wenn jemand in der Familie schwer krank wird.",
-"motif": "eine Wärmflasche, eine Tasse Tee und ein Strauß Blumen, darüber ein Pflaster in Herzform"
+"motif": "eine Wärmflasche, eine Tasse Tee und ein Strauß Blumen, darüber ein Pflaster in Herzform",
+"img": "W10.png"
 },
 {
 "id": "U1",
