@@ -108,14 +108,22 @@ function ParkedView({ cards, persons, onOpen }) {
       </div>
       <p class="muted">Geparkte Karten brauchen wir gerade nicht. Öffne eine Karte, um die Notiz oder die Gruppe zu ändern oder sie zurück ins Deck zu holen.</p>
       ${PARK_GROUPS.map((g) => {
-        const list = parked.filter((c) => (c.park_group || null) === g.key).sort(byCatSort);
-        if (!list.length) return null;
+        // Lebensereignisse bekommen einen eigenen Abschnitt (vor „Betrifft uns nicht“) – außer sie sollen bald ins Deck.
+        const list = parked.filter((c) => (c.park_group || null) === g.key && (c.cat !== 'wild' || g.key === 'soon')).sort(byCatSort);
+        const wild = g.key === 'never' ? parked.filter((c) => c.cat === 'wild' && c.park_group !== 'soon').sort(bySort) : [];
         return html`
-          <section class="section" key=${g.key || 'none'}>
-            <h2 class=${`sec-title${g.key === 'soon' ? ' warn' : ''}`}>${g.label} <span class=${`count${g.key === 'soon' ? ' warn' : ''}`}>${list.length}</span></h2>
-            ${g.hint && html`<p class="sec-hint">${g.hint}</p>`}
-            <${Grid} cards=${list} persons=${persons} onOpen=${onOpen}/>
-          </section>`;
+          ${wild.length > 0 && html`
+            <section class="section" key="wild">
+              <h2 class="sec-title" style=${`color:${CATS.wild.ink}`}>Große Lebensereignisse <span class="count">${wild.length}</span></h2>
+              <p class="sec-hint">Holen wir ins Deck, wenn es passiert.</p>
+              <${Grid} cards=${wild} persons=${persons} onOpen=${onOpen}/>
+            </section>`}
+          ${list.length > 0 && html`
+            <section class="section" key=${g.key || 'none'}>
+              <h2 class=${`sec-title${g.key === 'soon' ? ' warn' : ''}`}>${g.label} <span class=${`count${g.key === 'soon' ? ' warn' : ''}`}>${list.length}</span></h2>
+              ${g.hint && html`<p class="sec-hint">${g.hint}</p>`}
+              <${Grid} cards=${list} persons=${persons} onOpen=${onOpen}/>
+            </section>`}`;
       })}
     </div>`;
 }

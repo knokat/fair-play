@@ -6,7 +6,7 @@
 "name": "Kinder|betreuung & Hilfen",
 "dg": true,
 "status": "parked",
-"note": "Aktuell haben wir nur unsere Babysitterin, und die brauchen wir für Date Nights – darum kümmert sich, wer „Partnerschaft & Date Nights“ hält. Kann wieder wichtig werden, z. B. in Augsburg (neue Babysitterin finden) oder wenn wir öfter beide Termine haben.\nOffen: Wo gehört unsere Familienintensivbetreuerin hin?",
+"note": "Aktuell haben wir nur unsere Babysitterin, und die brauchen wir für Date Nights – darum kümmert sich, wer „Partnerschaft & Date Nights“ hält. Kommt vielleicht ab Augsburg wieder (neue Babysitterin finden, Betreuung, wenn wir beide Termine haben).\nUnsere Familienintensivbetreuerin gehört zu „Besondere Bedürfnisse & psychische Gesundheit“.",
 "desc": "Babysitter, Nanny oder Haushaltshilfe finden, einweisen und koordinieren.",
 "motif": "ein Klemmbrett mit Notizen für den Babysitter, daneben ein Haustürschlüssel und eine Kinder-Trinkflasche",
 "img": "H1.png",
@@ -85,11 +85,11 @@
 "orig": "Home Furnishings",
 "name": "Einrichtung",
 "status": "parked",
-"note": "Noch besprechen: Worum geht es genau, und betrifft es uns?",
+"note": "Mit dem Haus in Augsburg und der Küchenplanung bald aktuell.",
 "desc": "Möbel und Einrichtung aussuchen, kaufen und aufstellen.",
 "motif": "ein gemütlicher Sessel neben einer Stehlampe, davor ein aufgefächerter Farbmusterfächer",
 "img": "H7.png",
-"group": "open"
+"group": "soon"
 },
 {
 "id": "H8",
@@ -245,11 +245,11 @@
 "orig": "Memories & Photos",
 "name": "Erinnerungen & Fotos",
 "status": "parked",
-"note": "Noch besprechen: Worum geht es genau, und betrifft es uns?",
+"note": "Katja macht die Fotos, danach passiert nichts damit, weil uns die Zeit fehlt. Schön, wenn sie wiederkommt.",
 "desc": "Fotos sortieren, Alben gestalten, Erinnerungen aufbewahren.",
 "motif": "ein aufgeschlagenes Fotoalbum mit eingeklebten Fotos, daneben eine Sofortbildkamera",
 "img": "H19.png",
-"group": "open"
+"group": "later"
 },
 {
 "id": "H20",
@@ -270,11 +270,11 @@
 "orig": "Storage, Garage & Seasonal Items",
 "name": "Keller, Garage & Saisonales",
 "status": "parked",
-"note": "Noch besprechen: Was würde, wer die Karte hält, eigentlich tun? Für uns ist der Keller eher ein gemeinsames Aufräum-Projekt.",
+"note": "Läuft bei uns nebenher. Einmal gründlich aufräumen gehört zu „Aufräumen, Ordnen & Aussortieren“ – spätestens beim Umzug.",
 "desc": "Keller und Garage ordnen, Saisonales ein- und ausräumen.",
 "motif": "zwei gestapelte Aufbewahrungskisten, aus der einen schauen Weihnachtskugeln, aus der anderen ein Sonnenhut, daneben ein aufgerollter Gartenschlauch",
 "img": "H21.png",
-"group": "open"
+"group": "never"
 },
 {
 "id": "H22",
@@ -762,11 +762,11 @@
 "orig": "Parents & In-Laws",
 "name": "Eltern & Schwieger|eltern",
 "status": "parked",
-"note": "Noch besprechen: Worum geht es genau, und betrifft es uns?",
+"note": "Ist für uns nicht die Aufgabe einer Person – das machen wir beide.",
 "desc": "Kontakt halten und unterstützen, wo die Großeltern Hilfe brauchen.",
 "motif": "eine Lesebrille, eine Teetasse und ein altes Telefon mit kleinem Herz",
 "img": "C15.png",
-"group": "open"
+"group": "never"
 },
 {
 "id": "C16",
@@ -844,7 +844,7 @@
 "status": "deck",
 "desc": "Leander bekommt die Begleitung, die er braucht – Ärzte, Therapie, Rezepte und Struktur im Alltag.",
 "c": "Hat Termine, Medikation, Rezepte und Gespräche mit Schule und Therapie im Blick, auch allgemeine Arzttermine.",
-"p": "Sucht Fachleute, koordiniert Termine und Kosten und plant die Unterstützung.",
+"p": "Sucht Fachleute, koordiniert Termine und Kosten und plant die Unterstützung – auch die Absprachen mit unserer Familienintensivbetreuerin.",
 "e": "Geht zu Terminen, holt Rezepte und Medikamente und setzt Absprachen im Alltag um.",
 "motif": "zwei schützende Hände um eine kleine, wachsende Pflanze",
 "img": "C21.png"
@@ -923,11 +923,11 @@
 "orig": "Extended Family",
 "name": "Verwandtschaft",
 "status": "parked",
-"note": "Noch besprechen: Worum geht es genau, und betrifft es uns?",
+"note": "Vielleicht ab Augsburg: Katjas Cousin und Cousine leben dort.",
 "desc": "Kontakt zur erweiterten Familie pflegen.",
 "motif": "ein kleiner Stammbaum mit Bilderrahmen an den Ästen",
 "img": "M5.png",
-"group": "open"
+"group": "later"
 },
 {
 "id": "M6",
@@ -984,10 +984,11 @@
 "orig": "Hard Questions",
 "name": "Schwierige Fragen",
 "status": "parked",
-"note": "",
+"note": "Machen wir gemeinsam – keine eigene Karte.",
 "desc": "Auf große Fragen von Leander eingehen – Tod, Liebe, Gerechtigkeit.",
 "motif": "zwei Sprechblasen, in einer ein großes Fragezeichen, in der anderen ein kleines Herz, darunter ein aufgeschlagenes Buch",
-"img": "M10.png"
+"img": "M10.png",
+"group": "never"
 },
 {
 "id": "M11",
@@ -995,10 +996,11 @@
 "orig": "Holiday Cards",
 "name": "Weihnachts|karten",
 "status": "parked",
-"note": "",
+"note": "Eher ein amerikanisches Thema.",
 "desc": "Weihnachtskarten schreiben und verschicken.",
 "motif": "ein Stapel Weihnachtskarten mit Stern, eine Briefmarke und ein Füller",
-"img": "M11.png"
+"img": "M11.png",
+"group": "never"
 },
 {
 "id": "M12",
@@ -1059,10 +1061,11 @@
 "name": "Nächtliches Trösten",
 "dg": true,
 "status": "parked",
-"note": "",
+"note": "Leander ist alt genug.",
 "desc": "Nachts aufstehen, wenn Leander schlecht träumt oder krank ist.",
 "motif": "eine Nachttischlampe mit warmem Licht, ein Kuscheltier und ein Glas Wasser, darüber ein Mond",
-"img": "M16.png"
+"img": "M16.png",
+"group": "never"
 },
 {
 "id": "M17",
@@ -1070,10 +1073,11 @@
 "orig": "Partner Coach",
 "name": "Füreinander da sein",
 "status": "parked",
-"note": "Wir coachen uns ohnehin gegenseitig",
+"note": "Noch besprechen. Bisher: Wir coachen uns ohnehin gegenseitig.",
 "desc": "Einander zuhören und unterstützen.",
 "motif": "zwei Teetassen nebeneinander, darüber eine Sprechblase mit Herz",
-"img": "M17.png"
+"img": "M17.png",
+"group": "open"
 },
 {
 "id": "M18",
@@ -1081,10 +1085,11 @@
 "orig": "Showing Up & Participating",
 "name": "Dabei sein",
 "status": "parked",
-"note": "",
+"note": "Noch besprechen: Was heißt das bei uns?",
 "desc": "Bei Aufführungen, Spielen und Schulveranstaltungen dabei sein.",
 "motif": "zwei klatschende Hände vor einer kleinen Bühne mit Vorhang",
-"img": "M18.png"
+"img": "M18.png",
+"group": "open"
 },
 {
 "id": "M19",
@@ -1092,10 +1097,11 @@
 "orig": "Spirituality",
 "name": "Spiritualität",
 "status": "parked",
-"note": "",
+"note": "Kein Thema für uns.",
 "desc": "Glauben, Rituale und Sinnfragen in der Familie.",
 "motif": "eine brennende Kerze, ein kleiner Turm aus gestapelten Steinen und ein Blatt",
-"img": "M19.png"
+"img": "M19.png",
+"group": "never"
 },
 {
 "id": "M20",
@@ -1103,10 +1109,11 @@
 "orig": "Thank-You Notes",
 "name": "Dankes|karten",
 "status": "parked",
-"note": "",
+"note": "Kein Thema für uns.",
 "desc": "Danke sagen – schriftlich.",
 "motif": "eine Karte mit Herz in einem offenen Umschlag, daneben ein Füller",
-"img": "M20.png"
+"img": "M20.png",
+"group": "never"
 },
 {
 "id": "M21",
@@ -1114,10 +1121,11 @@
 "orig": "Values & Good Deeds (Kids)",
 "name": "Werte & gute Taten (Kind)",
 "status": "parked",
-"note": "",
+"note": "Werte leben wir im Alltag vor – keine Karte. Idee für einmal: Werte-Kärtchen auslegen und gemeinsam aussuchen, was unsere Familienwerte sind.",
 "desc": "Werte vermitteln und gemeinsam Gutes tun.",
 "motif": "ein Kinder-Müllgreifer und ein kleiner Sack beim Aufräumen im Park, darüber ein Herz",
-"img": "M21.png"
+"img": "M21.png",
+"group": "never"
 },
 {
 "id": "M22",
@@ -1126,10 +1134,11 @@
 "name": "Aufsicht",
 "dg": true,
 "status": "parked",
-"note": "",
+"note": "Wer da ist, schaut, dass es Leander gut geht. Als feste Karte würden wir sie ständig hin- und herschieben.",
 "desc": "Ein Auge auf Leander haben, wenn er spielt oder unterwegs ist.",
 "motif": "ein Fernglas, daneben eine Schaukel und ein Ball",
-"img": "M22.png"
+"img": "M22.png",
+"group": "never"
 },
 {
 "id": "W1",
