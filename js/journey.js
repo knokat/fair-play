@@ -9,14 +9,16 @@ const deckCards = (cards) => cards.filter((c) => c.status === 'deck' && !isTrio(
 const byName = (a, b) => plainName(a.name).localeCompare(plainName(b.name), 'de');
 const stepRow = (steps, n) => steps.find((s) => s.step === n) || { step: n, done_at: null, confirmed: {} };
 
-export const openSteps = (steps) => [1, 2, 3, 4, 5, 6, 7, 8].filter((n) => !stepRow(steps, n).done_at).length;
+export const STEP_COUNT = 7;
+export const openSteps = (steps) => STEPS.filter((s) => !stepRow(steps, s.n).done_at).length;
 
-// Ab wann zählen Änderungen für einen neuen Check-in: letzter Check-in, sonst das Versprechen, sonst 7 Tage.
+// Ab wann zählen Änderungen für einen neuen Check-in: letzter Check-in, sonst der zuletzt abgehakte
+// Vorbereitungsschritt (Start der ersten Runde), sonst 7 Tage.
 export function sinceForNewCheckin(checkins, steps) {
   const last = checkins.filter((c) => c.finished_at).sort((a, b) => b.finished_at.localeCompare(a.finished_at))[0];
   if (last) return last.finished_at;
-  const promise = stepRow(steps, 7).done_at;
-  if (promise) return promise;
+  const prep = STEPS.filter((st) => st.n !== ROUND).map((st) => stepRow(steps, st.n).done_at).filter(Boolean).sort().pop();
+  if (prep) return prep;
   return new Date(Date.now() - 7 * 86400000).toISOString();
 }
 
@@ -43,7 +45,10 @@ function Book({ items }) {
     </section>`;
 }
 
-// ---------- Inhalte der 8 Schritte ----------
+// ---------- Inhalte der Schritte ----------
+// n ist die Nummer in fp_step (bleibt stabil); angezeigt wird die Position in der Liste.
+// Schritt 7 „Versprechen geben“ hat Katja am 4.11.2026 herausgenommen.
+const ROUND = 8;
 const STEPS = [
   { n: 1, title: 'Deck anpassen', sub: 'Karten aussortieren' },
   { n: 2, title: 'Check-in festlegen', sub: 'Euer fester Termin jede Woche' },
@@ -51,7 +56,6 @@ const STEPS = [
   { n: 4, title: 'Übergabe-Moment', sub: 'Erzählen, wie es bisher lief' },
   { n: 5, title: 'Mindeststandard festlegen', sub: 'Unsere Definition of Done pro Karte' },
   { n: 6, title: 'Unicorn Space beanspruchen', sub: 'Zeit, Geld und Betreuung für jede*n' },
-  { n: 7, title: 'Versprechen geben', sub: 'Groll loslassen, volles CPE, Kontrolle abgeben' },
   { n: 8, title: 'Erste 7-Tage-Runde', sub: 'Danach euer erster Check-in' },
 ];
 
@@ -74,8 +78,6 @@ const BOOK = {
   6: ['Wenn alle Karten verteilt sind, spielt jede*r die eigene Unicorn-Space-Karte – sie ist Pflicht.',
     'Besprecht nacheinander: Was braucht mein Unicorn Space an Zeit, Geld und Betreuung?',
     'Niemand bestimmt, wie der andere diese Zeit nutzt. Hat jemand zu viele Karten dafür, wird neu verteilt.'],
-  7: ['Ihr habt jetzt ein System, das Zusammenarbeit statt Konkurrenz in den Vordergrund stellt.',
-    'Dazu gebt ihr euch ein Versprechen.'],
   8: ['Die erste Runde dauert sieben Tage. Spielt eure Karten so, wie ihr es vereinbart habt.',
     'Was hakt, notiert ihr für den Check-in, statt es im Moment zu klären.',
     'Im ersten Check-in schaut ihr zurück: Was lief gut, was verteilen wir neu?'],
@@ -210,31 +212,6 @@ function UnicornStep({ ctx }) {
     <${Grid} cards=${uni} persons=${ctx.persons} onOpen=${ctx.openCard}/>`;
 }
 
-function PromiseStep({ ctx, row }) {
-  const adults = adultsOf(ctx.persons);
-  const toggle = async (pid, on) => {
-    const confirmed = { ...(row.confirmed || {}) };
-    if (on) confirmed[pid] = new Date().toISOString(); else delete confirmed[pid];
-    const all = adults.every((p) => confirmed[p.id]);
-    try {
-      await store.saveStep(7, { confirmed, done_at: all ? new Date().toISOString() : null, done_by: all ? ctx.meId : null });
-      await ctx.reload();
-      if (all) ctx.toast('Versprochen. Eure erste 7-Tage-Runde beginnt.');
-    } catch (e) { ctx.toast(`Hat nicht geklappt: ${e.message}`); }
-  };
-  return html`
-    <section class="panel promise">
-      ${PROMISES.map((t) => html`<p>${t}</p>`)}
-    </section>
-    <section class="section">
-      ${adults.map((p) => html`
-        <label class="check big">
-          <input type="checkbox" checked=${!!(row.confirmed || {})[p.id]} onChange=${(e) => toggle(p.id, e.target.checked)}/>
-          <span>${p.name} verspricht das</span>
-        </label>`)}
-    </section>`;
-}
-
 function RoundStep({ ctx }) {
   const next = nextCheckin(ctx.settings.checkin);
   const days = next ? daysUntil(next) : null;
@@ -251,24 +228,27 @@ function RoundStep({ ctx }) {
 
 function StepDetail({ ctx, n, onBack, onOpenStep }) {
   const row = stepRow(ctx.steps, n);
-  const meta = STEPS[n - 1];
+  const idx = STEPS.findIndex((st) => st.n === n);
+  const meta = STEPS[idx];
+  const pos = idx + 1;
+  const nextStep = STEPS[idx + 1];
   const free = deckCards(ctx.cards).filter((c) => !c.holder).length;
   const doneBy = ctx.persons.find((p) => p.id === row.done_by);
   let canDone = true; let blocker = '';
   if (n === 2 && !ctx.settings.checkin) { canDone = false; blocker = 'Geht, sobald der Termin gespeichert ist.'; }
   if (n === 3 && free > 0) { canDone = false; blocker = `Geht, sobald keine Karte mehr frei ist – noch ${free}.`; }
-  const manual = n !== 7 && n !== 8 && n !== 1;
+  const manual = n !== ROUND && n !== 1;
   const setDone = async (on) => {
     try {
       await store.saveStep(n, { done_at: on ? new Date().toISOString() : null, done_by: on ? ctx.meId : null });
       await ctx.reload();
-      if (on) { ctx.toast(`Schritt ${n} erledigt`); onBack(); }
+      if (on) { ctx.toast(`Schritt ${pos} erledigt`); onBack(); }
     } catch (e) { ctx.toast(`Hat nicht geklappt: ${e.message}`); }
   };
   useEffect(() => { window.scrollTo(0, 0); }, [n]);
   return html`
     <div class="page">
-      <${PageBar} label=${`Unser Weg · Schritt ${n} von 8`} onBack=${onBack}/>
+      <${PageBar} label=${`Unser Weg · Schritt ${pos} von ${STEPS.length}`} onBack=${onBack}/>
       <h1 class="page-title">${meta.title}</h1>
       <${Book} items=${BOOK[n]}/>
       ${n === 1 && html`<p class="ok-line">Erledigt am 1.11.2026: Ihr habt das Deck gemeinsam aussortiert. Geparkte Karten liegen auf dem Parkplatz.</p>`}
@@ -277,8 +257,7 @@ function StepDetail({ ctx, n, onBack, onOpenStep }) {
       ${n === 4 && html`<p class="hint">Gebt ihr in der App eine Karte weiter, erinnert sie euch an den Übergabe-Moment.</p>`}
       ${n === 5 && html`<${MscStep} ctx=${ctx}/>`}
       ${n === 6 && html`<${UnicornStep} ctx=${ctx}/>`}
-      ${n === 7 && html`<${PromiseStep} ctx=${ctx} row=${row}/>`}
-      ${n === 8 && html`<${RoundStep} ctx=${ctx}/>`}
+      ${n === ROUND && html`<${RoundStep} ctx=${ctx}/>`}
       <div class="page-foot">
         ${row.done_at
           ? html`<p class="ok-line"><${IconCheck} size=${16}/> Erledigt am ${fmtDate(row.done_at)}${doneBy ? ` von ${doneBy.name}` : ''}</p>
@@ -286,7 +265,7 @@ function StepDetail({ ctx, n, onBack, onOpenStep }) {
           : manual && html`
             <button type="button" class="btn primary" disabled=${!canDone} onClick=${() => setDone(true)}><${IconCheck}/> Gemeinsam abhaken</button>
             ${blocker && html`<p class="field-hint center">${blocker}</p>`}`}
-        ${n < 8 && html`<button type="button" class="btn ghost" onClick=${() => onOpenStep(n + 1)}>Weiter zu Schritt ${n + 1}</button>`}
+        ${nextStep && html`<button type="button" class="btn ghost" onClick=${() => onOpenStep(nextStep.n)}>Weiter zu Schritt ${pos + 1}</button>`}
       </div>
     </div>`;
 }
@@ -294,7 +273,7 @@ function StepDetail({ ctx, n, onBack, onOpenStep }) {
 export function WegPage({ ctx, onBack }) {
   const [open, setOpen] = useState(null);
   if (open) return html`<${StepDetail} ctx=${ctx} n=${open} onBack=${() => setOpen(null)} onOpenStep=${setOpen}/>`;
-  const done = 8 - openSteps(ctx.steps);
+  const done = STEPS.length - openSteps(ctx.steps);
   const current = STEPS.find((s) => !stepRow(ctx.steps, s.n).done_at);
   const next = nextCheckin(ctx.settings.checkin);
   return html`
@@ -302,16 +281,16 @@ export function WegPage({ ctx, onBack }) {
       <${PageBar} label="Zurück" onBack=${onBack}/>
       <h1 class="page-title caps">Unser Weg</h1>
       <p class="muted">Vom aussortierten Deck bis zur ersten 7-Tage-Runde. Ihr könnt jeden Schritt öffnen – abgehakt wird gemeinsam.</p>
-      <${Progress} done=${done} total=${8}/>
-      <p class="ok-line">${done} von 8 Schritten erledigt</p>
+      <${Progress} done=${done} total=${STEPS.length}/>
+      <p class="ok-line">${done} von ${STEPS.length} Schritten erledigt</p>
       <ol class="steps">
-        ${STEPS.map((s) => {
+        ${STEPS.map((s, i) => {
           const row = stepRow(ctx.steps, s.n);
           const isCur = current && current.n === s.n;
           return html`
             <li key=${s.n}>
               <button type="button" class=${`step${isCur ? ' current' : ''}${row.done_at ? ' done' : ''}`} onClick=${() => setOpen(s.n)}>
-                <span class="step-num">${row.done_at ? html`<${IconCheck} size=${18}/>` : s.n}</span>
+                <span class="step-num">${row.done_at ? html`<${IconCheck} size=${18}/>` : i + 1}</span>
                 <span class="step-text">
                   ${isCur && html`<span class="label ok">Jetzt dran</span>`}
                   <span class="step-title">${s.title}</span>
@@ -432,7 +411,7 @@ export function CheckinPage({ ctx, checkin, step, setStep, onBack }) {
   const finish = async () => {
     try {
       await store.saveCheckin(checkin.id, { ...draft, finished_at: new Date().toISOString() });
-      if (!stepRow(ctx.steps, 8).done_at && stepRow(ctx.steps, 7).done_at) await store.saveStep(8, { done_at: new Date().toISOString(), done_by: ctx.meId });
+      if (!stepRow(ctx.steps, ROUND).done_at) await store.saveStep(ROUND, { done_at: new Date().toISOString(), done_by: ctx.meId });
       ctx.toast('Check-in gespeichert');
       setStep(1);
       await ctx.reload();

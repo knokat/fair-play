@@ -13,7 +13,7 @@ js/store.js         Laden und Speichern (Supabase oder Demo im Browser)
 js/meta.js          Kategorien, Farben, Helfer
 js/components.js    Kartendarstellung klein und groß, Icons
 js/app.js           Ansichten: Meine, Matthias, Deck, Parkplatz, Kartendetail, Menü
-js/journey.js       Unser Weg (8 Schritte), geführter Check-in, vergangene Check-ins, private Notizen
+js/journey.js       Unser Weg (7 Schritte), geführter Check-in, vergangene Check-ins, private Notizen
 data/cards.json     Startdeck: alle 100 Karten mit Status und Texten
 img/                Illustrationen, Dateiname = Kartennummer (H6.png …)
 sql/schema.sql      Tabellen und Zugriffsregeln

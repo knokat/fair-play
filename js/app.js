@@ -3,7 +3,7 @@ import { html, render, useState, useEffect, useMemo, useCallback } from 'https:/
 import * as store from './store.js';
 import { CATS, CAT_ORDER, plainName, isTrio, fmtDate, origUrl, PARK_GROUPS, parkGroupLabel } from './meta.js';
 import { Grid, Sheet, BigCard, OwnerDot, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand, IconRoute, IconNote } from './components.js';
-import { WegPage, CheckinPage, HistoryPage, NotesPage, NoteSheet, NextCheckinBar, RunningCheckinBar, sinceForNewCheckin, openSteps } from './journey.js';
+import { WegPage, CheckinPage, HistoryPage, NotesPage, NoteSheet, NextCheckinBar, RunningCheckinBar, sinceForNewCheckin, openSteps, STEP_COUNT } from './journey.js';
 
 const bySort = (a, b) => a.sort - b.sort;
 const groupByCat = (cards) => CAT_ORDER.map((cat) => [cat, cards.filter((c) => c.cat === cat).sort(bySort)]).filter(([, l]) => l.length);
@@ -258,7 +258,7 @@ function Menu({ me, persons, onClose, onSwitch, onSignOut, onReload, onGo, onChe
     <${Sheet} title="Menü" onClose=${onClose}>
       <p class="muted">Angemeldet als ${me.name}${store.DEMO ? ' (Demo-Modus)' : ''}.</p>
       <nav class="menu-list" aria-label="Fair-Play-Begleiter">
-        <button type="button" onClick=${() => onGo('weg')}><span class="mi-title">Unser Weg</span><span class="mi-sub">${stepsOpen ? `${8 - stepsOpen} von 8 Schritten erledigt` : 'Alle Schritte erledigt'}</span></button>
+        <button type="button" onClick=${() => onGo('weg')}><span class="mi-title">Unser Weg</span><span class="mi-sub">${stepsOpen ? `${STEP_COUNT - stepsOpen} von ${STEP_COUNT} Schritten erledigt` : 'Alle Schritte erledigt'}</span></button>
         <button type="button" onClick=${onCheckin}><span class="mi-title">${running ? 'Check-in fortsetzen' : 'Check-in starten'}</span><span class="mi-sub">Geführt in 8 Punkten</span></button>
         <button type="button" onClick=${() => onGo('history')}><span class="mi-title">Vergangene Check-ins</span><span class="mi-sub">Zum Nachlesen</span></button>
         <button type="button" onClick=${() => onGo('notes')}><span class="mi-title">Meine Notizen</span><span class="mi-sub">${openNotes ? `${openNotes} offen` : 'Keine offenen'} · nur für dich</span></button>
@@ -384,7 +384,7 @@ function App() {
               <div class="top-icons">
                 <button type="button" class="icon-btn badge-wrap" onClick=${() => go('notes')} aria-label=${`Meine Notizen${openNotes ? `, ${openNotes} offen` : ''}`}>
                   <${IconNote}/>${openNotes > 0 && html`<span class="badge">${openNotes}</span>`}</button>
-                <button type="button" class="icon-btn badge-wrap" onClick=${() => go('weg')} aria-label=${`Unser Weg${stepsOpen ? `, ${8 - stepsOpen} von 8 Schritten erledigt` : ''}`}>
+                <button type="button" class="icon-btn badge-wrap" onClick=${() => go('weg')} aria-label=${`Unser Weg${stepsOpen ? `, ${STEP_COUNT - stepsOpen} von ${STEP_COUNT} Schritten erledigt` : ''}`}>
                   <${IconRoute}/>${stepsOpen > 0 && html`<span class="dot"></span>`}</button>
                 <button type="button" class="icon-btn" onClick=${() => setMenu(true)} aria-label="Menü öffnen"><${IconMenu}/></button>
               </div>
