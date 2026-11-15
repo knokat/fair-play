@@ -346,7 +346,7 @@ const CI = [
   { n: 7, title: 'Unicorn Space' },
   { n: 8, title: 'Abschluss' },
 ];
-const FIELD_LABEL = { name: 'Name', descr: 'Beschreibung', conception: 'Dran-Denken', planning: 'Planen', execution: 'Erledigen', msc: 'Mindeststandard', only_me: '„Nur mir wichtig“', parked_note: 'Parkplatz-Notiz', park_group: 'Parkplatz-Gruppe', review_on: 'Wieder anschauen ab', schedule: 'Wochenplan', coach: 'Begleitung' };
+const FIELD_LABEL = { name: 'Name', descr: 'Beschreibung', conception: 'Dran-Denken', planning: 'Planen', execution: 'Erledigen', msc: 'Mindeststandard', only_me: '„Nur mir wichtig“', parked_note: 'Parkplatz-Notiz', park_group: 'Parkplatz-Gruppe', review_on: 'Wieder anschauen ab', schedule: 'Wochenplan', coach: 'Begleitung', card_notes: 'Notizen' };
 const UNI = [['ja', 'Ja'], ['teils', 'Teilweise'], ['nein', 'Nein']];
 
 function summarize(events, cards, persons) {

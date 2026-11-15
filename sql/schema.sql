@@ -165,3 +165,6 @@ alter table fp_card add column if not exists coach uuid references fp_person (id
 
 -- Parkplatz: „Wieder anschauen ab“. 15.11.2026
 alter table fp_card add column if not exists review_on date;
+
+-- Notizen auf der Karte (für alle sichtbar). 15.11.2026
+alter table fp_card add column if not exists card_notes text;

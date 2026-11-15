@@ -46,7 +46,7 @@ function CatSections({ cards, persons, onOpen, markId }) {
 // ---------- Ansicht: Karten einer Person ----------
 // Suche: Name, Originalname und alle Kartentexte, ohne Groß/Klein und Akzente.
 const norm = (t) => (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\|/g, '');
-const matches = (c, q) => !q || [c.name, c.orig, c.descr, c.conception, c.planning, c.execution, c.msc]
+const matches = (c, q) => !q || [c.name, c.orig, c.descr, c.conception, c.planning, c.execution, c.msc, c.card_notes]
   .some((t) => norm(t).includes(q));
 
 function PersonView({ person, isMe, cards, persons, onOpen }) {
@@ -179,7 +179,7 @@ function ParkedView({ cards, persons, onOpen }) {
 function EditSheet({ card, onSave, onClose }) {
   const [f, setF] = useState({
     name: card.name, descr: card.descr, conception: card.conception,
-    planning: card.planning, execution: card.execution, msc: card.msc,
+    planning: card.planning, execution: card.execution, msc: card.msc, card_notes: card.card_notes || '',
   });
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   const field = (k, label, rows = 3) => html`
@@ -196,6 +196,25 @@ function EditSheet({ card, onSave, onClose }) {
         ${field('planning', 'Planen')}
         ${field('execution', 'Erledigen')}
         ${field('msc', 'Mindeststandard', 4)}
+        ${field('card_notes', 'Notizen (für alle sichtbar)', 4)}
+        <div class="row">
+          <button type="button" class="btn ghost" onClick=${onClose}>Abbrechen</button>
+          <button type="submit" class="btn primary">Speichern</button>
+        </div>
+      </form>
+    </${Sheet}>`;
+}
+
+function CardNotesSheet({ card, onSave, onClose }) {
+  const [t, setT] = useState(card.card_notes || '');
+  return html`
+    <${Sheet} title=${`Notizen · ${plainName(card.name)}`} onClose=${onClose}>
+      <form class="form" onSubmit=${(e) => { e.preventDefault(); onSave({ card_notes: t.trim() }); }}>
+        <label for="card-notes">Notizen auf der Karte</label>
+        <textarea id="card-notes" rows="6" value=${t} onInput=${(e) => setT(e.target.value)}
+          ref=${(el) => el && !el.dataset.focused && (el.dataset.focused = '1', el.focus())}
+          placeholder="z. B. Neuen Termin für Leander vereinbaren"></textarea>
+        <p class="field-hint">Für alle sichtbar. Für private Themen im Check-in gibt es „Für Check-in notieren“.</p>
         <div class="row">
           <button type="button" class="btn ghost" onClick=${onClose}>Abbrechen</button>
           <button type="submit" class="btn primary">Speichern</button>
@@ -336,6 +355,12 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
           <button type="button" class="btn ghost" onClick=${() => setSheet('week')}><${IconEdit}/> Wochenplan ${hasSchedule(card) ? 'bearbeiten' : 'anlegen'}</button>`}
       </div>
 
+      <div class="panel">
+        <div class="panel-row"><span class="label">Notizen</span>
+          <button type="button" class="chip" onClick=${() => setSheet('notes')}><${IconEdit}/> ${card.card_notes ? 'Bearbeiten' : 'Notiz hinzufügen'}</button></div>
+        ${card.card_notes ? html`<p class="card-notes">${card.card_notes}</p>` : html`<p class="muted">Noch keine Notizen. Für alle sichtbar, z. B. offene Erledigungen.</p>`}
+      </div>
+
       <div class="row wrap">
         <button type="button" class="btn ghost" onClick=${() => setSheet('edit')}><${IconEdit}/> Texte bearbeiten</button>
         <button type="button" class="btn ghost" onClick=${() => onNote(card)}><${IconNote}/> Für Check-in notieren</button>
@@ -346,6 +371,8 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
       </div>
 
       ${sheet === 'edit' && html`<${EditSheet} card=${card} onClose=${() => setSheet(null)}
+        onSave=${async (f) => { await act('texts', card, f); setSheet(null); }}/>`}
+      ${sheet === 'notes' && html`<${CardNotesSheet} card=${card} onClose=${() => setSheet(null)}
         onSave=${async (f) => { await act('texts', card, f); setSheet(null); }}/>`}
       ${sheet === 'week' && html`<${WeekSheet} card=${card} persons=${persons} onClose=${() => setSheet(null)}
         onSave=${async (sch) => { await act('schedule', card, sch); setSheet(null); }}/>`}
