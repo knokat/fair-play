@@ -168,3 +168,57 @@ alter table fp_card add column if not exists review_on date;
 
 -- Notizen auf der Karte (für alle sichtbar). 15.11.2026
 alter table fp_card add column if not exists card_notes text;
+
+-- Login für Leander (Kind), 15.11.2026. Kinder lesen Personen und über fp_kid_cards() die Deck-Karten
+-- ohne M14 (Christkind & Co.) und C21 (Besondere Bedürfnisse) und ohne Notizfelder; sie schreiben nur eigene Notizen.
+-- Alles andere nur für Erwachsene. Erwachsene sehen und haken die Notizen des Kindes ab (Check-in).
+-- Login: Name „Leander“ in der App = leander@fairplay.invalid (in auth.users per SQL angelegt, mit fp_person.user_id verknüpft).
+create or replace function fp_is_adult() returns boolean
+language sql stable security definer set search_path = public as $$
+  select exists (select 1 from fp_person where user_id = auth.uid() and role = 'adult');
+$$;
+revoke execute on function fp_is_adult() from public, anon;
+grant execute on function fp_is_adult() to authenticated;
+
+create or replace function fp_is_child_person(p uuid) returns boolean
+language sql stable security definer set search_path = public as $$
+  select exists (select 1 from fp_person where id = p and role = 'child');
+$$;
+revoke execute on function fp_is_child_person(uuid) from public, anon;
+grant execute on function fp_is_child_person(uuid) to authenticated;
+
+drop policy if exists fp_person_all on fp_person;
+create policy fp_person_read on fp_person for select to authenticated using ((select fp_is_member()));
+create policy fp_person_write on fp_person for insert to authenticated with check ((select fp_is_adult()));
+create policy fp_person_update on fp_person for update to authenticated using ((select fp_is_adult())) with check ((select fp_is_adult()));
+create policy fp_person_delete on fp_person for delete to authenticated using ((select fp_is_adult()));
+
+drop policy if exists fp_card_all on fp_card;
+create policy fp_card_all on fp_card for all to authenticated using ((select fp_is_adult())) with check ((select fp_is_adult()));
+drop policy if exists fp_event_all on fp_card_event;
+create policy fp_event_all on fp_card_event for all to authenticated using ((select fp_is_adult())) with check ((select fp_is_adult()));
+drop policy if exists fp_setting_all on fp_setting;
+create policy fp_setting_all on fp_setting for all to authenticated using ((select fp_is_adult())) with check ((select fp_is_adult()));
+drop policy if exists fp_step_all on fp_step;
+create policy fp_step_all on fp_step for all to authenticated using ((select fp_is_adult())) with check ((select fp_is_adult()));
+drop policy if exists fp_checkin_all on fp_checkin;
+create policy fp_checkin_all on fp_checkin for all to authenticated using ((select fp_is_adult())) with check ((select fp_is_adult()));
+
+drop policy if exists fp_note_own on fp_note;
+create policy fp_note_own on fp_note for all to authenticated
+  using (author = (select fp_me()) or ((select fp_is_adult()) and fp_is_child_person(author)))
+  with check (author = (select fp_me()) or ((select fp_is_adult()) and fp_is_child_person(author)));
+
+create or replace function fp_kid_cards()
+returns table (id text, sort int, cat text, orig text, name text, is_dg boolean, trio_owner uuid,
+  descr text, conception text, planning text, execution text, msc text, status text, holder uuid,
+  only_me boolean, img text, updated_by uuid, updated_at timestamptz, schedule jsonb, coach uuid)
+language sql stable security definer set search_path = public as $$
+  select c.id, c.sort, c.cat, c.orig, c.name, c.is_dg, c.trio_owner, c.descr, c.conception, c.planning,
+    c.execution, c.msc, c.status, c.holder, c.only_me, c.img, c.updated_by, c.updated_at, c.schedule, c.coach
+  from fp_card c
+  where fp_is_member() and c.status = 'deck' and c.id not in ('M14', 'C21')
+  order by c.sort;
+$$;
+revoke execute on function fp_kid_cards() from public, anon;
+grant execute on function fp_kid_cards() to authenticated;

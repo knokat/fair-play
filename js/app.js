@@ -25,8 +25,8 @@ function Login({ onDone }) {
       <h1 class="brand">Fair Play</h1>
       <p class="muted">Melde dich mit deinem Konto an.</p>
       <form onSubmit=${submit} class="form">
-        <label for="login-email">E-Mail</label>
-        <input id="login-email" type="email" autocomplete="username" value=${email} onInput=${(e) => setEmail(e.target.value)} required/>
+        <label for="login-email">E-Mail oder Name</label>
+        <input id="login-email" type="text" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" value=${email} onInput=${(e) => setEmail(e.target.value)} required/>
         <label for="login-pw">Passwort</label>
         <input id="login-pw" type="password" autocomplete="current-password" value=${pw} onInput=${(e) => setPw(e.target.value)} required/>
         ${err && html`<p class="error" role="alert">${err}</p>`}
@@ -49,7 +49,7 @@ const norm = (t) => (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u
 const matches = (c, q) => !q || [c.name, c.orig, c.descr, c.conception, c.planning, c.execution, c.msc, c.card_notes]
   .some((t) => norm(t).includes(q));
 
-function PersonView({ person, isMe, cards, persons, onOpen }) {
+function PersonView({ person, isMe, cards, persons, onOpen, readOnly = false }) {
   const [dgOnly, setDgOnly] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -88,7 +88,7 @@ function PersonView({ person, isMe, cards, persons, onOpen }) {
           <button type="button" class="icon-btn small" aria-label="Suche schließen" onClick=${closeSearch}><${IconClose}/></button>
         </div>`}
       ${filtering && held.length + byPlan.length + coaching.length + trio.length === 0 && html`<p class="empty-state">Keine passende Karte${q ? ` für „${query.trim()}“` : ''}.</p>`}
-      ${!filtering && allHeld.length === 0 && html`<p class="empty-state">${isMe ? 'Du hältst' : `${person.name} hält`} noch keine Karten. Im Deck kannst du Karten verteilen.</p>`}
+      ${!filtering && allHeld.length === 0 && html`<p class="empty-state">${isMe ? 'Du hältst' : `${person.name} hält`} noch keine Karten.${readOnly ? '' : ' Im Deck kannst du Karten verteilen.'}</p>`}
       <${CatSections} cards=${held} persons=${persons} onOpen=${onOpen}/>
       ${coaching.length > 0 && html`
       <section class="section">
@@ -111,7 +111,7 @@ function PersonView({ person, isMe, cards, persons, onOpen }) {
 }
 
 // ---------- Ansicht: Deck ----------
-function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOnly, setDgOnly, markId, order = [] }) {
+function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOnly, setDgOnly, markId, order = [], readOnly = false }) {
   let deck = cards.filter((c) => c.status === 'deck' && !isTrio(c));
   const total = deck.length;
   const dgTotal = deck.filter((c) => c.is_dg).length;
@@ -126,7 +126,7 @@ function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOn
         <span class="sum-text">Karten im Deck · ${dgTotal} Daily Grinds</span>
       </div>
       <div class="toolbar">
-        <button type="button" class=${`chip${dealMode ? ' on' : ''}`} aria-pressed=${dealMode} onClick=${() => setDealMode(!dealMode)}><${IconHand}/> Verteilen</button>
+        ${!readOnly && html`<button type="button" class=${`chip${dealMode ? ' on' : ''}`} aria-pressed=${dealMode} onClick=${() => setDealMode(!dealMode)}><${IconHand}/> Verteilen</button>`}
         <button type="button" class=${`chip${dgOnly ? ' on' : ''}`} aria-pressed=${dgOnly} onClick=${() => setDgOnly(!dgOnly)}>Nur Daily Grinds</button>
       </div>
       ${dealMode && html`<p class="hint" role="status">Tippe auf eine Karte: ${order.map((p, i) => (i === 0 ? 'du' : p.name)).join(' → ')} → frei. Die Karten bleiben an ihrem Platz.${free.length ? ` Noch frei: ${free.length}.` : ' Alle Karten haben einen Owner.'}</p>`}
@@ -290,7 +290,7 @@ function WeekSheet({ card, persons, onSave, onClose }) {
 }
 
 // ---------- Kartendetail ----------
-function Detail({ card, persons, meId, onClose, act, onNote }) {
+function Detail({ card, persons, meId, onClose, act, onNote, readOnly = false }) {
   const [flipped, setFlipped] = useState(false);
   const [sheet, setSheet] = useState(null);
   const me = persons.find((p) => p.id === meId);
@@ -310,6 +310,7 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
       <${BigCard} card=${card} persons=${persons} flipped=${flipped} onFlip=${() => setFlipped(!flipped)}/>
       <p class="flip-hint"><${IconFlip}/> Tippen zum Umdrehen</p>
 
+      ${readOnly ? html`<${KidPanel} card=${card} persons=${persons} meId=${meId} onNote=${onNote}/>` : html`
       <div class="panel">
         ${parked ? html`
           <div class="panel-row"><span class="label">Parkplatz</span><span class="park-group">${parkGroupLabel(card.park_group)}</span></div>
@@ -359,10 +360,10 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
         <button type="button" class="btn ghost" onClick=${() => setSheet('edit')}><${IconEdit}/> Texte bearbeiten</button>
         <button type="button" class="btn ghost" onClick=${() => setSheet('notes')}><${IconEdit}/> Notizen</button>
         <button type="button" class="btn ghost" onClick=${() => onNote(card)}><${IconNote}/> Für Check-in notieren</button>
-      </div>
+      </div>`}
       <div class="meta">
         ${editor && html`<span>Zuletzt geändert von ${editor.name} am ${fmtDate(card.updated_at)}</span>`}
-        <a href=${origUrl(card)} target="_blank" rel="noopener">Originalkarte „${card.orig}“ auf fairplaypolicy.org</a>
+        ${!readOnly && html`<a href=${origUrl(card)} target="_blank" rel="noopener">Originalkarte „${card.orig}“ auf fairplaypolicy.org</a>`}
       </div>
 
       ${sheet === 'edit' && html`<${EditSheet} card=${card} onClose=${() => setSheet(null)}
@@ -376,8 +377,27 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
     </div>`;
 }
 
+// ---------- Kartendetail für Kinder: nur lesen, plus Notiz an die Eltern ----------
+function KidPanel({ card, persons, meId, onNote }) {
+  const holder = persons.find((p) => p.id === card.holder);
+  const coach = coachOf(card, persons);
+  const mine = card.holder === meId || (card.schedule && Object.values(card.schedule).includes(meId));
+  return html`
+    <div class="panel">
+      <div class="panel-row"><span class="label">Owner</span>
+        <span class="owner-inline"><${OwnerDot} person=${holder} size=${30}/>${holder ? (holder.id === meId ? 'Du' : holder.name) : 'Noch nicht verteilt'}</span></div>
+      ${coach && html`<div class="panel-row"><span class="label">Begleitung</span>
+        <span class="owner-inline"><${OwnerDot} person=${coach} size=${30}/>${coach.name}</span></div>`}
+      ${hasSchedule(card) && html`<div class="panel-row week-row"><span class="label">Wochenplan</span><${WeekStrip} card=${card} persons=${persons} size="lg"/></div>`}
+      <div class="row wrap">
+        ${mine && html`<button type="button" class="btn primary" onClick=${() => onNote(card, 'Ich brauche Hilfe bei dieser Karte.')}><${IconHand}/> Brauche Hilfe</button>`}
+        <button type="button" class=${`btn ${mine ? 'ghost' : 'primary'}`} onClick=${() => onNote(card)}><${IconNote}/> Für Mama & Papa notieren</button>
+      </div>
+    </div>`;
+}
+
 // ---------- Menü ----------
-function Menu({ me, persons, cards, onClose, onSwitch, onSignOut, onReload, onGo, onParked, onCheckin, running, openSteps: stepsOpen, openNotes }) {
+function Menu({ me, persons, cards, onClose, onSwitch, onSignOut, onReload, onGo, onParked, onCheckin, running, openSteps: stepsOpen, openNotes, isChild }) {
   const hardRefresh = async () => {
     try {
       if ('serviceWorker' in navigator) (await navigator.serviceWorker.getRegistrations()).forEach((r) => r.unregister());
@@ -388,13 +408,17 @@ function Menu({ me, persons, cards, onClose, onSwitch, onSignOut, onReload, onGo
   return html`
     <${Sheet} title="Menü" onClose=${onClose}>
       <p class="muted">Angemeldet als ${me.name}${store.DEMO ? ' (Demo-Modus)' : ''}.</p>
+      ${isChild ? html`
+      <nav class="menu-list" aria-label="Menü">
+        <button type="button" onClick=${() => onGo('notes')}><span class="mi-title">Meine Notizen</span><span class="mi-sub">${openNotes ? `${openNotes} offen` : 'Keine offenen'} · Mama und Papa lesen mit</span></button>
+      </nav>` : html`
       <nav class="menu-list" aria-label="Fair-Play-Begleiter">
         <button type="button" onClick=${() => onGo('weg')}><span class="mi-title">Unser Weg</span><span class="mi-sub">${stepsOpen ? `${STEP_COUNT - stepsOpen} von ${STEP_COUNT} Schritten erledigt` : 'Alle Schritte erledigt'}</span></button>
         <button type="button" onClick=${onCheckin}><span class="mi-title">${running ? 'Check-in fortsetzen' : 'Check-in starten'}</span><span class="mi-sub">Geführt in 8 Punkten</span></button>
         <button type="button" onClick=${() => onGo('history')}><span class="mi-title">Vergangene Check-ins</span><span class="mi-sub">Zum Nachlesen</span></button>
         <button type="button" onClick=${() => onGo('notes')}><span class="mi-title">Meine Notizen</span><span class="mi-sub">${openNotes ? `${openNotes} offen` : 'Keine offenen'} · nur für dich</span></button>
         <button type="button" onClick=${onParked}><span class="mi-title">Parkplatz</span><span class="mi-sub">${cards.filter((c) => c.status === 'parked').length} Karten, die wir gerade nicht brauchen</span></button>
-      </nav>
+      </nav>`}
       ${store.DEMO && html`
         <p class="field-hint">Im Demo-Modus werden Änderungen nur in diesem Browser gespeichert.</p>
         <div class="row wrap">${persons.filter((p) => p.id !== me.id).map((p) => html`
@@ -411,7 +435,7 @@ function Menu({ me, persons, cards, onClose, onSwitch, onSignOut, onReload, onGo
 function App() {
   const [phase, setPhase] = useState('loading'); // loading | login | ready | error
   const [error, setError] = useState('');
-  const [data, setData] = useState({ persons: [], cards: [], meId: null, settings: {}, steps: [], notes: [], checkins: [] });
+  const [data, setData] = useState({ persons: [], cards: [], meId: null, isChild: false, settings: {}, steps: [], notes: [], kidNotes: [], checkins: [] });
   const [page, setPage] = useState(null); // null | weg | checkin | history | notes
   const [ciStep, setCiStep] = useState(1);
   const [noteFor, setNoteFor] = useState(null); // { card } öffnet das Notiz-Sheet
@@ -453,7 +477,7 @@ function App() {
 
   useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(''), Math.max(2200, toast.length * 55)); return () => clearTimeout(t); }, [toast]);
 
-  const { persons, cards, meId, settings, steps, notes, checkins } = data;
+  const { persons, cards, meId, isChild, settings, steps, notes, kidNotes = [], checkins } = data;
   const me = persons.find((p) => p.id === meId);
   // Reihenfolge ab mir: ich → andere Erwachsene → Kinder (für Verteilen und den zweiten Tab).
   const order = [
@@ -507,14 +531,16 @@ function App() {
     } catch (e) { setToast(`Hat nicht geklappt: ${e.message}`); }
   };
   const ctx = {
-    persons, cards, meId, me, settings, steps, notes, checkins, running,
+    persons, cards, meId, me, isChild, settings, steps, notes, kidNotes, checkins, running,
     reload: load, toast: setToast, go, startCheckin,
     openCard: (c) => setDetailId(c.id),
     goDeck: ({ dg, deal }) => { setPage(null); setView('deck'); setDgOnly(!!dg); setDealMode(!!deal); window.scrollTo(0, 0); },
   };
   const stepsOpen = openSteps(steps);
-  const openNotes = notes.filter((n) => !n.done_at).length;
-  const pageEl = page === 'weg' ? html`<${WegPage} ctx=${ctx} onBack=${() => go(null)}/>`
+  // Offene Themen: eigene, bei Erwachsenen plus die des Kindes.
+  const openNotes = notes.filter((n) => !n.done_at).length + kidNotes.filter((n) => !n.done_at).length;
+  const pageEl = isChild && page !== 'notes' ? null
+    : page === 'weg' ? html`<${WegPage} ctx=${ctx} onBack=${() => go(null)}/>`
     : page === 'checkin' && running ? html`<${CheckinPage} key=${running.id} ctx=${ctx} checkin=${running} step=${ciStep} setStep=${setCiStep} onBack=${() => go(null)}/>`
     : page === 'history' ? html`<${HistoryPage} ctx=${ctx} onBack=${() => go(null)}/>`
     : page === 'notes' ? html`<${NotesPage} ctx=${ctx} onBack=${() => go(null)}/>`
@@ -525,7 +551,7 @@ function App() {
   return html`
     <div class="app">
       ${detail
-        ? html`<${Detail} card=${detail} persons=${persons} meId=${meId} onClose=${() => setDetailId(null)} act=${act} onNote=${(c) => setNoteFor({ card: c })}/>`
+        ? html`<${Detail} card=${detail} persons=${persons} meId=${meId} readOnly=${isChild} onClose=${() => setDetailId(null)} act=${act} onNote=${(c, text) => setNoteFor({ card: c, text })}/>`
         : pageEl || html`
           <header class="top">
             <div class="top-row">
@@ -533,8 +559,8 @@ function App() {
               <div class="top-icons">
                 <button type="button" class="icon-btn badge-wrap" onClick=${() => go('notes')} aria-label=${`Meine Notizen${openNotes ? `, ${openNotes} offen` : ''}`}>
                   <${IconNote}/>${openNotes > 0 && html`<span class="badge">${openNotes}</span>`}</button>
-                <button type="button" class="icon-btn badge-wrap" onClick=${() => go('weg')} aria-label=${`Unser Weg${stepsOpen ? `, ${STEP_COUNT - stepsOpen} von ${STEP_COUNT} Schritten erledigt` : ''}`}>
-                  <${IconRoute}/>${stepsOpen > 0 && html`<span class="dot"></span>`}</button>
+                ${!isChild && html`<button type="button" class="icon-btn badge-wrap" onClick=${() => go('weg')} aria-label=${`Unser Weg${stepsOpen ? `, ${STEP_COUNT - stepsOpen} von ${STEP_COUNT} Schritten erledigt` : ''}`}>
+                  <${IconRoute}/>${stepsOpen > 0 && html`<span class="dot"></span>`}</button>`}
                 <button type="button" class="icon-btn" onClick=${() => setMenu(true)} aria-label="Menü öffnen"><${IconMenu}/></button>
               </div>
             </div>
@@ -544,18 +570,18 @@ function App() {
                   onClick=${() => { setView(id); setDealMode(false); window.scrollTo(0, 0); }}>${label}</button>`)}
             </nav>
           </header>
-          <${RunningCheckinBar} ctx=${ctx} step=${ciStep}/>
-          ${view === 'mine' && html`<${NextCheckinBar} ctx=${ctx}/>`}
-          ${view === 'mine' && html`<${PersonView} person=${me} isMe=${true} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
-          ${viewPerson && html`<${PersonView} key=${viewPerson.id} person=${viewPerson} isMe=${false} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
+          ${!isChild && html`<${RunningCheckinBar} ctx=${ctx} step=${ciStep}/>`}
+          ${view === 'mine' && !isChild && html`<${NextCheckinBar} ctx=${ctx}/>`}
+          ${view === 'mine' && html`<${PersonView} person=${me} isMe=${true} cards=${cards} persons=${persons} readOnly=${isChild} onOpen=${(c) => setDetailId(c.id)}/>`}
+          ${viewPerson && html`<${PersonView} key=${viewPerson.id} person=${viewPerson} isMe=${false} cards=${cards} persons=${persons} readOnly=${isChild} onOpen=${(c) => setDetailId(c.id)}/>`}
           ${view === 'deck' && html`<${DeckView} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)} onCycle=${cycle}
-              dealMode=${dealMode} setDealMode=${setDealMode} dgOnly=${dgOnly} setDgOnly=${setDgOnly} markId=${markId} order=${order}/>`}
-          ${view === 'parked' && html`<${ParkedView} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
+              dealMode=${dealMode && !isChild} setDealMode=${setDealMode} dgOnly=${dgOnly} setDgOnly=${setDgOnly} markId=${markId} order=${order} readOnly=${isChild}/>`}
+          ${view === 'parked' && !isChild && html`<${ParkedView} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
         `}
-      ${noteFor && html`<${NoteSheet} ctx=${ctx} card=${noteFor.card} onClose=${() => setNoteFor(null)}/>`}
+      ${noteFor && html`<${NoteSheet} ctx=${ctx} card=${noteFor.card} initial=${noteFor.text} onClose=${() => setNoteFor(null)}/>`}
       ${menu && html`<${Menu} me=${me} persons=${persons} cards=${cards} onClose=${() => setMenu(false)}
         onParked=${() => { setMenu(false); setPage(null); setView('parked'); setDealMode(false); window.scrollTo(0, 0); }}
-        onGo=${go} onCheckin=${startCheckin} running=${running} openSteps=${stepsOpen} openNotes=${openNotes}
+        onGo=${go} onCheckin=${startCheckin} running=${running} openSteps=${stepsOpen} openNotes=${openNotes} isChild=${isChild}
         onSwitch=${(id) => { store.setDemoMe(id); setMenu(false); load(); }}
         onReload=${() => { setMenu(false); load(); }}
         onSignOut=${async () => { setMenu(false); await store.signOut(); setPhase('login'); }}/>`}

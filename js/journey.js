@@ -430,6 +430,7 @@ export function CheckinPage({ ctx, checkin, step, setStep, onBack }) {
     setPick(''); setPickNote('');
   };
   const myOpen = ctx.notes.filter((n) => !n.done_at || n.checkin_id === checkin.id);
+  const kidOpen = (ctx.kidNotes || []).filter((n) => !n.done_at || n.checkin_id === checkin.id);
   const markNote = async (n, on) => {
     try { await store.updateNote(n.id, on ? { done_at: new Date().toISOString(), checkin_id: checkin.id } : { done_at: null, checkin_id: null }); ctx.reload(); } catch (e) { ctx.toast(`Hat nicht geklappt: ${e.message}`); }
   };
@@ -470,6 +471,16 @@ export function CheckinPage({ ctx, checkin, step, setStep, onBack }) {
             </li>`)}</ul>` : html`<p class="muted">Du hast keine offenen Notizen.</p>`}
           <p class="field-hint">Abhaken = besprochen. Die Themen der anderen Person stehen auf ihrem Handy unter Notizen.</p>
         </section>
+        ${kidOpen.length > 0 && html`
+        <section class="section">
+          <h2 class="sec-title">Von ${[...new Set(kidOpen.map((n) => ctx.persons.find((p) => p.id === n.author)?.name))].join(' und ')} <span class="count">${kidOpen.filter((n) => !n.done_at).length}</span></h2>
+          <ul class="notes">${kidOpen.map((n) => html`
+            <li class=${`note${n.done_at ? ' is-done' : ''}`}>
+              <label class="check"><input type="checkbox" checked=${!!n.done_at} onChange=${(e) => markNote(n, e.target.checked)}/>
+                <span>${n.text}${n.card_id && cardOf(n.card_id) ? html` <span class="note-card">${plainName(cardOf(n.card_id).name)}</span>` : ''}</span></label>
+            </li>`)}</ul>
+          <p class="field-hint">Steht auf beiden Handys. Am besten mit ihm gemeinsam anschauen.</p>
+        </section>`}
         <section class="section">
           <h2 class="sec-title warn">Hat gehakt <span class="count warn">${draft.stuck.length}</span></h2>
           ${draft.stuck.map((s) => html`
@@ -582,20 +593,20 @@ export function HistoryPage({ ctx, onBack }) {
 }
 
 // ---------- Notizen ----------
-export function NoteSheet({ ctx, card, onClose }) {
-  const [text, setText] = useState('');
+export function NoteSheet({ ctx, card, initial = '', onClose }) {
+  const [text, setText] = useState(initial || '');
   const save = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;
-    try { await store.addNote(text.trim(), card?.id, ctx.meId); await ctx.reload(); ctx.toast('Für den Check-in notiert'); onClose(); } catch (x) { ctx.toast(`Hat nicht geklappt: ${x.message}`); }
+    try { await store.addNote(text.trim(), card?.id, ctx.meId); await ctx.reload(); ctx.toast(ctx.isChild ? 'Notiert' : 'Für den Check-in notiert'); onClose(); } catch (x) { ctx.toast(`Hat nicht geklappt: ${x.message}`); }
   };
   return html`
-    <${Sheet} title="Für den Check-in notieren" onClose=${onClose}>
+    <${Sheet} title=${ctx.isChild ? 'Für Mama & Papa notieren' : 'Für den Check-in notieren'} onClose=${onClose}>
       <form class="form" onSubmit=${save}>
         ${card && html`<p class="muted">Zur Karte „${plainName(card.name)}“</p>`}
         <label for="note-text">Was möchtest du ansprechen?</label>
         <textarea id="note-text" rows="4" value=${text} onInput=${(e) => setText(e.target.value)}></textarea>
-        <p class="field-hint">Nur du siehst deine Notizen.</p>
+        <p class="field-hint">${ctx.isChild ? 'Mama und Papa lesen deine Notizen und sprechen beim Check-in darüber.' : 'Nur du siehst deine Notizen.'}</p>
         <div class="row">
           <button type="button" class="btn ghost" onClick=${onClose}>Abbrechen</button>
           <button type="submit" class="btn primary" disabled=${!text.trim()}>Speichern</button>
@@ -618,19 +629,21 @@ export function NotesPage({ ctx, onBack }) {
     run(() => store.addNote(text.trim(), cardId, ctx.meId), 'Notiert');
     setText(''); setCardId('');
   };
-  const item = (n) => {
+  const kidOpen = (ctx.kidNotes || []).filter((n) => !n.done_at);
+  const authorName = (id) => ctx.persons.find((p) => p.id === id)?.name || '';
+  const item = (n, foreign = false) => {
     const c = n.card_id && cardOf(n.card_id);
     return html`
       <li class=${`note${n.done_at ? ' is-done' : ''}`} key=${n.id}>
         <div class="note-body">
           <p>${n.text}</p>
-          <span class="note-meta">${fmtDate(n.created_at)}${c ? html` · <button type="button" class="link-btn" onClick=${() => ctx.openCard(c)}>${plainName(c.name)}</button>` : ''}</span>
+          <span class="note-meta">${foreign ? `${authorName(n.author)} · ` : ''}${fmtDate(n.created_at)}${c ? html` · <button type="button" class="link-btn" onClick=${() => ctx.openCard(c)}>${plainName(c.name)}</button>` : ''}</span>
         </div>
         <div class="note-actions">
           <button type="button" class="icon-btn" aria-label=${n.done_at ? 'Wieder offen' : 'Besprochen'} title=${n.done_at ? 'Wieder offen' : 'Besprochen'}
             onClick=${() => run(() => store.updateNote(n.id, n.done_at ? { done_at: null, checkin_id: null } : { done_at: new Date().toISOString() }))}>
             <span class=${`tick-box${n.done_at ? ' on' : ''}`}><${IconCheck} size=${16}/></span></button>
-          <button type="button" class="icon-btn" aria-label="Löschen" onClick=${() => { if (confirm('Notiz löschen?')) run(() => store.deleteNote(n.id)); }}><${IconTrash}/></button>
+          ${!foreign && html`<button type="button" class="icon-btn" aria-label="Löschen" onClick=${() => { if (confirm('Notiz löschen?')) run(() => store.deleteNote(n.id)); }}><${IconTrash}/></button>`}
         </div>
       </li>`;
   };
@@ -638,10 +651,10 @@ export function NotesPage({ ctx, onBack }) {
     <div class="page">
       <${PageBar} label="Zurück" onBack=${onBack}/>
       <h1 class="page-title caps">Meine Notizen</h1>
-      <p class="muted">Was du beim nächsten Check-in ansprechen möchtest. Nur du siehst deine Notizen.</p>
+      <p class="muted">${ctx.isChild ? 'Was du Mama und Papa sagen möchtest, zum Beispiel wenn du bei einer Karte Hilfe brauchst. Sie lesen deine Notizen und sprechen beim Check-in darüber.' : 'Was du beim nächsten Check-in ansprechen möchtest. Nur du siehst deine Notizen.'}</p>
       <form class="panel form" onSubmit=${add}>
         <label for="new-note">Neues Thema</label>
-        <textarea id="new-note" rows="3" value=${text} onInput=${(e) => setText(e.target.value)} placeholder="z. B. Abendroutine an Trainingsabenden"></textarea>
+        <textarea id="new-note" rows="3" value=${text} onInput=${(e) => setText(e.target.value)} placeholder=${ctx.isChild ? 'z. B. Ich vergesse oft die Trinkflasche' : 'z. B. Abendroutine an Trainingsabenden'}></textarea>
         <label for="new-note-card">Zu einer Karte (optional)</label>
         <select id="new-note-card" value=${cardId} onChange=${(e) => setCardId(e.target.value)}>
           <option value="">Keine Karte</option>
@@ -651,12 +664,18 @@ export function NotesPage({ ctx, onBack }) {
       </form>
       <section class="section">
         <h2 class="sec-title">Offen <span class="count">${open.length}</span></h2>
-        ${open.length ? html`<ul class="notes">${open.map(item)}</ul>` : html`<p class="muted">Keine offenen Themen.</p>`}
+        ${open.length ? html`<ul class="notes">${open.map((n) => item(n))}</ul>` : html`<p class="muted">Keine offenen Themen.</p>`}
       </section>
+      ${kidOpen.length > 0 && html`
+        <section class="section">
+          <h2 class="sec-title">Von ${[...new Set(kidOpen.map((n) => authorName(n.author)))].join(' und ')} <span class="count">${kidOpen.length}</span></h2>
+          <p class="sec-hint">Abhaken, wenn ihr es besprochen habt.</p>
+          <ul class="notes">${kidOpen.map((n) => item(n, true))}</ul>
+        </section>`}
       ${done.length > 0 && html`
         <details class="section">
           <summary class="sec-title">Besprochen <span class="count">${done.length}</span></summary>
-          <ul class="notes">${done.map(item)}</ul>
+          <ul class="notes">${done.map((n) => item(n))}</ul>
         </details>`}
     </div>`;
 }

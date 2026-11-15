@@ -61,10 +61,13 @@ export async function getSession() {
   const { data } = await (await client()).auth.getSession();
   return data.session;
 }
-export async function signIn(email, password) {
-  const { error } = await (await client()).auth.signInWithPassword({ email, password });
+// Kinder melden sich mit ihrem Namen an (z. B. „Leander“); intern ist das ein Login name@fairplay.invalid.
+export const KID_DOMAIN = 'fairplay.invalid';
+export const loginEmail = (id) => (id.includes('@') ? id : `${id.trim().toLowerCase()}@${KID_DOMAIN}`);
+export async function signIn(id, password) {
+  const { error } = await (await client()).auth.signInWithPassword({ email: loginEmail(id), password });
   if (error) throw new Error(error.message === 'Invalid login credentials'
-    ? 'E-Mail oder Passwort stimmt nicht.' : error.message);
+    ? 'Name, E-Mail oder Passwort stimmt nicht.' : error.message);
 }
 export async function signOut() {
   if (DEMO) return;
@@ -79,31 +82,59 @@ export async function onAuthChange(cb) {
 export async function loadAll() {
   if (DEMO) {
     const d = demoExtras(await loadDemo());
+    const me = d.persons.find((p) => p.id === d.me);
+    const childIds = d.persons.filter((p) => p.role === 'child').map((p) => p.id);
+    if (me.role === 'child') {
+      return {
+        persons: d.persons, cards: kidView(d.cards), meId: d.me, isChild: true, settings: {}, steps: [],
+        notes: d.notes.filter((n) => n.author === d.me), kidNotes: [], checkins: [],
+      };
+    }
     const settings = {};
     Object.entries(d.settings).forEach(([k, v]) => { settings[k] = v; });
     return {
-      persons: d.persons, cards: d.cards, meId: d.me, settings, steps: d.steps,
-      notes: d.notes.filter((n) => n.author === d.me), checkins: d.checkins,
+      persons: d.persons, cards: d.cards, meId: d.me, isChild: false, settings, steps: d.steps,
+      notes: d.notes.filter((n) => n.author === d.me), kidNotes: d.notes.filter((n) => childIds.includes(n.author)), checkins: d.checkins,
     };
   }
   const c = await client();
-  const [r1, r2, { data: user }, r3, r4, r5, r6] = await Promise.all([
-    c.from('fp_person').select('*').order('sort'),
-    c.from('fp_card').select('*').order('sort'),
-    c.auth.getUser(),
-    c.from('fp_setting').select('*'),
-    c.from('fp_step').select('*').order('step'),
-    c.from('fp_note').select('*').order('created_at', { ascending: false }),
-    c.from('fp_checkin').select('*').order('started_at', { ascending: false }),
-  ]);
-  const err = [r1, r2, r3, r4, r5, r6].find((r) => r.error);
-  if (err) throw new Error(err.error.message);
+  const [r1, { data: user }] = await Promise.all([c.from('fp_person').select('*').order('sort'), c.auth.getUser()]);
+  if (r1.error) throw new Error(r1.error.message);
   const persons = r1.data;
   const me = persons.find((p) => p.user_id === user.user?.id);
   if (!me) throw new Error('Dein Login ist noch keiner Person zugeordnet. Siehe README, Schritt 4.');
+  const notesQ = c.from('fp_note').select('*').order('created_at', { ascending: false });
+  if (me.role === 'child') {
+    // Kinder lesen die Karten über fp_kid_cards(): nur Deck, ohne M14/C21 und ohne Notizfelder.
+    const [r2, r5] = await Promise.all([c.rpc('fp_kid_cards'), notesQ]);
+    const err = [r2, r5].find((r) => r.error);
+    if (err) throw new Error(err.error.message);
+    return { persons, cards: r2.data, meId: me.id, isChild: true, settings: {}, steps: [], notes: r5.data, kidNotes: [], checkins: [] };
+  }
+  const [r2, r3, r4, r5, r6] = await Promise.all([
+    c.from('fp_card').select('*').order('sort'),
+    c.from('fp_setting').select('*'),
+    c.from('fp_step').select('*').order('step'),
+    notesQ,
+    c.from('fp_checkin').select('*').order('started_at', { ascending: false }),
+  ]);
+  const err = [r2, r3, r4, r5, r6].find((r) => r.error);
+  if (err) throw new Error(err.error.message);
   const settings = {};
   r3.data.forEach((row) => { settings[row.key] = row.value; });
-  return { persons, cards: r2.data, meId: me.id, settings, steps: r4.data, notes: r5.data, checkins: r6.data };
+  // Erwachsene sehen zusätzlich die Notizen des Kindes (für den Check-in).
+  const childIds = persons.filter((p) => p.role === 'child').map((p) => p.id);
+  return {
+    persons, cards: r2.data, meId: me.id, isChild: false, settings, steps: r4.data,
+    notes: r5.data.filter((n) => n.author === me.id), kidNotes: r5.data.filter((n) => childIds.includes(n.author)), checkins: r6.data,
+  };
+}
+
+// Was ein Kind sehen darf (gleiche Regel wie fp_kid_cards() in der Datenbank; im Demo-Modus genutzt).
+export const KID_HIDDEN = ['M14', 'C21'];
+function kidView(cards) {
+  return cards.filter((c) => c.status === 'deck' && !KID_HIDDEN.includes(c.id))
+    .map(({ card_notes, parked_note, park_group, review_on, ...rest }) => rest);
 }
 
 // ---------- Live-Aktualisierung ----------

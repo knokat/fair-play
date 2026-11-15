@@ -25,7 +25,7 @@ tools/              Skripte, die seed.sql und die Prompt-Seite erzeugen
 
 - **App:** https://knokat.github.io/fair-play/ (GitHub Pages, Branch `main`, Ordner `/`)
 - **Datenbank:** Supabase-Projekt „Workout Tracker“ (`zkqfeqtnoxgoepmykupd`), Tabellen `fp_person`, `fp_card`, `fp_card_event`, `fp_setting`, `fp_step`, `fp_checkin`, `fp_note` (Notizen sieht nur die Person, die sie schreibt)
-- **Logins:** Supabase Auth mit E-Mail und Passwort. Jede Person in `fp_person` ist über `user_id` mit ihrem Login verknüpft; nur verknüpfte Logins sehen Daten.
+- **Logins:** Supabase Auth mit E-Mail und Passwort. Kinder melden sich mit ihrem Namen an (Leander → `leander@fairplay.invalid`); sie sehen Karten nur lesend (ohne M14, C21 und Notizfelder) und schreiben eigene Notizen, die die Eltern sehen. Jede Person in `fp_person` ist über `user_id` mit ihrem Login verknüpft; nur verknüpfte Logins sehen Daten.
 
 ## Matthias freischalten
 
