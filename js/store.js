@@ -153,8 +153,8 @@ export function setSchedule(card, schedule, meId) {
   return patchCard(card, { schedule: value }, [{ action: 'edited', field: 'schedule' }], meId);
 }
 
-export function park(card, note, group, meId) {
-  const info = { parked_note: note || '', park_group: group || null };
+export function park(card, note, group, meId, reviewOn) {
+  const info = { parked_note: note || '', park_group: group || null, review_on: reviewOn || null };
   if (card.status === 'parked') {
     const changed = Object.keys(info).filter((k) => (card[k] || null) !== (info[k] || null));
     if (!changed.length) return Promise.resolve();
@@ -165,7 +165,7 @@ export function park(card, note, group, meId) {
 }
 
 export const unpark = (card, meId) =>
-  patchCard(card, { status: 'deck', holder: null }, [{ action: 'unparked' }], meId);
+  patchCard(card, { status: 'deck', holder: null, review_on: null }, [{ action: 'unparked' }], meId);
 
 export const setOnlyMe = (card, value, meId) =>
   patchCard(card, { only_me: value }, [{ action: 'edited', field: 'only_me' }], meId);

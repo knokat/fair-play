@@ -1,7 +1,7 @@
 // Hauptkomponente: Anmeldung, Ansichten (Meine, andere Person, Deck, Parkplatz) und Kartendetail.
 import { html, render, useState, useEffect, useMemo, useCallback } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import * as store from './store.js';
-import { CATS, CAT_ORDER, plainName, isTrio, fmtDate, origUrl, PARK_GROUPS, parkGroupLabel } from './meta.js';
+import { CATS, CAT_ORDER, plainName, isTrio, fmtDate, origUrl, PARK_GROUPS, parkGroupLabel, reviewDue, reviewOverdue, fmtDay } from './meta.js';
 import { Grid, Sheet, BigCard, OwnerDot, WeekStrip, hasSchedule, coachOf, IconCup, IconSearch, IconClose, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand, IconRoute, IconNote } from './components.js';
 import { WegPage, CheckinPage, HistoryPage, NotesPage, NoteSheet, NextCheckinBar, RunningCheckinBar, sinceForNewCheckin, openSteps, STEP_COUNT } from './journey.js';
 
@@ -206,9 +206,10 @@ function EditSheet({ card, onSave, onClose }) {
 function ParkSheet({ card, onPark, onClose }) {
   const [note, setNote] = useState(card.parked_note || '');
   const [group, setGroup] = useState(card.park_group || null);
+  const [review, setReview] = useState(card.review_on || '');
   return html`
     <${Sheet} title=${card.status === 'parked' ? 'Parkplatz-Notiz' : 'Karte parken'} onClose=${onClose}>
-      <form class="form" onSubmit=${(e) => { e.preventDefault(); onPark(note.trim(), group); }}>
+      <form class="form" onSubmit=${(e) => { e.preventDefault(); onPark(note.trim(), group, review || null); }}>
         <span class="label-text" id="park-group-label">Wohin damit?</span>
         <div class="group-pick" role="radiogroup" aria-labelledby="park-group-label">
           ${PARK_GROUPS.filter((g) => g.key).map((g) => html`
@@ -219,6 +220,12 @@ function ParkSheet({ card, onPark, onClose }) {
         </div>
         <label for="park-note">Warum parken wir sie? (optional)</label>
         <textarea id="park-note" rows="4" value=${note} onInput=${(e) => setNote(e.target.value)} placeholder="z. B. Mit Augsburg ins Deck holen"></textarea>
+        <label for="park-review">Wieder anschauen ab (optional)</label>
+        <div class="row">
+          <input id="park-review" type="date" value=${review} onInput=${(e) => setReview(e.target.value)}/>
+          ${review && html`<button type="button" class="btn ghost" onClick=${() => setReview('')}>Kein Datum</button>`}
+        </div>
+        <p class="field-hint">Der Tag, an dem ihr anfangen müsst – nicht das Ereignis selbst. Ab 7 Tage vorher steht die Karte im Check-in.</p>
         ${card.status !== 'parked' && card.holder && html`<p class="field-hint">Die Karte verliert dabei ihren Owner.</p>`}
         <div class="row">
           <button type="button" class="btn ghost" onClick=${onClose}>Abbrechen</button>
@@ -286,6 +293,8 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
       <div class="panel">
         ${parked ? html`
           <div class="panel-row"><span class="label">Parkplatz</span><span class="park-group">${parkGroupLabel(card.park_group)}</span></div>
+          ${card.review_on && html`<div class="panel-row"><span class="label">Wieder anschauen ab</span>
+            <span class=${`review-tag big${reviewDue(card) ? ' due' : ''}`}>${fmtDay(card.review_on)}${reviewOverdue(card) ? ' · überfällig' : reviewDue(card) ? ' · steht an' : ''}</span></div>`}
           ${card.parked_note ? html`<p class="park-note">${card.parked_note}</p>` : html`<p class="muted">Noch keine Notiz.</p>`}
           <div class="row">
             <button type="button" class="btn primary" onClick=${() => act('unpark', card)}>Ins Deck holen</button>
@@ -340,7 +349,7 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
       ${sheet === 'week' && html`<${WeekSheet} card=${card} persons=${persons} onClose=${() => setSheet(null)}
         onSave=${async (sch) => { await act('schedule', card, sch); setSheet(null); }}/>`}
       ${sheet === 'park' && html`<${ParkSheet} card=${card} onClose=${() => setSheet(null)}
-        onPark=${async (note, group) => { await act('park', card, { note, group }); setSheet(null); }}/>`}
+        onPark=${async (note, group, review) => { await act('park', card, { note, group, review }); setSheet(null); }}/>`}
     </div>`;
 }
 
@@ -437,7 +446,7 @@ function App() {
       if (type === 'coach') { await store.setCoach(card, arg, meId); setToast(arg ? `Begleitung: ${name(arg)}` : 'Keine Begleitung'); }
       if (type === 'deal') { await store.setHolder(card, arg, meId, persons.find((p) => p.id === arg)?.role === 'child'); setToast(handoverText(card, arg) || (arg === meId ? 'Du hältst jetzt diese Karte' : `An ${name(arg)} gegeben`)); }
       if (type === 'schedule') { await store.setSchedule(card, arg, meId); setToast(Object.values(arg || {}).some(Boolean) ? 'Wochenplan gespeichert' : 'Wochenplan gelöscht'); }
-      if (type === 'park') { await store.park(card, arg.note, arg.group, meId); setToast(card.status === 'parked' ? 'Gespeichert' : 'Geparkt'); }
+      if (type === 'park') { await store.park(card, arg.note, arg.group, meId, arg.review); setToast(card.status === 'parked' ? 'Gespeichert' : 'Geparkt'); }
       if (type === 'unpark') { await store.unpark(card, meId); setToast('Zurück im Deck, noch ohne Owner'); }
       if (type === 'onlyMe') { await store.setOnlyMe(card, arg, meId); }
       if (type === 'texts') { await store.updateTexts(card, arg, meId); setToast('Gespeichert'); }

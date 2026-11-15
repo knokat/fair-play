@@ -1,7 +1,7 @@
 // Anleitung „Unser Weg“, geführter Check-in, vergangene Check-ins und private Notizen.
 import { html, useState, useEffect } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import * as store from './store.js';
-import { CATS, plainName, isTrio, fmtDate, WEEKDAYS, dayName, nextCheckin, fmtWhen, daysUntil } from './meta.js';
+import { CATS, plainName, isTrio, fmtDate, WEEKDAYS, dayName, nextCheckin, fmtWhen, daysUntil, reviewDue, parseDay } from './meta.js';
 import { Grid, Sheet, OwnerDot, IconBack, IconCheck, IconChevron, IconTrash, IconPlus, IconHand, hasSchedule } from './components.js';
 
 const adultsOf = (persons) => persons.filter((p) => p.role === 'adult');
@@ -317,9 +317,11 @@ export function NextCheckinBar({ ctx }) {
   const next = nextCheckin(ctx.settings.checkin);
   if (!next || ctx.running) return null;
   const days = daysUntil(next);
+  const due = ctx.cards.filter((c) => reviewDue(c, next)).length;
   return html`
     <div class="next-bar">
-      <span><span class="label">Nächster Check-in</span><br/><b>${days === 0 ? 'Heute' : days === 1 ? 'Morgen' : fmtWhen(next).split(' · ')[0]}</b> · ${fmtWhen(next).split(' · ')[1]}</span>
+      <span><span class="label">Nächster Check-in</span><br/><b>${days === 0 ? 'Heute' : days === 1 ? 'Morgen' : fmtWhen(next).split(' · ')[0]}</b> · ${fmtWhen(next).split(' · ')[1]}
+        ${due > 0 && html`<br/><span class="review-tag due">${due === 1 ? '1 Parkplatz-Karte steht an' : `${due} Parkplatz-Karten stehen an`}</span>`}</span>
       <button type="button" class="chip" onClick=${ctx.startCheckin}>Starten</button>
     </div>`;
 }
@@ -344,7 +346,7 @@ const CI = [
   { n: 7, title: 'Unicorn Space' },
   { n: 8, title: 'Abschluss' },
 ];
-const FIELD_LABEL = { name: 'Name', descr: 'Beschreibung', conception: 'Dran-Denken', planning: 'Planen', execution: 'Erledigen', msc: 'Mindeststandard', only_me: '„Nur mir wichtig“', parked_note: 'Parkplatz-Notiz', park_group: 'Parkplatz-Gruppe', schedule: 'Wochenplan', coach: 'Begleitung' };
+const FIELD_LABEL = { name: 'Name', descr: 'Beschreibung', conception: 'Dran-Denken', planning: 'Planen', execution: 'Erledigen', msc: 'Mindeststandard', only_me: '„Nur mir wichtig“', parked_note: 'Parkplatz-Notiz', park_group: 'Parkplatz-Gruppe', review_on: 'Wieder anschauen ab', schedule: 'Wochenplan', coach: 'Begleitung' };
 const UNI = [['ja', 'Ja'], ['teils', 'Teilweise'], ['nein', 'Nein']];
 
 function summarize(events, cards, persons) {
@@ -515,6 +517,10 @@ export function CheckinPage({ ctx, checkin, step, setStep, onBack }) {
           <p class="field-hint">Karte öffnen › „Wochenplan bearbeiten“: Wer ist an welchem Tag dran?</p>
           <${Grid} cards=${planned} persons=${ctx.persons} onOpen=${ctx.openCard}/>` : html`
           <p class="field-hint">Karten mit wechselnden Tagen (z. B. Hausübung): im Kartendetail einen Wochenplan anlegen.</p>`; })()}
+        ${(() => { const due = ctx.cards.filter((c) => reviewDue(c)).sort((a, b) => parseDay(a.review_on) - parseDay(b.review_on)); return due.length ? html`
+          <p class="label">Vom Parkplatz: steht an</p>
+          <p class="field-hint">Datum erreicht oder in den nächsten 7 Tagen. Karte öffnen › „Ins Deck holen“ oder bei „Notiz & Gruppe“ ein neues Datum setzen.</p>
+          <${Grid} cards=${due} persons=${ctx.persons} onOpen=${ctx.openCard}/>` : ''; })()}
         <p class="field-hint">Wild Cards holt ihr bei Bedarf vom Parkplatz ins Deck.</p>`}
 
       ${step === 7 && html`

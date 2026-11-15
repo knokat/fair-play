@@ -79,6 +79,19 @@ export function nextCheckin(setting, from = new Date()) {
   return d;
 }
 
+// ---------- Parkplatz: „Wieder anschauen ab“ ----------
+// review_on ist ein Datum 'JJJJ-MM-TT'. Fällig = ab 7 Tage vor dem Datum, und überfällige bleiben fällig.
+export const parseDay = (s) => { if (!s) return null; const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+export function reviewDue(card, ref = new Date()) {
+  const d = card.status === 'parked' ? parseDay(card.review_on) : null;
+  if (!d) return false;
+  const limit = startOfDay(ref); limit.setDate(limit.getDate() + 7);
+  return d <= limit;
+}
+export const reviewOverdue = (card, ref = new Date()) => { const d = parseDay(card.review_on); return !!d && d < startOfDay(ref); };
+export const fmtDay = (s) => { const d = parseDay(s); return d ? d.toLocaleDateString('de-AT', { day: 'numeric', month: 'numeric', year: '2-digit' }) : ''; };
+
 export function fmtWhen(d) {
   if (!d) return '';
   const day = d.toLocaleDateString('de-AT', { weekday: 'short', day: 'numeric', month: 'numeric' });

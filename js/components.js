@@ -1,6 +1,6 @@
 // Kartendarstellung (klein im Deck, groß im Detail) und Icons.
 import { html, useEffect } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
-import { CATS, cardName, plainName, isTrio } from './meta.js';
+import { CATS, cardName, plainName, isTrio, reviewDue, fmtDay } from './meta.js';
 
 // ---------- Icons ----------
 export const Cup = ({ fill, size = 24, label = 'Daily Grind' }) => html`
@@ -104,7 +104,10 @@ export function SmallCard({ card, persons, onClick, mark }) {
       ${parked
         ? html`<div class="card-bottom note">
             ${card.is_dg && html`<span class="ico"><${Cup} fill=${cat.accent} size=${22}/></span>`}
-            <span class="note-text">${card.parked_note || 'Geparkt'}</span>
+            <span class="note-stack">
+              ${card.review_on && html`<span class=${`review-tag${reviewDue(card) ? ' due' : ''}`}>ab ${fmtDay(card.review_on)}</span>`}
+              <span class="note-text">${card.parked_note || 'Geparkt'}</span>
+            </span>
           </div>`
         : html`<div class="card-bottom">
             <span class="ico">${card.is_dg ? html`<${Cup} fill=${cat.accent} size=${22}/>` : isTrio(card) ? html`<${Smile} fill=${cat.accent} size=${22}/>` : ''}</span>
