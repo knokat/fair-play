@@ -151,3 +151,8 @@ on conflict (step) do nothing;
 
 -- Live-Aktualisierung zwischen den Handys (Supabase Realtime), 15.11.2026
 alter publication supabase_realtime add table public.fp_card, public.fp_step, public.fp_setting, public.fp_checkin;
+
+-- Leander als Person (Kind, ohne Login), kann Karten halten. 15.11.2026
+insert into fp_person (id, name, initial, color, role, user_id, sort)
+values ('00000000-0000-4000-8000-00000000000c', 'Leander', 'L', '#2F6B5E', 'child', null, 3)
+on conflict (id) do nothing;

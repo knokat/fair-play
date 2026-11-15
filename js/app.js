@@ -44,28 +44,33 @@ function CatSections({ cards, persons, onOpen, markId }) {
 }
 
 // ---------- Ansicht: Karten einer Person ----------
-function PersonView({ person, isMe, cards, persons, onOpen }) {
+function PersonView({ person, isMe, cards, persons, onOpen, picks = [], onPick }) {
   const trio = cards.filter((c) => c.trio_owner === person.id).sort(bySort);
   const held = cards.filter((c) => !isTrio(c) && c.status === 'deck' && c.holder === person.id);
   const dg = held.filter((c) => c.is_dg).length;
   const onlyMe = held.filter((c) => c.only_me).length;
   return html`
     <div class="view">
+      ${picks.length > 1 && html`
+        <div class="toolbar">${picks.map((p) => html`
+          <button type="button" class=${`chip${p.id === person.id ? ' on' : ''}`} aria-pressed=${p.id === person.id} onClick=${() => onPick(p.id)}>${p.name}</button>`)}
+        </div>`}
       <div class="summary">
         <span class="big-num">${held.length}</span>
         <span class="sum-text">${held.length === 1 ? 'Karte' : 'Karten'} · ${dg} Daily ${dg === 1 ? 'Grind' : 'Grinds'}${onlyMe ? ` · ${onlyMe} nur ${isMe ? 'mir' : person.name} wichtig` : ''}</span>
       </div>
       ${held.length === 0 && html`<p class="empty-state">${isMe ? 'Du hältst' : `${person.name} hält`} noch keine Karten. Im Deck kannst du Karten verteilen.</p>`}
       <${CatSections} cards=${held} persons=${persons} onOpen=${onOpen}/>
+      ${trio.length > 0 && html`
       <section class="section">
         <h2 class="sec-title">Happiness Trio <span class="count">${trio.length}</span></h2>
         <${Grid} cards=${trio} persons=${persons} onOpen=${onOpen}/>
-      </section>
+      </section>`}
     </div>`;
 }
 
 // ---------- Ansicht: Deck ----------
-function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOnly, setDgOnly, markId }) {
+function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOnly, setDgOnly, markId, order = [] }) {
   let deck = cards.filter((c) => c.status === 'deck' && !isTrio(c));
   const total = deck.length;
   const dgTotal = deck.filter((c) => c.is_dg).length;
@@ -83,7 +88,7 @@ function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOn
         <button type="button" class=${`chip${dealMode ? ' on' : ''}`} aria-pressed=${dealMode} onClick=${() => setDealMode(!dealMode)}><${IconHand}/> Verteilen</button>
         <button type="button" class=${`chip${dgOnly ? ' on' : ''}`} aria-pressed=${dgOnly} onClick=${() => setDgOnly(!dgOnly)}>Nur Daily Grinds</button>
       </div>
-      ${dealMode && html`<p class="hint" role="status">Tippe auf eine Karte: erst du, dann die andere Person, dann wieder frei. Die Karten bleiben an ihrem Platz.${free.length ? ` Noch frei: ${free.length}.` : ' Alle Karten haben einen Owner.'}</p>`}
+      ${dealMode && html`<p class="hint" role="status">Tippe auf eine Karte: ${order.map((p, i) => (i === 0 ? 'du' : p.name)).join(' → ')} → frei. Die Karten bleiben an ihrem Platz.${free.length ? ` Noch frei: ${free.length}.` : ' Alle Karten haben einen Owner.'}</p>`}
       ${dealMode && html`<${CatSections} cards=${deck} persons=${persons} onOpen=${open} markId=${markId}/>`}
       ${!dealMode && free.length > 0 && html`
         <section class="section">
@@ -187,7 +192,7 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
   const [flipped, setFlipped] = useState(false);
   const [sheet, setSheet] = useState(null);
   const me = persons.find((p) => p.id === meId);
-  const others = persons.filter((p) => p.id !== meId && p.role === 'adult');
+  const others = persons.filter((p) => p.id !== meId); // andere Erwachsene und Kinder
   const holder = persons.find((p) => p.id === card.holder);
   const editor = persons.find((p) => p.id === card.updated_by);
   const parked = card.status === 'parked';
@@ -291,6 +296,7 @@ function App() {
   const [menu, setMenu] = useState(false);
   const [toast, setToast] = useState('');
   const [markId, setMarkId] = useState(null);
+  const [otherPick, setOtherPick] = useState(null);
 
   const load = useCallback(async () => {
     try {
@@ -324,7 +330,14 @@ function App() {
 
   const { persons, cards, meId, settings, steps, notes, checkins } = data;
   const me = persons.find((p) => p.id === meId);
-  const other = persons.find((p) => p.id !== meId && p.role === 'adult');
+  // Reihenfolge ab mir: ich → andere Erwachsene → Kinder (für Verteilen und den zweiten Tab).
+  const order = [
+    ...persons.filter((p) => p.id === meId),
+    ...persons.filter((p) => p.id !== meId && p.role === 'adult'),
+    ...persons.filter((p) => p.id !== meId && p.role !== 'adult'),
+  ];
+  const otherList = order.slice(1);
+  const other = otherList.find((p) => p.id === otherPick) || otherList[0];
   const name = (id) => persons.find((p) => p.id === id)?.name;
 
   const act = async (type, card, arg) => {
@@ -345,11 +358,9 @@ function App() {
   }
 
   const cycle = async (card) => {
-    // Reihenfolge ab der tippenden Person: ich → andere → frei.
-    const all = persons.filter((p) => p.role === 'adult');
-    const adults = [...all.filter((p) => p.id === meId), ...all.filter((p) => p.id !== meId)];
-    const i = adults.findIndex((p) => p.id === card.holder);
-    const next = i === -1 ? adults[0].id : (adults[i + 1]?.id ?? null);
+    // Reihenfolge ab der tippenden Person: ich → andere Erwachsene → Kinder → frei.
+    const i = order.findIndex((p) => p.id === card.holder);
+    const next = i === -1 ? order[0].id : (order[i + 1]?.id ?? null);
     setMarkId(card.id);
     await act('deal', card, next);
     setToast(handoverText(card, next) || (next ? `${plainName(card.name)} → ${name(next)}` : `${plainName(card.name)} → frei`));
@@ -409,9 +420,10 @@ function App() {
           <${RunningCheckinBar} ctx=${ctx} step=${ciStep}/>
           ${view === 'mine' && html`<${NextCheckinBar} ctx=${ctx}/>`}
           ${view === 'mine' && html`<${PersonView} person=${me} isMe=${true} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
-          ${view === 'other' && other && html`<${PersonView} person=${other} isMe=${false} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
+          ${view === 'other' && other && html`<${PersonView} person=${other} isMe=${false} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}
+              picks=${otherList} onPick=${(id) => { setOtherPick(id); window.scrollTo(0, 0); }}/>`}
           ${view === 'deck' && html`<${DeckView} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)} onCycle=${cycle}
-              dealMode=${dealMode} setDealMode=${setDealMode} dgOnly=${dgOnly} setDgOnly=${setDgOnly} markId=${markId}/>`}
+              dealMode=${dealMode} setDealMode=${setDealMode} dgOnly=${dgOnly} setDgOnly=${setDgOnly} markId=${markId} order=${order}/>`}
           ${view === 'parked' && html`<${ParkedView} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
         `}
       ${noteFor && html`<${NoteSheet} ctx=${ctx} card=${noteFor.card} onClose=${() => setNoteFor(null)}/>`}

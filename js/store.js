@@ -17,6 +17,7 @@ const DEMO_KEY = 'fairplay-demo-v1';
 const DEMO_PERSONS = [
   { id: 'p-k', name: 'Katja', initial: 'K', color: '#990F4B', role: 'adult', sort: 1 },
   { id: 'p-m', name: 'Matthias', initial: 'M', color: '#3B4C7A', role: 'adult', sort: 2 },
+  { id: 'p-l', name: 'Leander', initial: 'L', color: '#2F6B5E', role: 'child', sort: 3 },
 ];
 let demo = null;
 
