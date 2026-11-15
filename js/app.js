@@ -83,15 +83,16 @@ function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOn
         <button type="button" class=${`chip${dealMode ? ' on' : ''}`} aria-pressed=${dealMode} onClick=${() => setDealMode(!dealMode)}><${IconHand}/> Verteilen</button>
         <button type="button" class=${`chip${dgOnly ? ' on' : ''}`} aria-pressed=${dgOnly} onClick=${() => setDgOnly(!dgOnly)}>Nur Daily Grinds</button>
       </div>
-      ${dealMode && html`<p class="hint" role="status">Tippe auf eine Karte, um sie weiterzugeben: ${persons.map((p) => p.initial).join(' → ')} → frei.</p>`}
-      ${free.length > 0 && html`
+      ${dealMode && html`<p class="hint" role="status">Tippe auf eine Karte: erst du, dann die andere Person, dann wieder frei. Die Karten bleiben an ihrem Platz.${free.length ? ` Noch frei: ${free.length}.` : ' Alle Karten haben einen Owner.'}</p>`}
+      ${dealMode && html`<${CatSections} cards=${deck} persons=${persons} onOpen=${open} markId=${markId}/>`}
+      ${!dealMode && free.length > 0 && html`
         <section class="section">
           <h2 class="sec-title warn">Noch nicht verteilt <span class="count warn">${free.length}</span></h2>
           <${Grid} cards=${free} persons=${persons} onOpen=${open} markId=${markId}/>
         </section>`}
-      ${free.length === 0 && total > 0 && html`<p class="ok-state">Alle Karten haben einen Owner.</p>`}
-      ${dealt.length > 0 && html`<h2 class="group-title">Verteilt</h2>`}
-      <${CatSections} cards=${dealt} persons=${persons} onOpen=${open} markId=${markId}/>
+      ${!dealMode && free.length === 0 && total > 0 && html`<p class="ok-state">Alle Karten haben einen Owner.</p>`}
+      ${!dealMode && dealt.length > 0 && html`<h2 class="group-title">Verteilt</h2>`}
+      ${!dealMode && html`<${CatSections} cards=${dealt} persons=${persons} onOpen=${open} markId=${markId}/>`}
     </div>`;
 }
 
@@ -336,7 +337,9 @@ function App() {
   }
 
   const cycle = async (card) => {
-    const adults = persons.filter((p) => p.role === 'adult');
+    // Reihenfolge ab der tippenden Person: ich → andere → frei.
+    const all = persons.filter((p) => p.role === 'adult');
+    const adults = [...all.filter((p) => p.id === meId), ...all.filter((p) => p.id !== meId)];
     const i = adults.findIndex((p) => p.id === card.holder);
     const next = i === -1 ? adults[0].id : (adults[i + 1]?.id ?? null);
     setMarkId(card.id);
