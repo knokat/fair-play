@@ -69,23 +69,24 @@ function PersonView({ person, isMe, cards, persons, onOpen }) {
   const closeSearch = () => { setQuery(''); setSearchOpen(false); };
   return html`
     <div class="view">
-      <div class="summary">
-        <span class="big-num">${held.length}</span>
+      <div class="summary with-tools">
+        <span class="big-num">${allHeld.length}</span>
         <span class="sum-text">${allHeld.length === 1 ? 'Karte' : 'Karten'} · ${dg} Daily ${dg === 1 ? 'Grind' : 'Grinds'}${onlyMe ? ` · ${onlyMe} nur ${isMe ? 'mir' : person.name} wichtig` : ''}</span>
+        <span class="tools">
+          <button type="button" class=${`chip icon-chip${dgOnly ? ' on' : ''}`} aria-pressed=${dgOnly} aria-label="Nur Daily Grinds" title="Nur Daily Grinds"
+            onClick=${() => setDgOnly(!dgOnly)}><${IconCup}/></button>
+          <button type="button" class=${`chip icon-chip${searchOpen ? ' on' : ''}`} aria-pressed=${searchOpen} aria-label="Karten suchen" title="Karten suchen"
+            onClick=${() => (searchOpen ? closeSearch() : setSearchOpen(true))}><${IconSearch}/></button>
+        </span>
       </div>
-      <div class="toolbar">
-        <button type="button" class=${`chip icon-chip${dgOnly ? ' on' : ''}`} aria-pressed=${dgOnly} aria-label="Nur Daily Grinds" title="Nur Daily Grinds"
-          onClick=${() => setDgOnly(!dgOnly)}><${IconCup}/></button>
-        ${searchOpen
-          ? html`<div class="search-box">
-              <${IconSearch} size=${18}/>
-              <input type="search" class="search-input" aria-label="Karten suchen" placeholder="Karten suchen" value=${query}
-                ref=${(el) => el && !el.dataset.focused && (el.dataset.focused = '1', el.focus())}
-                onInput=${(e) => setQuery(e.target.value)} onKeyDown=${(e) => e.key === 'Escape' && closeSearch()}/>
-              <button type="button" class="icon-btn small" aria-label="Suche schließen" onClick=${closeSearch}><${IconClose}/></button>
-            </div>`
-          : html`<button type="button" class="chip icon-chip" aria-label="Karten suchen" title="Karten suchen" onClick=${() => setSearchOpen(true)}><${IconSearch}/></button>`}
-      </div>
+      ${searchOpen && html`
+        <div class="search-box">
+          <${IconSearch} size=${18}/>
+          <input type="search" class="search-input" aria-label="Suchbegriff" placeholder="Karten suchen" value=${query}
+            ref=${(el) => el && !el.dataset.focused && (el.dataset.focused = '1', el.focus())}
+            onInput=${(e) => setQuery(e.target.value)} onKeyDown=${(e) => e.key === 'Escape' && closeSearch()}/>
+          <button type="button" class="icon-btn small" aria-label="Suche schließen" onClick=${closeSearch}><${IconClose}/></button>
+        </div>`}
       ${filtering && held.length + byPlan.length + coaching.length + trio.length === 0 && html`<p class="empty-state">Keine passende Karte${q ? ` für „${query.trim()}“` : ''}.</p>`}
       ${!filtering && allHeld.length === 0 && html`<p class="empty-state">${isMe ? 'Du hältst' : `${person.name} hält`} noch keine Karten. Im Deck kannst du Karten verteilen.</p>`}
       <${CatSections} cards=${held} persons=${persons} onOpen=${onOpen}/>

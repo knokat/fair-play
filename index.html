@@ -45,6 +45,8 @@ button { font: inherit; color: inherit; }
 /* Ansichten */
 .view { display: flex; flex-direction: column; gap: 18px; padding-block: 8px 48px; }
 .summary { display: flex; align-items: baseline; gap: 10px; }
+.summary.with-tools { flex-wrap: wrap; }
+.summary .tools { margin-left: auto; display: inline-flex; gap: 8px; align-self: center; }
 .big-num { font-family: var(--display); font-weight: 700; font-size: 34px; font-variant-numeric: tabular-nums; }
 .sum-text { color: var(--ink-soft); font-weight: 600; }
 .section { display: flex; flex-direction: column; gap: 10px; }
@@ -65,7 +67,7 @@ button { font: inherit; color: inherit; }
 .coach-dot { display: inline-flex; margin-right: -5px; position: relative; z-index: 0; opacity: .95; }
 .coach-dot .owner-dot { box-shadow: 0 0 0 2px var(--paper); }
 .owner-big .coach-dot { margin-right: -8px; align-self: flex-end; }
-.search-box { flex: 1 1 200px; min-width: 0; display: flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 4px 0 12px; border-radius: 20px; border: 1.5px solid var(--ink); background: var(--surface); }
+.search-box { box-sizing: border-box; width: 100%; min-width: 0; display: flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 4px 0 12px; border-radius: 20px; border: 1.5px solid var(--ink); background: var(--surface); }
 .search-input { flex: 1; min-width: 0; border: none; background: transparent; font: inherit; font-size: 16px; color: var(--ink); outline: none; }
 .search-input::-webkit-search-cancel-button { display: none; }
 .icon-btn.small { width: 32px; height: 32px; min-width: 32px; }
