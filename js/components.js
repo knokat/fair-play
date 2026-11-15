@@ -17,6 +17,9 @@ export const Smile = ({ fill, size = 24 }) => html`
   </svg>`;
 
 const icon = (d, size = 20) => html`<svg aria-hidden="true" viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+export const IconCup = ({ size = 20 }) => icon(html`<path d="M9 2.5c-.9 1.2.9 2 0 3.4M13 2.5c-.9 1.2.9 2 0 3.4"/><path d="M4 9h14v4.5a5.5 5.5 0 0 1-5.5 5.5h-3A5.5 5.5 0 0 1 4 13.5z"/><path d="M18 10.5h1.8a2.3 2.3 0 0 1 0 4.6H17.6"/>`, size);
+export const IconSearch = ({ size = 20 }) => icon(html`<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/>`, size);
+export const IconClose = ({ size = 18 }) => icon(html`<path d="M6 6l12 12M18 6L6 18"/>`, size);
 export const IconBack = () => icon(html`<path d="M15 18l-6-6 6-6"/>`, 24);
 export const IconSwap = () => icon(html`<path d="M7 7h11l-3-3"/><path d="M17 17H6l3 3"/>`);
 export const IconPark = () => icon(html`<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M10 16V8h3a2.5 2.5 0 0 1 0 5h-3"/>`);

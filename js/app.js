@@ -2,7 +2,7 @@
 import { html, render, useState, useEffect, useMemo, useCallback } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import * as store from './store.js';
 import { CATS, CAT_ORDER, plainName, isTrio, fmtDate, origUrl, PARK_GROUPS, parkGroupLabel } from './meta.js';
-import { Grid, Sheet, BigCard, OwnerDot, WeekStrip, hasSchedule, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand, IconRoute, IconNote } from './components.js';
+import { Grid, Sheet, BigCard, OwnerDot, WeekStrip, hasSchedule, IconCup, IconSearch, IconClose, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand, IconRoute, IconNote } from './components.js';
 import { WegPage, CheckinPage, HistoryPage, NotesPage, NoteSheet, NextCheckinBar, RunningCheckinBar, sinceForNewCheckin, openSteps, STEP_COUNT } from './journey.js';
 
 const bySort = (a, b) => a.sort - b.sort;
@@ -44,20 +44,47 @@ function CatSections({ cards, persons, onOpen, markId }) {
 }
 
 // ---------- Ansicht: Karten einer Person ----------
+// Suche: Name, Originalname und alle Kartentexte, ohne Groß/Klein und Akzente.
+const norm = (t) => (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\|/g, '');
+const matches = (c, q) => !q || [c.name, c.orig, c.descr, c.conception, c.planning, c.execution, c.msc]
+  .some((t) => norm(t).includes(q));
+
 function PersonView({ person, isMe, cards, persons, onOpen }) {
-  const trio = cards.filter((c) => c.trio_owner === person.id).sort(bySort);
-  const held = cards.filter((c) => !isTrio(c) && c.status === 'deck' && c.holder === person.id);
+  const [dgOnly, setDgOnly] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const q = norm(query.trim());
+  const keep = (c) => (!dgOnly || c.is_dg) && matches(c, q);
+  const allHeld = cards.filter((c) => !isTrio(c) && c.status === 'deck' && c.holder === person.id);
+  const dg = allHeld.filter((c) => c.is_dg).length;
+  const onlyMe = allHeld.filter((c) => c.only_me).length;
+  const held = allHeld.filter(keep);
+  const trio = cards.filter((c) => c.trio_owner === person.id && keep(c)).sort(bySort);
   const byPlan = cards.filter((c) => !isTrio(c) && c.status === 'deck' && c.holder !== person.id
-    && c.schedule && Object.values(c.schedule).includes(person.id)).sort(bySort);
-  const dg = held.filter((c) => c.is_dg).length;
-  const onlyMe = held.filter((c) => c.only_me).length;
+    && c.schedule && Object.values(c.schedule).includes(person.id) && keep(c)).sort(bySort);
+  const filtering = dgOnly || !!q;
+  const closeSearch = () => { setQuery(''); setSearchOpen(false); };
   return html`
     <div class="view">
       <div class="summary">
         <span class="big-num">${held.length}</span>
-        <span class="sum-text">${held.length === 1 ? 'Karte' : 'Karten'} · ${dg} Daily ${dg === 1 ? 'Grind' : 'Grinds'}${onlyMe ? ` · ${onlyMe} nur ${isMe ? 'mir' : person.name} wichtig` : ''}</span>
+        <span class="sum-text">${allHeld.length === 1 ? 'Karte' : 'Karten'} · ${dg} Daily ${dg === 1 ? 'Grind' : 'Grinds'}${onlyMe ? ` · ${onlyMe} nur ${isMe ? 'mir' : person.name} wichtig` : ''}</span>
       </div>
-      ${held.length === 0 && html`<p class="empty-state">${isMe ? 'Du hältst' : `${person.name} hält`} noch keine Karten. Im Deck kannst du Karten verteilen.</p>`}
+      <div class="toolbar">
+        <button type="button" class=${`chip icon-chip${dgOnly ? ' on' : ''}`} aria-pressed=${dgOnly} aria-label="Nur Daily Grinds" title="Nur Daily Grinds"
+          onClick=${() => setDgOnly(!dgOnly)}><${IconCup}/></button>
+        ${searchOpen
+          ? html`<div class="search-box">
+              <${IconSearch} size=${18}/>
+              <input type="search" class="search-input" aria-label="Karten suchen" placeholder="Karten suchen" value=${query}
+                ref=${(el) => el && !el.dataset.focused && (el.dataset.focused = '1', el.focus())}
+                onInput=${(e) => setQuery(e.target.value)} onKeyDown=${(e) => e.key === 'Escape' && closeSearch()}/>
+              <button type="button" class="icon-btn small" aria-label="Suche schließen" onClick=${closeSearch}><${IconClose}/></button>
+            </div>`
+          : html`<button type="button" class="chip icon-chip" aria-label="Karten suchen" title="Karten suchen" onClick=${() => setSearchOpen(true)}><${IconSearch}/></button>`}
+      </div>
+      ${filtering && held.length + byPlan.length + trio.length === 0 && html`<p class="empty-state">Keine passende Karte${q ? ` für „${query.trim()}“` : ''}.</p>`}
+      ${!filtering && allHeld.length === 0 && html`<p class="empty-state">${isMe ? 'Du hältst' : `${person.name} hält`} noch keine Karten. Im Deck kannst du Karten verteilen.</p>`}
       <${CatSections} cards=${held} persons=${persons} onOpen=${onOpen}/>
       ${byPlan.length > 0 && html`
       <section class="section">
