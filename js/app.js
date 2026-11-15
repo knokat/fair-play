@@ -2,7 +2,7 @@
 import { html, render, useState, useEffect, useMemo, useCallback } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import * as store from './store.js';
 import { CATS, CAT_ORDER, plainName, isTrio, fmtDate, origUrl, PARK_GROUPS, parkGroupLabel } from './meta.js';
-import { Grid, Sheet, BigCard, OwnerDot, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand, IconRoute, IconNote } from './components.js';
+import { Grid, Sheet, BigCard, OwnerDot, WeekStrip, hasSchedule, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand, IconRoute, IconNote } from './components.js';
 import { WegPage, CheckinPage, HistoryPage, NotesPage, NoteSheet, NextCheckinBar, RunningCheckinBar, sinceForNewCheckin, openSteps, STEP_COUNT } from './journey.js';
 
 const bySort = (a, b) => a.sort - b.sort;
@@ -47,6 +47,8 @@ function CatSections({ cards, persons, onOpen, markId }) {
 function PersonView({ person, isMe, cards, persons, onOpen }) {
   const trio = cards.filter((c) => c.trio_owner === person.id).sort(bySort);
   const held = cards.filter((c) => !isTrio(c) && c.status === 'deck' && c.holder === person.id);
+  const byPlan = cards.filter((c) => !isTrio(c) && c.status === 'deck' && c.holder !== person.id
+    && c.schedule && Object.values(c.schedule).includes(person.id)).sort(bySort);
   const dg = held.filter((c) => c.is_dg).length;
   const onlyMe = held.filter((c) => c.only_me).length;
   return html`
@@ -57,6 +59,12 @@ function PersonView({ person, isMe, cards, persons, onOpen }) {
       </div>
       ${held.length === 0 && html`<p class="empty-state">${isMe ? 'Du hältst' : `${person.name} hält`} noch keine Karten. Im Deck kannst du Karten verteilen.</p>`}
       <${CatSections} cards=${held} persons=${persons} onOpen=${onOpen}/>
+      ${byPlan.length > 0 && html`
+      <section class="section">
+        <h2 class="sec-title">Laut Wochenplan <span class="count">${byPlan.length}</span></h2>
+        <p class="muted">${isMe ? 'Du bist' : `${person.name} ist`} an einzelnen Tagen dran; die Karte gehört jemand anderem.</p>
+        <${Grid} cards=${byPlan} persons=${persons} onOpen=${onOpen}/>
+      </section>`}
       ${trio.length > 0 && html`
       <section class="section">
         <h2 class="sec-title">Happiness Trio <span class="count">${trio.length}</span></h2>
@@ -184,6 +192,40 @@ function ParkSheet({ card, onPark, onClose }) {
     </${Sheet}>`;
 }
 
+// ---------- Wochenplan bearbeiten ----------
+const WEEK_DAYS = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+function WeekSheet({ card, persons, onSave, onClose }) {
+  const [plan, setPlan] = useState({ ...(card.schedule || {}) });
+  const set = (k, id) => setPlan({ ...plan, [k]: id });
+  const opts = [[null, '–'], ...persons.map((p) => [p.id, p.name])];
+  return html`
+    <${Sheet} title=${`Wochenplan · ${plainName(card.name)}`} onClose=${onClose}>
+      <form class="form" onSubmit=${(e) => { e.preventDefault(); onSave(plan); }}>
+        <p class="field-hint">Wer ist an welchem Tag dran? Am besten im Check-in für die nächste Woche festlegen. Der Owner behält den Überblick über die Karte.</p>
+        ${WEEK_DAYS.map((d, i) => {
+          const k = String(i + 1);
+          return html`
+            <div class="week-edit">
+              <span class="label-text">${d}</span>
+              <div class="seg" style=${`grid-template-columns:repeat(${opts.length},minmax(0,1fr))`} role="radiogroup" aria-label=${d}>
+                ${opts.map(([id, label]) => {
+                  const on = (plan[k] || null) === id;
+                  const p = persons.find((x) => x.id === id);
+                  return html`<button type="button" role="radio" aria-checked=${on} class=${`seg-btn${on ? ' on' : ''}`}
+                    style=${on && p ? `background:${p.color};color:#fff` : ''} onClick=${() => set(k, id)}>${label}</button>`;
+                })}
+              </div>
+            </div>`;
+        })}
+        <div class="row wrap">
+          <button type="button" class="btn ghost" onClick=${() => onSave({})}>Plan löschen</button>
+          <button type="button" class="btn ghost" onClick=${onClose}>Abbrechen</button>
+          <button type="submit" class="btn primary">Speichern</button>
+        </div>
+      </form>
+    </${Sheet}>`;
+}
+
 // ---------- Kartendetail ----------
 function Detail({ card, persons, meId, onClose, act, onNote }) {
   const [flipped, setFlipped] = useState(false);
@@ -229,7 +271,10 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
             <label class="check">
               <input type="checkbox" id="only-me" checked=${card.only_me} onChange=${(e) => act('onlyMe', card, e.target.checked)}/>
               <span>Nur ${holder.id === meId ? 'mir' : holder.name} wichtig</span>
-            </label>`}`}
+            </label>`}
+          <div class="panel-row week-row"><span class="label">Wochenplan</span>
+            ${hasSchedule(card) ? html`<${WeekStrip} card=${card} persons=${persons} size="lg"/>` : html`<span class="muted">Kein Plan – die Karte hält ${holder ? holder.name : 'noch niemand'} an allen Tagen.</span>`}</div>
+          <button type="button" class="btn ghost" onClick=${() => setSheet('week')}><${IconEdit}/> Wochenplan ${hasSchedule(card) ? 'bearbeiten' : 'anlegen'}</button>`}
       </div>
 
       <div class="row wrap">
@@ -243,6 +288,8 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
 
       ${sheet === 'edit' && html`<${EditSheet} card=${card} onClose=${() => setSheet(null)}
         onSave=${async (f) => { await act('texts', card, f); setSheet(null); }}/>`}
+      ${sheet === 'week' && html`<${WeekSheet} card=${card} persons=${persons} onClose=${() => setSheet(null)}
+        onSave=${async (sch) => { await act('schedule', card, sch); setSheet(null); }}/>`}
       ${sheet === 'park' && html`<${ParkSheet} card=${card} onClose=${() => setSheet(null)}
         onPark=${async (note, group) => { await act('park', card, { note, group }); setSheet(null); }}/>`}
     </div>`;
@@ -339,6 +386,7 @@ function App() {
   const act = async (type, card, arg) => {
     try {
       if (type === 'deal') { await store.setHolder(card, arg, meId); setToast(handoverText(card, arg) || (arg === meId ? 'Du hältst jetzt diese Karte' : `An ${name(arg)} gegeben`)); }
+      if (type === 'schedule') { await store.setSchedule(card, arg, meId); setToast(Object.values(arg || {}).some(Boolean) ? 'Wochenplan gespeichert' : 'Wochenplan gelöscht'); }
       if (type === 'park') { await store.park(card, arg.note, arg.group, meId); setToast(card.status === 'parked' ? 'Gespeichert' : 'Geparkt'); }
       if (type === 'unpark') { await store.unpark(card, meId); setToast('Zurück im Deck, noch ohne Owner'); }
       if (type === 'onlyMe') { await store.setOnlyMe(card, arg, meId); }

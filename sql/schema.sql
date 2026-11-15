@@ -156,3 +156,6 @@ alter publication supabase_realtime add table public.fp_card, public.fp_step, pu
 insert into fp_person (id, name, initial, color, role, user_id, sort)
 values ('00000000-0000-4000-8000-00000000000c', 'Leander', 'L', '#2F6B5E', 'child', null, 3)
 on conflict (id) do nothing;
+
+-- Wochenplan pro Karte: {"1".."7": person id}, 1 = Montag. 15.11.2026
+alter table fp_card add column if not exists schedule jsonb;

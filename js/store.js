@@ -142,6 +142,13 @@ export const setHolder = (card, personId, meId) =>
   patchCard(card, { holder: personId, ...(personId ? {} : { only_me: false }) },
     [{ action: 'dealt', from_person: card.holder, to_person: personId }], meId);
 
+export function setSchedule(card, schedule, meId) {
+  const clean = {};
+  Object.entries(schedule || {}).forEach(([k, v]) => { if (v) clean[k] = v; });
+  const value = Object.keys(clean).length ? clean : null;
+  return patchCard(card, { schedule: value }, [{ action: 'edited', field: 'schedule' }], meId);
+}
+
 export function park(card, note, group, meId) {
   const info = { parked_note: note || '', park_group: group || null };
   if (card.status === 'parked') {

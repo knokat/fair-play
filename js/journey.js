@@ -2,7 +2,7 @@
 import { html, useState, useEffect } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import * as store from './store.js';
 import { CATS, plainName, isTrio, fmtDate, WEEKDAYS, dayName, nextCheckin, fmtWhen, daysUntil } from './meta.js';
-import { Grid, Sheet, OwnerDot, IconBack, IconCheck, IconChevron, IconTrash, IconPlus, IconHand } from './components.js';
+import { Grid, Sheet, OwnerDot, IconBack, IconCheck, IconChevron, IconTrash, IconPlus, IconHand, hasSchedule } from './components.js';
 
 const adultsOf = (persons) => persons.filter((p) => p.role === 'adult');
 const deckCards = (cards) => cards.filter((c) => c.status === 'deck' && !isTrio(c));
@@ -344,7 +344,7 @@ const CI = [
   { n: 7, title: 'Unicorn Space' },
   { n: 8, title: 'Abschluss' },
 ];
-const FIELD_LABEL = { name: 'Name', descr: 'Beschreibung', conception: 'Dran-Denken', planning: 'Planen', execution: 'Erledigen', msc: 'Mindeststandard', only_me: '„Nur mir wichtig“', parked_note: 'Parkplatz-Notiz', park_group: 'Parkplatz-Gruppe' };
+const FIELD_LABEL = { name: 'Name', descr: 'Beschreibung', conception: 'Dran-Denken', planning: 'Planen', execution: 'Erledigen', msc: 'Mindeststandard', only_me: '„Nur mir wichtig“', parked_note: 'Parkplatz-Notiz', park_group: 'Parkplatz-Gruppe', schedule: 'Wochenplan' };
 const UNI = [['ja', 'Ja'], ['teils', 'Teilweise'], ['nein', 'Nein']];
 
 function summarize(events, cards, persons) {
@@ -510,6 +510,11 @@ export function CheckinPage({ ctx, checkin, step, setStep, onBack }) {
       ${step === 6 && html`
         <p class="lead">Wer ist wann weg? Gibt es besondere Termine? Steht eine Wild Card an – Umzug, neuer Job, Krankheit?</p>
         ${area('vorschau', 'Notiz', 'z. B. Matthias Mi–Fr unterwegs, Elternabend am Do')}
+        ${(() => { const planned = deckCards(ctx.cards).filter(hasSchedule); return planned.length ? html`
+          <p class="label">Wochenplan für die nächste Woche</p>
+          <p class="field-hint">Karte öffnen › „Wochenplan bearbeiten“: Wer ist an welchem Tag dran?</p>
+          <${Grid} cards=${planned} persons=${ctx.persons} onOpen=${ctx.openCard}/>` : html`
+          <p class="field-hint">Karten mit wechselnden Tagen (z. B. Hausübung): im Kartendetail einen Wochenplan anlegen.</p>`; })()}
         <p class="field-hint">Wild Cards holt ihr bei Bedarf vom Parkplatz ins Deck.</p>`}
 
       ${step === 7 && html`

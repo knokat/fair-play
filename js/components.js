@@ -49,6 +49,29 @@ function Illustration({ card }) {
 
 const Paper = () => html`<svg class="paper" aria-hidden="true"><rect width="100%" height="100%" filter="url(#paper)"/></svg>`;
 
+// ---------- Wochenplan ----------
+// schedule = { "1": personId, … "7": personId } (1 = Montag). Sa/So erscheinen nur, wenn belegt.
+const DAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+export const hasSchedule = (card) => !!card.schedule && Object.values(card.schedule).some(Boolean);
+export const todayKey = () => String(((new Date().getDay() + 6) % 7) + 1);
+export function WeekStrip({ card, persons, size = 'sm' }) {
+  if (!hasSchedule(card)) return '';
+  const s = card.schedule;
+  const days = DAYS.map((d, i) => [String(i + 1), d]).filter(([k]) => Number(k) <= 5 || s[k]);
+  const today = todayKey();
+  const label = 'Wochenplan: ' + days.map(([k, d]) => `${d} ${persons.find((p) => p.id === s[k])?.name || 'offen'}`).join(', ');
+  return html`
+    <div class=${`week week-${size}`} role="img" aria-label=${label}>
+      ${days.map(([k, d]) => {
+        const p = persons.find((x) => x.id === s[k]);
+        return html`<span class=${`wd${k === today ? ' today' : ''}`}>
+          <span class="wd-d">${d}</span>
+          ${p ? html`<span class="wd-p" style=${`background:${p.color}`}>${p.initial}</span>` : html`<span class="wd-p wd-empty">–</span>`}
+        </span>`;
+      })}
+    </div>`;
+}
+
 // ---------- Kleine Karte (Deck, Listen) ----------
 export function SmallCard({ card, persons, onClick, mark }) {
   const cat = CATS[card.cat];
@@ -67,6 +90,7 @@ export function SmallCard({ card, persons, onClick, mark }) {
         </div>
       </div>
       <${Illustration} card=${card}/>
+      ${!parked && html`<${WeekStrip} card=${card} persons=${persons}/>`}
       ${parked
         ? html`<div class="card-bottom note">
             ${card.is_dg && html`<span class="ico"><${Cup} fill=${cat.accent} size=${22}/></span>`}
@@ -105,6 +129,7 @@ export function BigCard({ card, persons, flipped, onFlip }) {
             </div>
           </div>
           <${Illustration} card=${card}/>
+          ${!parked && html`<${WeekStrip} card=${card} persons=${persons} size="lg"/>`}
           <div class="card-bottom">
             <span class="ico">${card.is_dg ? html`<${Cup} fill=${cat.accent} size=${42}/>` : isTrio(card) ? html`<${Smile} fill=${cat.accent} size=${42}/>` : ''}</span>
             ${parked
