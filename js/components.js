@@ -1,5 +1,5 @@
 // Kartendarstellung (klein im Deck, groß im Detail) und Icons.
-import { html, useEffect } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
+import { html, useEffect, useRef, useState } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import { CATS, cardName, plainName, isTrio, reviewDue, fmtDay } from './meta.js';
 
 // ---------- Icons ----------
@@ -146,6 +146,22 @@ export function BigCard({ card, persons, flipped, onFlip }) {
   const holder = persons.find((p) => p.id === card.holder);
   const coach = coachOf(card, persons);
   const parked = card.status === 'parked';
+  // Läuft der Text über die Karte hinaus, blendet er unten aus und zeigt „weiter“, bis ans Ende gescrollt ist.
+  const bodyRef = useRef(null);
+  const [more, setMore] = useState(false);
+  const checkMore = () => {
+    const el = bodyRef.current;
+    if (el) setMore(el.scrollHeight - el.scrollTop - el.clientHeight > 6);
+  };
+  useEffect(() => {
+    checkMore();
+    const el = bodyRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return undefined;
+    const ro = new ResizeObserver(checkMore);
+    ro.observe(el);
+    [...el.children].forEach((c) => ro.observe(c));
+    return () => ro.disconnect();
+  }, [card.descr, card.conception, card.planning, card.execution, card.msc, card.card_notes, flipped]);
   const sections = [
     ['Worum geht’s', card.descr],
     ['Dran-Denken', card.conception],
@@ -180,7 +196,8 @@ export function BigCard({ card, persons, flipped, onFlip }) {
             <span class="title" lang="de">${cardName(card.name)}</span>
             <span class="cat-h" style=${`color:${cat.ink}`}>${cat.label}</span>
           </div>
-          <div class="back-body">
+          <div class=${`back-wrap${more ? ' has-more' : ''}`}>
+          <div class="back-body" ref=${bodyRef} onScroll=${checkMore}>
             ${sections.map(([h, t]) => t ? html`<div class="sec"><span class="sec-h" style=${`color:${cat.ink}`}>${h}</span><${RichText} text=${t}/></div>` : '')}
             <div class="sec msc">
               <span class="sec-h" style=${`color:${cat.ink}`}>Mindeststandard</span>
@@ -190,6 +207,8 @@ export function BigCard({ card, persons, flipped, onFlip }) {
               <span class="sec-h" style=${`color:${cat.ink}`}>Notizen</span>
               <${RichText} text=${card.card_notes}/>
             </div>`}
+          </div>
+          <div class="more-fade" aria-hidden="true"><span class="more-chip">↓ weiter</span></div>
           </div>
         </div>
       </button>

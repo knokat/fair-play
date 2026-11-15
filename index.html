@@ -141,7 +141,13 @@ button { font: inherit; color: inherit; }
 .back-head { position: relative; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: 1.5px solid var(--card-ink); padding-bottom: 10px; }
 .back-head .title { font-size: 15px; }
 .cat-h { font-weight: 800; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; flex-shrink: 0; }
-.back-body { position: relative; flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.back-wrap { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.back-body { position: relative; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 10px; }
+.more-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px;
+  background: linear-gradient(to bottom, rgba(251,241,232,0), var(--paper) 78%); pointer-events: none; opacity: 0; transition: opacity .2s; }
+.back-wrap.has-more .more-fade { opacity: 1; }
+.more-chip { font-size: 12px; font-weight: 800; letter-spacing: 0.04em; color: var(--card-soft); background: var(--paper); border: 1px solid var(--card-line); border-radius: 999px; padding: 3px 10px; box-shadow: 0 1px 3px rgba(58,57,50,0.12); }
+@media (prefers-reduced-motion: reduce) { .more-fade { transition: none; } }
 .sec { display: flex; flex-direction: column; gap: 2px; }
 .sec-h { font-weight: 800; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
 .sec p { margin: 0; font-size: 14px; line-height: 1.4; }
