@@ -222,7 +222,9 @@
 "desc": "Jeden Mittag steht ein Mittagessen auf dem Tisch – an Schultagen, wenn Leander heimkommt, und am Wochenende, ob gekocht, auswärts oder unterwegs.",
 "c": "Denkt rechtzeitig daran, was es mittags gibt, und hat im Blick, wer an welchem Tag zu Hause ist – am Wochenende auch bei Ausflügen und Besuch.",
 "p": "Plant die Mittagessen passend zu Stundenplan, Vorräten und Abendessen; regelt die Tage, an denen der Owner nicht da ist.",
-"e": "Kocht, wärmt auf oder organisiert das Essen unterwegs, isst mit und räumt danach ab."
+"e": "Kocht, wärmt auf oder organisiert das Essen unterwegs, isst mit und räumt danach ab.",
+"img": "H23.png",
+"motif": "ein Kochtopf mit Dampf, ein Kochlöffel und ein paar frische Kräuter"
 },
 {
 "id": "H17",
@@ -235,7 +237,7 @@
 "c": "Denkt rechtzeitig daran, was es heute und diese Woche gibt – am Wochenende auch bei Ausflügen und Besuch.",
 "p": "Plant die Abendessen passend zu Terminen, Vorräten und Mittagessen; reserviert oder bestellt, wenn nicht gekocht wird.",
 "e": "Kocht, bestellt oder reserviert und deckt den Tisch.",
-"motif": "ein Kochtopf mit Dampf, ein Kochlöffel und ein paar frische Kräuter",
+"motif": "zwei Sandwiches, zwei geschälte Karotten, eine aufgeschnittene Paprika und ein paar Kirschtomaten",
 "img": "H17.png"
 },
 {
