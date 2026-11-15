@@ -2,7 +2,7 @@
 import { html, render, useState, useEffect, useMemo, useCallback } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import * as store from './store.js';
 import { CATS, CAT_ORDER, plainName, isTrio, fmtDate, origUrl, PARK_GROUPS, parkGroupLabel } from './meta.js';
-import { Grid, Sheet, BigCard, OwnerDot, WeekStrip, hasSchedule, IconCup, IconSearch, IconClose, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand, IconRoute, IconNote } from './components.js';
+import { Grid, Sheet, BigCard, OwnerDot, WeekStrip, hasSchedule, coachOf, IconCup, IconSearch, IconClose, IconBack, IconSwap, IconPark, IconEdit, IconMenu, IconFlip, IconHand, IconRoute, IconNote } from './components.js';
 import { WegPage, CheckinPage, HistoryPage, NotesPage, NoteSheet, NextCheckinBar, RunningCheckinBar, sinceForNewCheckin, openSteps, STEP_COUNT } from './journey.js';
 
 const bySort = (a, b) => a.sort - b.sort;
@@ -62,6 +62,9 @@ function PersonView({ person, isMe, cards, persons, onOpen }) {
   const trio = cards.filter((c) => c.trio_owner === person.id && keep(c)).sort(bySort);
   const byPlan = cards.filter((c) => !isTrio(c) && c.status === 'deck' && c.holder !== person.id
     && c.schedule && Object.values(c.schedule).includes(person.id) && keep(c)).sort(bySort);
+  const coaching = cards.filter((c) => !isTrio(c) && c.status === 'deck' && c.holder !== person.id
+    && coachOf(c, persons)?.id === person.id && keep(c)).sort(bySort);
+  const kids = [...new Set(coaching.map((c) => persons.find((p) => p.id === c.holder)?.name))].join(' und ');
   const filtering = dgOnly || !!q;
   const closeSearch = () => { setQuery(''); setSearchOpen(false); };
   return html`
@@ -83,9 +86,15 @@ function PersonView({ person, isMe, cards, persons, onOpen }) {
             </div>`
           : html`<button type="button" class="chip icon-chip" aria-label="Karten suchen" title="Karten suchen" onClick=${() => setSearchOpen(true)}><${IconSearch}/></button>`}
       </div>
-      ${filtering && held.length + byPlan.length + trio.length === 0 && html`<p class="empty-state">Keine passende Karte${q ? ` für „${query.trim()}“` : ''}.</p>`}
+      ${filtering && held.length + byPlan.length + coaching.length + trio.length === 0 && html`<p class="empty-state">Keine passende Karte${q ? ` für „${query.trim()}“` : ''}.</p>`}
       ${!filtering && allHeld.length === 0 && html`<p class="empty-state">${isMe ? 'Du hältst' : `${person.name} hält`} noch keine Karten. Im Deck kannst du Karten verteilen.</p>`}
       <${CatSections} cards=${held} persons=${persons} onOpen=${onOpen}/>
+      ${coaching.length > 0 && html`
+      <section class="section">
+        <h2 class="sec-title">Begleitung <span class="count">${coaching.length}</span></h2>
+        <p class="muted">${isMe ? 'Du begleitest' : `${person.name} begleitet`} ${kids} bei diesen Karten.</p>
+        <${Grid} cards=${coaching} persons=${persons} onOpen=${onOpen}/>
+      </section>`}
       ${byPlan.length > 0 && html`
       <section class="section">
         <h2 class="sec-title">Laut Wochenplan <span class="count">${byPlan.length}</span></h2>
@@ -299,6 +308,19 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
               <input type="checkbox" id="only-me" checked=${card.only_me} onChange=${(e) => act('onlyMe', card, e.target.checked)}/>
               <span>Nur ${holder.id === meId ? 'mir' : holder.name} wichtig</span>
             </label>`}
+          ${holder && holder.role !== 'adult' && html`
+            <div class="week-edit">
+              <span class="label">Begleitung</span>
+              <div class="seg" style=${`grid-template-columns:repeat(${persons.filter((p) => p.role === 'adult').length + 1},minmax(0,1fr))`} role="radiogroup" aria-label="Begleitung">
+                ${[[null, 'Niemand'], ...persons.filter((p) => p.role === 'adult').map((p) => [p.id, p.name])].map(([id, label]) => {
+                  const on = (card.coach || null) === id;
+                  const p = persons.find((x) => x.id === id);
+                  return html`<button type="button" role="radio" aria-checked=${on} class=${`seg-btn${on ? ' on' : ''}`}
+                    style=${on && p ? `background:${p.color};color:#fff` : ''} onClick=${() => !on && act('coach', card, id)}>${label}</button>`;
+                })}
+              </div>
+              <p class="field-hint">Wer ${holder.name} bei dieser Karte begleitet. Die Karte erscheint dann auch in dessen Tab.</p>
+            </div>`}
           <div class="panel-row week-row"><span class="label">Wochenplan</span>
             ${hasSchedule(card) ? html`<${WeekStrip} card=${card} persons=${persons} size="lg"/>` : html`<span class="muted">Kein Plan – die Karte hält ${holder ? holder.name : 'noch niemand'} an allen Tagen.</span>`}</div>
           <button type="button" class="btn ghost" onClick=${() => setSheet('week')}><${IconEdit}/> Wochenplan ${hasSchedule(card) ? 'bearbeiten' : 'anlegen'}</button>`}
@@ -412,7 +434,8 @@ function App() {
 
   const act = async (type, card, arg) => {
     try {
-      if (type === 'deal') { await store.setHolder(card, arg, meId); setToast(handoverText(card, arg) || (arg === meId ? 'Du hältst jetzt diese Karte' : `An ${name(arg)} gegeben`)); }
+      if (type === 'coach') { await store.setCoach(card, arg, meId); setToast(arg ? `Begleitung: ${name(arg)}` : 'Keine Begleitung'); }
+      if (type === 'deal') { await store.setHolder(card, arg, meId, persons.find((p) => p.id === arg)?.role === 'child'); setToast(handoverText(card, arg) || (arg === meId ? 'Du hältst jetzt diese Karte' : `An ${name(arg)} gegeben`)); }
       if (type === 'schedule') { await store.setSchedule(card, arg, meId); setToast(Object.values(arg || {}).some(Boolean) ? 'Wochenplan gespeichert' : 'Wochenplan gelöscht'); }
       if (type === 'park') { await store.park(card, arg.note, arg.group, meId); setToast(card.status === 'parked' ? 'Gespeichert' : 'Geparkt'); }
       if (type === 'unpark') { await store.unpark(card, meId); setToast('Zurück im Deck, noch ohne Owner'); }

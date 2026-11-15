@@ -159,3 +159,6 @@ on conflict (id) do nothing;
 
 -- Wochenplan pro Karte: {"1".."7": person id}, 1 = Montag. 15.11.2026
 alter table fp_card add column if not exists schedule jsonb;
+
+-- Begleitung für Karten, die ein Kind hält. 15.11.2026
+alter table fp_card add column if not exists coach uuid references fp_person (id);

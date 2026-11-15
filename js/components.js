@@ -76,12 +76,19 @@ export function WeekStrip({ card, persons, size = 'sm' }) {
 }
 
 // ---------- Kleine Karte (Deck, Listen) ----------
+// Begleitung: nur bei Karten, die ein Kind hält.
+export const coachOf = (card, persons) => {
+  const holder = persons.find((p) => p.id === card.holder);
+  return holder && holder.role !== 'adult' ? persons.find((p) => p.id === card.coach) || null : null;
+};
+
 export function SmallCard({ card, persons, onClick, mark }) {
   const cat = CATS[card.cat];
   const holder = persons.find((p) => p.id === card.holder);
+  const coach = coachOf(card, persons);
   const parked = card.status === 'parked';
   const free = !parked && !holder;
-  const label = [plainName(card.name), parked ? 'auf dem Parkplatz' : holder ? holder.name : 'noch frei', card.is_dg ? 'Daily Grind' : '', card.only_me ? 'nur mir wichtig' : ''].filter(Boolean).join(', ');
+  const label = [plainName(card.name), parked ? 'auf dem Parkplatz' : holder ? holder.name : 'noch frei', card.is_dg ? 'Daily Grind' : '', card.only_me ? 'nur mir wichtig' : '', coach ? `begleitet von ${coach.name}` : ''].filter(Boolean).join(', ');
   return html`
     <button type="button" class=${`card-s${free ? ' is-free' : ''}${parked ? ' is-parked' : ''}${mark ? ' is-marked' : ''}`} onClick=${onClick} aria-label=${label}>
       <${Paper}/>
@@ -102,7 +109,7 @@ export function SmallCard({ card, persons, onClick, mark }) {
         : html`<div class="card-bottom">
             <span class="ico">${card.is_dg ? html`<${Cup} fill=${cat.accent} size=${22}/>` : isTrio(card) ? html`<${Smile} fill=${cat.accent} size=${22}/>` : ''}</span>
             ${card.only_me ? html`<span class="only-me" title="Nur mir wichtig">nur mir</span>` : ''}
-            <${OwnerDot} person=${holder}/>
+            <span class="owners">${coach && html`<span class="coach-dot" title=${`Begleitung: ${coach.name}`}><${OwnerDot} person=${coach} size=${18}/></span>`}<${OwnerDot} person=${holder}/></span>
           </div>`}
     </button>`;
 }
@@ -111,6 +118,7 @@ export function SmallCard({ card, persons, onClick, mark }) {
 export function BigCard({ card, persons, flipped, onFlip }) {
   const cat = CATS[card.cat];
   const holder = persons.find((p) => p.id === card.holder);
+  const coach = coachOf(card, persons);
   const parked = card.status === 'parked';
   const sections = [
     ['Worum geht’s', card.descr],
@@ -137,7 +145,7 @@ export function BigCard({ card, persons, flipped, onFlip }) {
             <span class="ico">${card.is_dg ? html`<${Cup} fill=${cat.accent} size=${42}/>` : isTrio(card) ? html`<${Smile} fill=${cat.accent} size=${42}/>` : ''}</span>
             ${parked
               ? html`<span class="parked-tag"><${IconPark}/> Parkplatz</span>`
-              : html`<span class="owner-big"><${OwnerDot} person=${holder} size=${46}/>${holder ? html`<span class="owner-name">${holder.name}</span>` : ''}</span>`}
+              : html`<span class="owner-big">${coach && html`<span class="coach-dot" title=${`Begleitung: ${coach.name}`}><${OwnerDot} person=${coach} size=${30}/></span>`}<${OwnerDot} person=${holder} size=${46}/>${holder ? html`<span class="owner-name">${holder.name}</span>` : ''}</span>`}
           </div>
         </div>
         <div class="face back card-l" aria-hidden=${flipped ? 'false' : 'true'}>

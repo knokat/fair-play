@@ -138,9 +138,13 @@ async function patchCard(card, patch, events, meId) {
   if (events.length) await c.from('fp_card_event').insert(events.map((e) => ({ card_id: card.id, by_person: meId, ...e })));
 }
 
-export const setHolder = (card, personId, meId) =>
-  patchCard(card, { holder: personId, ...(personId ? {} : { only_me: false }) },
+// keepCoach = false: die Begleitung fällt weg (Karte geht an eine erwachsene Person oder wird frei).
+export const setHolder = (card, personId, meId, keepCoach = false) =>
+  patchCard(card, { holder: personId, ...(personId ? {} : { only_me: false }), ...(keepCoach || !card.coach ? {} : { coach: null }) },
     [{ action: 'dealt', from_person: card.holder, to_person: personId }], meId);
+
+export const setCoach = (card, personId, meId) =>
+  patchCard(card, { coach: personId || null }, [{ action: 'edited', field: 'coach' }], meId);
 
 export function setSchedule(card, schedule, meId) {
   const clean = {};
