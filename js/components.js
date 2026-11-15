@@ -117,6 +117,29 @@ export function SmallCard({ card, persons, onClick, mark }) {
     </button>`;
 }
 
+// ---------- Mehrzeilige Texte: Absätze, Zeilenumbrüche, Listen ("- "), Zwischenüberschriften (Zeile endet mit ":") ----------
+export function RichText({ text, cls = '' }) {
+  const blocks = [];
+  let list = null;
+  (text || '').split('\n').forEach((raw) => {
+    const line = raw.trim();
+    const m = line.match(/^[-•*]\s+(.*)$/) || line.match(/^\(\s*[-•*]\s*(.*)\)$/);
+    if (m) {
+      const item = line.startsWith('(') ? `(${m[1]})` : m[1];
+      if (!list) { list = []; blocks.push({ type: 'ul', items: list }); }
+      list.push(item);
+      return;
+    }
+    list = null;
+    if (!line) { blocks.push({ type: 'gap' }); return; }
+    blocks.push({ type: line.endsWith(':') ? 'h' : 'p', text: line });
+  });
+  return html`<div class=${`rich ${cls}`}>${blocks.map((b) => (b.type === 'ul'
+    ? html`<ul>${b.items.map((t) => html`<li>${t}</li>`)}</ul>`
+    : b.type === 'h' ? html`<p class="rich-h">${b.text}</p>`
+    : b.type === 'p' ? html`<p>${b.text}</p>` : ''))}</div>`;
+}
+
 // ---------- Große Karte mit Rückseite ----------
 export function BigCard({ card, persons, flipped, onFlip }) {
   const cat = CATS[card.cat];
@@ -158,14 +181,14 @@ export function BigCard({ card, persons, flipped, onFlip }) {
             <span class="cat-h" style=${`color:${cat.ink}`}>${cat.label}</span>
           </div>
           <div class="back-body">
-            ${sections.map(([h, t]) => t ? html`<div class="sec"><span class="sec-h" style=${`color:${cat.ink}`}>${h}</span><p>${t}</p></div>` : '')}
+            ${sections.map(([h, t]) => t ? html`<div class="sec"><span class="sec-h" style=${`color:${cat.ink}`}>${h}</span><${RichText} text=${t}/></div>` : '')}
             <div class="sec msc">
               <span class="sec-h" style=${`color:${cat.ink}`}>Mindeststandard</span>
-              <p class=${card.msc ? '' : 'empty'}>${card.msc || 'Noch nicht vereinbart'}</p>
+              ${card.msc ? html`<${RichText} text=${card.msc}/>` : html`<p class="empty">Noch nicht vereinbart</p>`}
             </div>
             ${card.card_notes && html`<div class="sec notes">
               <span class="sec-h" style=${`color:${cat.ink}`}>Notizen</span>
-              <p class="pre">${card.card_notes}</p>
+              <${RichText} text=${card.card_notes}/>
             </div>`}
           </div>
         </div>

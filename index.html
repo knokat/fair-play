@@ -147,6 +147,13 @@ button { font: inherit; color: inherit; }
 .sec p { margin: 0; font-size: 14px; line-height: 1.4; }
 .sec.msc { margin-top: auto; padding: 10px 12px; border: 1.5px dashed var(--card-ink); border-radius: 12px; }
 .sec p.empty { font-style: italic; color: var(--card-soft); }
+.rich { display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.4; }
+.rich p { margin: 0; }
+.rich .rich-h { font-weight: 800; margin-top: 4px; }
+.rich .rich-h:first-child { margin-top: 0; }
+.rich ul { margin: 0; padding-left: 18px; }
+.rich li { margin: 0; padding-left: 2px; }
+.rich li::marker { color: var(--card-soft); }
 .flip-hint { margin: 0; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; color: var(--ink-soft); }
 @media (prefers-reduced-motion: reduce) { .flip-inner { transition: none; } .card-s { transition: none; } }
 
