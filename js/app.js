@@ -44,17 +44,13 @@ function CatSections({ cards, persons, onOpen, markId }) {
 }
 
 // ---------- Ansicht: Karten einer Person ----------
-function PersonView({ person, isMe, cards, persons, onOpen, picks = [], onPick }) {
+function PersonView({ person, isMe, cards, persons, onOpen }) {
   const trio = cards.filter((c) => c.trio_owner === person.id).sort(bySort);
   const held = cards.filter((c) => !isTrio(c) && c.status === 'deck' && c.holder === person.id);
   const dg = held.filter((c) => c.is_dg).length;
   const onlyMe = held.filter((c) => c.only_me).length;
   return html`
     <div class="view">
-      ${picks.length > 1 && html`
-        <div class="toolbar">${picks.map((p) => html`
-          <button type="button" class=${`chip${p.id === person.id ? ' on' : ''}`} aria-pressed=${p.id === person.id} onClick=${() => onPick(p.id)}>${p.name}</button>`)}
-        </div>`}
       <div class="summary">
         <span class="big-num">${held.length}</span>
         <span class="sum-text">${held.length === 1 ? 'Karte' : 'Karten'} · ${dg} Daily ${dg === 1 ? 'Grind' : 'Grinds'}${onlyMe ? ` · ${onlyMe} nur ${isMe ? 'mir' : person.name} wichtig` : ''}</span>
@@ -108,6 +104,7 @@ function ParkedView({ cards, persons, onOpen }) {
   const byCatSort = (a, b) => (CAT_ORDER.indexOf(a.cat) - CAT_ORDER.indexOf(b.cat)) || bySort(a, b);
   return html`
     <div class="view">
+      <h2 class="sec-title">Parkplatz</h2>
       <div class="summary">
         <span class="big-num">${parked.length}</span>
         <span class="sum-text">Karten auf dem Parkplatz · ${dg} Daily ${dg === 1 ? 'Grind' : 'Grinds'}</span>
@@ -252,7 +249,7 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
 }
 
 // ---------- Menü ----------
-function Menu({ me, persons, onClose, onSwitch, onSignOut, onReload, onGo, onCheckin, running, openSteps: stepsOpen, openNotes }) {
+function Menu({ me, persons, cards, onClose, onSwitch, onSignOut, onReload, onGo, onParked, onCheckin, running, openSteps: stepsOpen, openNotes }) {
   const hardRefresh = async () => {
     try {
       if ('serviceWorker' in navigator) (await navigator.serviceWorker.getRegistrations()).forEach((r) => r.unregister());
@@ -268,6 +265,7 @@ function Menu({ me, persons, onClose, onSwitch, onSignOut, onReload, onGo, onChe
         <button type="button" onClick=${onCheckin}><span class="mi-title">${running ? 'Check-in fortsetzen' : 'Check-in starten'}</span><span class="mi-sub">Geführt in 8 Punkten</span></button>
         <button type="button" onClick=${() => onGo('history')}><span class="mi-title">Vergangene Check-ins</span><span class="mi-sub">Zum Nachlesen</span></button>
         <button type="button" onClick=${() => onGo('notes')}><span class="mi-title">Meine Notizen</span><span class="mi-sub">${openNotes ? `${openNotes} offen` : 'Keine offenen'} · nur für dich</span></button>
+        <button type="button" onClick=${onParked}><span class="mi-title">Parkplatz</span><span class="mi-sub">${cards.filter((c) => c.status === 'parked').length} Karten, die wir gerade nicht brauchen</span></button>
       </nav>
       ${store.DEMO && html`
         <p class="field-hint">Im Demo-Modus werden Änderungen nur in diesem Browser gespeichert.</p>
@@ -296,7 +294,6 @@ function App() {
   const [menu, setMenu] = useState(false);
   const [toast, setToast] = useState('');
   const [markId, setMarkId] = useState(null);
-  const [otherPick, setOtherPick] = useState(null);
 
   const load = useCallback(async () => {
     try {
@@ -337,7 +334,6 @@ function App() {
     ...persons.filter((p) => p.id !== meId && p.role !== 'adult'),
   ];
   const otherList = order.slice(1);
-  const other = otherList.find((p) => p.id === otherPick) || otherList[0];
   const name = (id) => persons.find((p) => p.id === id)?.name;
 
   const act = async (type, card, arg) => {
@@ -393,7 +389,8 @@ function App() {
     : page === 'history' ? html`<${HistoryPage} ctx=${ctx} onBack=${() => go(null)}/>`
     : page === 'notes' ? html`<${NotesPage} ctx=${ctx} onBack=${() => go(null)}/>`
     : null;
-  const tabs = [['mine', 'Meine'], ['other', other?.name || 'Partner'], ['deck', 'Deck'], ['parked', 'Parkplatz']];
+  const tabs = [['mine', 'Meine'], ...otherList.map((p) => [`p:${p.id}`, p.name]), ['deck', 'Deck']];
+  const viewPerson = view.startsWith('p:') ? otherList.find((p) => `p:${p.id}` === view) : null;
 
   return html`
     <div class="app">
@@ -420,14 +417,14 @@ function App() {
           <${RunningCheckinBar} ctx=${ctx} step=${ciStep}/>
           ${view === 'mine' && html`<${NextCheckinBar} ctx=${ctx}/>`}
           ${view === 'mine' && html`<${PersonView} person=${me} isMe=${true} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
-          ${view === 'other' && other && html`<${PersonView} person=${other} isMe=${false} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}
-              picks=${otherList} onPick=${(id) => { setOtherPick(id); window.scrollTo(0, 0); }}/>`}
+          ${viewPerson && html`<${PersonView} key=${viewPerson.id} person=${viewPerson} isMe=${false} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
           ${view === 'deck' && html`<${DeckView} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)} onCycle=${cycle}
               dealMode=${dealMode} setDealMode=${setDealMode} dgOnly=${dgOnly} setDgOnly=${setDgOnly} markId=${markId} order=${order}/>`}
           ${view === 'parked' && html`<${ParkedView} cards=${cards} persons=${persons} onOpen=${(c) => setDetailId(c.id)}/>`}
         `}
       ${noteFor && html`<${NoteSheet} ctx=${ctx} card=${noteFor.card} onClose=${() => setNoteFor(null)}/>`}
-      ${menu && html`<${Menu} me=${me} persons=${persons} onClose=${() => setMenu(false)}
+      ${menu && html`<${Menu} me=${me} persons=${persons} cards=${cards} onClose=${() => setMenu(false)}
+        onParked=${() => { setMenu(false); setPage(null); setView('parked'); setDealMode(false); window.scrollTo(0, 0); }}
         onGo=${go} onCheckin=${startCheckin} running=${running} openSteps=${stepsOpen} openNotes=${openNotes}
         onSwitch=${(id) => { store.setDemoMe(id); setMenu(false); load(); }}
         onReload=${() => { setMenu(false); load(); }}
