@@ -88,7 +88,7 @@ export function SmallCard({ card, persons, onClick, mark }) {
   const coach = coachOf(card, persons);
   const parked = card.status === 'parked';
   const free = !parked && !holder;
-  const label = [plainName(card.name), parked ? 'auf dem Parkplatz' : holder ? holder.name : 'noch frei', card.is_dg ? 'Daily Grind' : '', card.only_me ? 'nur mir wichtig' : '', card.card_notes ? 'mit Notizen' : '', coach ? `begleitet von ${coach.name}` : ''].filter(Boolean).join(', ');
+  const label = [plainName(card.name), parked ? 'auf dem Parkplatz' : holder ? holder.name : 'noch frei', card.is_dg ? 'Daily Grind' : '', card.only_me ? 'nur mir wichtig' : '', coach ? `begleitet von ${coach.name}` : ''].filter(Boolean).join(', ');
   return html`
     <button type="button" class=${`card-s${free ? ' is-free' : ''}${parked ? ' is-parked' : ''}${mark ? ' is-marked' : ''}`} onClick=${onClick} aria-label=${label}>
       <${Paper}/>
@@ -112,7 +112,6 @@ export function SmallCard({ card, persons, onClick, mark }) {
         : html`<div class="card-bottom">
             <span class="ico">${card.is_dg ? html`<${Cup} fill=${cat.accent} size=${22}/>` : isTrio(card) ? html`<${Smile} fill=${cat.accent} size=${22}/>` : ''}</span>
             ${card.only_me ? html`<span class="only-me" title="Nur mir wichtig">nur mir</span>` : ''}
-            ${card.card_notes ? html`<span class="has-notes" title="Hat Notizen" aria-hidden="true"><${IconNote}/></span>` : ''}
             <span class="owners">${coach && html`<span class="coach-dot" title=${`Begleitung: ${coach.name}`}><${OwnerDot} person=${coach} size=${18}/></span>`}<${OwnerDot} person=${holder}/></span>
           </div>`}
     </button>`;

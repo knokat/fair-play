@@ -355,14 +355,9 @@ function Detail({ card, persons, meId, onClose, act, onNote }) {
           <button type="button" class="btn ghost" onClick=${() => setSheet('week')}><${IconEdit}/> Wochenplan ${hasSchedule(card) ? 'bearbeiten' : 'anlegen'}</button>`}
       </div>
 
-      <div class="panel">
-        <div class="panel-row"><span class="label">Notizen</span>
-          <button type="button" class="chip" onClick=${() => setSheet('notes')}><${IconEdit}/> ${card.card_notes ? 'Bearbeiten' : 'Notiz hinzufügen'}</button></div>
-        ${card.card_notes ? html`<p class="card-notes">${card.card_notes}</p>` : html`<p class="muted">Noch keine Notizen. Für alle sichtbar, z. B. offene Erledigungen.</p>`}
-      </div>
-
       <div class="row wrap">
         <button type="button" class="btn ghost" onClick=${() => setSheet('edit')}><${IconEdit}/> Texte bearbeiten</button>
+        <button type="button" class="btn ghost" onClick=${() => setSheet('notes')}><${IconEdit}/> Notizen</button>
         <button type="button" class="btn ghost" onClick=${() => onNote(card)}><${IconNote}/> Für Check-in notieren</button>
       </div>
       <div class="meta">
