@@ -148,3 +148,6 @@ create policy fp_note_own on fp_note for all to authenticated
 insert into fp_step (step, done_at) values
   (1, '2026-11-01T20:00:00+01:00'), (2, null), (3, null), (4, null), (5, null), (6, null), (7, null), (8, null)
 on conflict (step) do nothing;
+
+-- Live-Aktualisierung zwischen den Handys (Supabase Realtime), 15.11.2026
+alter publication supabase_realtime add table public.fp_card, public.fp_step, public.fp_setting, public.fp_checkin;

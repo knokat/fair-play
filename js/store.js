@@ -105,6 +105,21 @@ export async function loadAll() {
   return { persons, cards: r2.data, meId: me.id, settings, steps: r4.data, notes: r5.data, checkins: r6.data };
 }
 
+// ---------- Live-Aktualisierung ----------
+// Meldet Änderungen an den gemeinsamen Tabellen (Supabase Realtime, RLS gilt auch hier).
+export async function subscribe(onChange) {
+  if (DEMO) return () => {};
+  const c = await client();
+  const { data } = await c.auth.getSession();
+  if (data.session) c.realtime.setAuth(data.session.access_token);
+  const ch = c.channel('fp-live');
+  ['fp_card', 'fp_step', 'fp_setting', 'fp_checkin'].forEach((table) => {
+    ch.on('postgres_changes', { event: '*', schema: 'public', table }, () => onChange(table));
+  });
+  ch.subscribe();
+  return () => { c.removeChannel(ch); };
+}
+
 export function setDemoMe(id) { if (demo) { demo.me = id; saveDemo(); } }
 
 // ---------- Ändern ----------

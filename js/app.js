@@ -312,6 +312,14 @@ function App() {
     return () => document.removeEventListener('visibilitychange', vis);
   }, []);
 
+  // Live: Änderungen vom anderen Handy (Re-Deal, Texte, Weg, Check-in) sofort übernehmen.
+  useEffect(() => {
+    if (phase !== 'ready') return;
+    let timer = null; let stop = () => {};
+    store.subscribe(() => { clearTimeout(timer); timer = setTimeout(load, 300); }).then((fn) => { stop = fn; });
+    return () => { clearTimeout(timer); stop(); };
+  }, [phase === 'ready']);
+
   useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(''), Math.max(2200, toast.length * 55)); return () => clearTimeout(t); }, [toast]);
 
   const { persons, cards, meId, settings, steps, notes, checkins } = data;
