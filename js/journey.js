@@ -1,7 +1,7 @@
 // Anleitung „Unser Weg“, geführter Check-in, vergangene Check-ins und private Notizen.
 import { html, useState, useEffect } from 'https://unpkg.com/htm@3.1.1/preact/standalone.module.js';
 import * as store from './store.js';
-import { CATS, plainName, isTrio, fmtDate, WEEKDAYS, dayName, nextCheckin, fmtWhen, daysUntil, reviewDue, parseDay } from './meta.js';
+import { CATS, plainName, isTrio, fmtDate, WEEKDAYS, dayName, nextCheckin, fixedCheckin, suggestCheckin, toStamp, parseStamp, fmtWhen, daysUntil, reviewDue, parseDay } from './meta.js';
 import { Grid, Sheet, OwnerDot, IconBack, IconCheck, IconChevron, IconTrash, IconPlus, IconHand, hasSchedule } from './components.js';
 
 const adultsOf = (persons) => persons.filter((p) => p.role === 'adult');
@@ -104,7 +104,7 @@ function CheckinSettingForm({ ctx }) {
   const [busy, setBusy] = useState(false);
   const save = async () => {
     setBusy(true);
-    try { await store.saveSetting('checkin', { day, time, duration: Number(duration) }, ctx.meId); await ctx.reload(); ctx.toast('Termin gespeichert'); } catch (e) { ctx.toast(`Hat nicht geklappt: ${e.message}`); }
+    try { await store.saveSetting('checkin', { ...cur, day, time, duration: Number(duration) }, ctx.meId); await ctx.reload(); ctx.toast('Termin gespeichert'); } catch (e) { ctx.toast(`Hat nicht geklappt: ${e.message}`); }
     setBusy(false);
   };
   const next = nextCheckin(ctx.settings.checkin);
@@ -123,8 +123,8 @@ function CheckinSettingForm({ ctx }) {
           </select></label>
       </div>
       <button type="button" class="btn primary" disabled=${day == null || !time || busy} onClick=${save}>Termin speichern</button>
-      ${next && html`<p class="ok-line">Euer Check-in: jeden ${dayName(ctx.settings.checkin.day)} um ${ctx.settings.checkin.time}. Der nächste ist am ${fmtWhen(next)}.</p>`}
-      <p class="field-hint">Der Termin steht oben auf „Meine“. Eine Erinnerung gibt es nicht.</p>
+      ${cur.day != null && html`<p class="ok-line">Euer üblicher Termin: jeden ${dayName(cur.day)} um ${cur.time}.${next ? ` Der nächste ist am ${fmtWhen(next)}.` : ''}</p>`}
+      <p class="field-hint">Das ist euer Standard. Den jeweils nächsten Check-in tragt ihr beim Abschluss des Check-ins ein oder verschiebt ihn oben auf „Meine“. Eine Erinnerung gibt es nicht.</p>
     </div>`;
 }
 
@@ -312,17 +312,72 @@ export function WegPage({ ctx, onBack }) {
     </div>`;
 }
 
+// ---------- Nächsten Check-in eintragen ----------
+const dayOf = (st) => (st || '').split('T')[0];
+const timeOf = (st) => (st || '').split('T')[1] || '';
+const todayStamp = () => dayOf(toStamp(new Date()));
+
+function WhenFields({ date, time, setDate, setTime }) {
+  return html`
+    <div class="row">
+      <label class="field"><span class="label">Datum</span><input type="date" min=${todayStamp()} value=${date} onInput=${(e) => setDate(e.target.value)}/></label>
+      <label class="field"><span class="label">Uhrzeit</span><input type="time" value=${time} onInput=${(e) => setTime(e.target.value)}/></label>
+    </div>
+    ${date && time && html`<p class="field-hint">${fmtWhen(parseStamp(`${date}T${time}`))}</p>`}`;
+}
+
+export async function saveNextCheckin(ctx, stamp) {
+  await store.saveSetting('checkin', { ...(ctx.settings.checkin || {}), next: stamp }, ctx.meId);
+}
+
+function NextCheckinSheet({ ctx, onClose }) {
+  const set = ctx.settings.checkin || {};
+  const start = nextCheckin(set) || suggestCheckin(set);
+  const st = toStamp(start);
+  const [date, setDate] = useState(dayOf(st));
+  const [time, setTime] = useState(timeOf(st));
+  const [busy, setBusy] = useState(false);
+  const fixed = fixedCheckin(set);
+  const save = async (stamp) => {
+    setBusy(true);
+    try { await saveNextCheckin(ctx, stamp); await ctx.reload(); ctx.toast(stamp ? 'Termin eingetragen' : 'Üblicher Termin gilt wieder'); onClose(); } catch (e) { ctx.toast(`Hat nicht geklappt: ${e.message}`); }
+    setBusy(false);
+  };
+  return html`
+    <${Sheet} title="Nächster Check-in" onClose=${onClose}>
+      <${WhenFields} date=${date} time=${time} setDate=${setDate} setTime=${setTime}/>
+      ${set.day != null && html`<p class="field-hint">Üblich: ${dayName(set.day)}, ${set.time}. Danach gilt wieder der übliche Termin, bis ihr einen neuen eintragt.</p>`}
+      <div class="row">
+        <button type="button" class="btn ghost" onClick=${onClose}>Abbrechen</button>
+        <button type="button" class="btn primary" disabled=${!date || !time || busy} onClick=${() => save(`${date}T${time}`)}>Speichern</button>
+      </div>
+      ${fixed && set.day != null && html`<button type="button" class="text-btn" disabled=${busy} onClick=${() => save(null)}>Üblichen Termin nehmen</button>`}
+    </${Sheet}>`;
+}
+
 // ---------- Hinweise in den Tabs ----------
 export function NextCheckinBar({ ctx }) {
+  const [edit, setEdit] = useState(false);
   const next = nextCheckin(ctx.settings.checkin);
-  if (!next || ctx.running) return null;
+  if (ctx.running) return null;
+  if (!next) {
+    if (!ctx.settings.checkin) return null;
+    return html`
+      <div class="next-bar">
+        <span><span class="label">Nächster Check-in</span><br/><b>Noch kein Termin</b></span>
+        <button type="button" class="chip" onClick=${() => setEdit(true)}>Eintragen</button>
+        ${edit && html`<${NextCheckinSheet} ctx=${ctx} onClose=${() => setEdit(false)}/>`}
+      </div>`;
+  }
   const days = daysUntil(next);
   const due = ctx.cards.filter((c) => reviewDue(c, next)).length;
   return html`
     <div class="next-bar">
       <span><span class="label">Nächster Check-in</span><br/><b>${days === 0 ? 'Heute' : days === 1 ? 'Morgen' : fmtWhen(next).split(' · ')[0]}</b> · ${fmtWhen(next).split(' · ')[1]}
+        <br/><button type="button" class="text-btn next-move" onClick=${() => setEdit(true)}>Termin verschieben</button>
         ${due > 0 && html`<br/><span class="review-tag due">${due === 1 ? '1 Parkplatz-Karte steht an' : `${due} Parkplatz-Karten stehen an`}</span>`}</span>
       <button type="button" class="chip" onClick=${ctx.startCheckin}>Starten</button>
+      ${edit && html`<${NextCheckinSheet} ctx=${ctx} onClose=${() => setEdit(false)}/>`}
     </div>`;
 }
 
@@ -405,6 +460,11 @@ export function CheckinPage({ ctx, checkin, step, setStep, onBack }) {
   const [draft, setDraft] = useState({ notes: checkin.notes || {}, unicorn: checkin.unicorn || {}, stuck: checkin.stuck || [] });
   const [pick, setPick] = useState('');
   const [pickNote, setPickNote] = useState('');
+  // Vorschlag für den nächsten Termin: frühestens einen Tag nach diesem Check-in (der aktuelle Termin ist damit erledigt).
+  const after = new Date(Math.max(Date.now(), new Date(checkin.started_at).getTime()) + 86400000);
+  const nextStamp = toStamp(fixedCheckin(ctx.settings.checkin, after) || suggestCheckin(ctx.settings.checkin, after));
+  const [nDate, setNDate] = useState(dayOf(nextStamp));
+  const [nTime, setNTime] = useState(timeOf(nextStamp));
   const adults = adultsOf(ctx.persons);
   const setNote = (k) => (e) => setDraft({ ...draft, notes: { ...draft.notes, [k]: e.target.value } });
   const save = () => store.saveCheckin(checkin.id, draft).catch((e) => ctx.toast(`Nicht gespeichert: ${e.message}`));
@@ -412,6 +472,7 @@ export function CheckinPage({ ctx, checkin, step, setStep, onBack }) {
   const leave = async () => { await save(); onBack(); };
   const finish = async () => {
     try {
+      if (nDate && nTime) await saveNextCheckin(ctx, `${nDate}T${nTime}`);
       await store.saveCheckin(checkin.id, { ...draft, finished_at: new Date().toISOString() });
       if (!stepRow(ctx.steps, ROUND).done_at) await store.saveStep(ROUND, { done_at: new Date().toISOString(), done_by: ctx.meId });
       ctx.toast('Check-in gespeichert');
@@ -437,7 +498,6 @@ export function CheckinPage({ ctx, checkin, step, setStep, onBack }) {
   const deck = deckCards(ctx.cards).sort(byName);
   const cardOf = (id) => ctx.cards.find((c) => c.id === id);
   const free = deckCards(ctx.cards).filter((c) => !c.holder).length;
-  const next = nextCheckin(ctx.settings.checkin, new Date(Date.now() + 3600000));
   const area = (k, label, ph) => html`
     <label class="field"><span class="label">${label}</span>
       <textarea rows="4" value=${draft.notes[k] || ''} onInput=${setNote(k)} onBlur=${save} placeholder=${ph}></textarea></label>`;
@@ -552,8 +612,12 @@ export function CheckinPage({ ctx, checkin, step, setStep, onBack }) {
         <div class="panel">
           <div class="panel-row"><span class="label">Hat gehakt</span><b>${draft.stuck.length}</b></div>
           <div class="panel-row"><span class="label">Unicorn Space</span><span>${adults.map((p) => `${p.name}: ${(UNI.find(([v]) => v === (draft.unicorn[p.id] || {}).status) || [, '–'])[1]}`).join(' · ')}</span></div>
-          <div class="panel-row"><span class="label">Nächster Check-in</span><span>${next ? fmtWhen(next) : 'noch kein Termin'}</span></div>
         </div>
+        <section class="panel">
+          <h2 class="label">Nächster Check-in</h2>
+          <${WhenFields} date=${nDate} time=${nTime} setDate=${setNDate} setTime=${setNTime}/>
+          <p class="field-hint">Wird mit dem Abschluss gespeichert und steht dann oben auf „Meine“.</p>
+        </section>
         ${area('abschluss', 'Was nehmen wir mit?', 'Vereinbarungen, Dank, ein Satz für nächste Woche')}
         <button type="button" class="btn primary" onClick=${finish}><${IconCheck}/> Check-in abschließen</button>
         <button type="button" class="text-btn danger" onClick=${discard}>Check-in verwerfen</button>`}

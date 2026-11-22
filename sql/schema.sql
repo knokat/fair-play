@@ -84,7 +84,8 @@ $$;
 revoke execute on function fp_me() from public, anon;
 grant execute on function fp_me() to authenticated;
 
--- Einstellungen, z. B. key 'checkin' = {"day": 0, "time": "19:30", "duration": 30} (day: 0 = Sonntag … 6 = Samstag)
+-- Einstellungen, z. B. key 'checkin' = {"day": 0, "time": "19:30", "duration": 30, "next": "2026-11-25T20:15"}
+-- (day: 0 = Sonntag … 6 = Samstag = üblicher Termin; next = eingetragener nächster Check-in, lokale Zeit, gilt bis er vorbei ist)
 create table if not exists fp_setting (
   key text primary key,
   value jsonb not null,

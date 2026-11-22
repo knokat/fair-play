@@ -68,7 +68,19 @@ export function fmtDate(iso) {
 export const WEEKDAYS = [[1, 'Mo', 'Montag'], [2, 'Di', 'Dienstag'], [3, 'Mi', 'Mittwoch'], [4, 'Do', 'Donnerstag'], [5, 'Fr', 'Freitag'], [6, 'Sa', 'Samstag'], [0, 'So', 'Sonntag']];
 export const dayName = (d) => (WEEKDAYS.find(([n]) => n === d) || [])[2] || '';
 
-export function nextCheckin(setting, from = new Date()) {
+// Fester Wochentag (day/time) als üblicher Termin; „next“ = Datum und Uhrzeit des nächsten Check-ins
+// als lokaler Zeitstempel 'JJJJ-MM-TTTHH:MM'. Ist „next“ gesetzt und noch nicht vorbei, gilt er.
+const pad2 = (n) => String(n).padStart(2, '0');
+export const toStamp = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}T${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+export function parseStamp(s) {
+  if (!s) return null;
+  const [a, b = '00:00'] = s.split('T');
+  const [y, mo, d] = a.split('-').map(Number);
+  const [h, mi] = b.split(':').map(Number);
+  return new Date(y, mo - 1, d, h, mi, 0, 0);
+}
+
+export function weeklyCheckin(setting, from = new Date()) {
   if (!setting || setting.day == null || !setting.time) return null;
   const [h, m] = setting.time.split(':').map(Number);
   const d = new Date(from);
@@ -77,6 +89,29 @@ export function nextCheckin(setting, from = new Date()) {
   const end = new Date(d.getTime() + (setting.duration || 30) * 60000);
   if (end < from) d.setDate(d.getDate() + 7);
   return d;
+}
+
+// Termin, der gerade gilt: ein eingetragenes Datum (solange es nicht vorbei ist), sonst der übliche Wochentag.
+export function fixedCheckin(setting, from = new Date()) {
+  const d = parseStamp(setting && setting.next);
+  if (!d) return null;
+  const end = new Date(d.getTime() + ((setting && setting.duration) || 30) * 60000);
+  return end < from ? null : d;
+}
+
+export function nextCheckin(setting, from = new Date()) {
+  if (!setting) return null;
+  return fixedCheckin(setting, from) || weeklyCheckin(setting, from);
+}
+
+// Vorschlag für das Eingabefeld „Nächster Check-in“ (nach dem aktuellen Termin).
+export function suggestCheckin(setting, from = new Date()) {
+  const d = weeklyCheckin(setting, from);
+  if (d) return d;
+  const s = new Date(from); s.setDate(s.getDate() + 7);
+  const [h, m] = ((setting && setting.time) || '19:30').split(':').map(Number);
+  s.setHours(h, m, 0, 0);
+  return s;
 }
 
 // ---------- Parkplatz: „Wieder anschauen ab“ ----------
