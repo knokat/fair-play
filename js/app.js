@@ -46,14 +46,32 @@ function CatSections({ cards, persons, onOpen, markId }) {
 // ---------- Ansicht: Karten einer Person ----------
 // Suche: Name, Originalname und alle Kartentexte, ohne Groß/Klein und Akzente.
 const norm = (t) => (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\|/g, '');
-const matches = (c, q) => !q || [c.name, c.orig, c.descr, c.conception, c.planning, c.execution, c.msc, c.card_notes]
-  .some((t) => norm(t).includes(q));
+const matches = (c, q) => !q || [c.name, c.orig, c.descr, c.conception, c.planning, c.execution, c.msc, c.card_notes,
+  c.status === 'parked' ? c.parked_note : ''].some((t) => norm(t).includes(q));
+
+// Suche ein- und ausblenden (Lupe) und Suchfeld – gleich in Meine, Person, Deck und Parkplatz.
+function useSearch() {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  return { open, setOpen, query, setQuery, q: norm(query.trim()), close: () => { setQuery(''); setOpen(false); } };
+}
+const SearchToggle = ({ s }) => html`
+  <button type="button" class=${`chip icon-chip${s.open ? ' on' : ''}`} aria-pressed=${s.open} aria-label="Karten suchen" title="Karten suchen"
+    onClick=${() => (s.open ? s.close() : s.setOpen(true))}><${IconSearch}/></button>`;
+const SearchBox = ({ s }) => s.open && html`
+  <div class="search-box">
+    <${IconSearch} size=${18}/>
+    <input type="search" class="search-input" aria-label="Suchbegriff" placeholder="Karten suchen" value=${s.query}
+      ref=${(el) => el && !el.dataset.focused && (el.dataset.focused = '1', el.focus())}
+      onInput=${(e) => s.setQuery(e.target.value)} onKeyDown=${(e) => e.key === 'Escape' && s.close()}/>
+    <button type="button" class="icon-btn small" aria-label="Suche schließen" onClick=${s.close}><${IconClose}/></button>
+  </div>`;
+const NoHit = ({ s }) => html`<p class="empty-state">Keine passende Karte${s.q ? ` für „${s.query.trim()}“` : ''}.</p>`;
 
 function PersonView({ person, isMe, cards, persons, onOpen, readOnly = false }) {
   const [dgOnly, setDgOnly] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  const q = norm(query.trim());
+  const search = useSearch();
+  const { q } = search;
   const keep = (c) => (!dgOnly || c.is_dg) && matches(c, q);
   const allHeld = cards.filter((c) => !isTrio(c) && c.status === 'deck' && c.holder === person.id);
   const dg = allHeld.filter((c) => c.is_dg).length;
@@ -66,7 +84,6 @@ function PersonView({ person, isMe, cards, persons, onOpen, readOnly = false }) 
     && coachOf(c, persons)?.id === person.id && keep(c)).sort(bySort);
   const kids = [...new Set(coaching.map((c) => persons.find((p) => p.id === c.holder)?.name))].join(' und ');
   const filtering = dgOnly || !!q;
-  const closeSearch = () => { setQuery(''); setSearchOpen(false); };
   return html`
     <div class="view">
       <div class="summary with-tools">
@@ -75,19 +92,11 @@ function PersonView({ person, isMe, cards, persons, onOpen, readOnly = false }) 
         <span class="tools">
           <button type="button" class=${`chip icon-chip${dgOnly ? ' on' : ''}`} aria-pressed=${dgOnly} aria-label="Nur Daily Grinds" title="Nur Daily Grinds"
             onClick=${() => setDgOnly(!dgOnly)}><${IconCup}/></button>
-          <button type="button" class=${`chip icon-chip${searchOpen ? ' on' : ''}`} aria-pressed=${searchOpen} aria-label="Karten suchen" title="Karten suchen"
-            onClick=${() => (searchOpen ? closeSearch() : setSearchOpen(true))}><${IconSearch}/></button>
+          <${SearchToggle} s=${search}/>
         </span>
       </div>
-      ${searchOpen && html`
-        <div class="search-box">
-          <${IconSearch} size=${18}/>
-          <input type="search" class="search-input" aria-label="Suchbegriff" placeholder="Karten suchen" value=${query}
-            ref=${(el) => el && !el.dataset.focused && (el.dataset.focused = '1', el.focus())}
-            onInput=${(e) => setQuery(e.target.value)} onKeyDown=${(e) => e.key === 'Escape' && closeSearch()}/>
-          <button type="button" class="icon-btn small" aria-label="Suche schließen" onClick=${closeSearch}><${IconClose}/></button>
-        </div>`}
-      ${filtering && held.length + byPlan.length + coaching.length + trio.length === 0 && html`<p class="empty-state">Keine passende Karte${q ? ` für „${query.trim()}“` : ''}.</p>`}
+      <${SearchBox} s=${search}/>
+      ${filtering && held.length + byPlan.length + coaching.length + trio.length === 0 && html`<${NoHit} s=${search}/>`}
       ${!filtering && allHeld.length === 0 && html`<p class="empty-state">${isMe ? 'Du hältst' : `${person.name} hält`} noch keine Karten.${readOnly ? '' : ' Im Deck kannst du Karten verteilen.'}</p>`}
       <${CatSections} cards=${held} persons=${persons} onOpen=${onOpen}/>
       ${coaching.length > 0 && html`
@@ -112,10 +121,13 @@ function PersonView({ person, isMe, cards, persons, onOpen, readOnly = false }) 
 
 // ---------- Ansicht: Deck ----------
 function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOnly, setDgOnly, markId, order = [], readOnly = false }) {
+  const search = useSearch();
   let deck = cards.filter((c) => c.status === 'deck' && !isTrio(c));
   const total = deck.length;
   const dgTotal = deck.filter((c) => c.is_dg).length;
+  const freeTotal = deck.filter((c) => !c.holder).length;
   if (dgOnly) deck = deck.filter((c) => c.is_dg);
+  deck = deck.filter((c) => matches(c, search.q));
   const free = deck.filter((c) => !c.holder);
   const dealt = deck.filter((c) => c.holder);
   const open = dealMode ? onCycle : onOpen;
@@ -128,15 +140,18 @@ function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOn
       <div class="toolbar">
         ${!readOnly && html`<button type="button" class=${`chip${dealMode ? ' on' : ''}`} aria-pressed=${dealMode} onClick=${() => setDealMode(!dealMode)}><${IconHand}/> Verteilen</button>`}
         <button type="button" class=${`chip${dgOnly ? ' on' : ''}`} aria-pressed=${dgOnly} onClick=${() => setDgOnly(!dgOnly)}>Nur Daily Grinds</button>
+        <span class="toolbar-end"><${SearchToggle} s=${search}/></span>
       </div>
-      ${dealMode && html`<p class="hint" role="status">Tippe auf eine Karte: ${order.map((p, i) => (i === 0 ? 'du' : p.name)).join(' → ')} → frei. Die Karten bleiben an ihrem Platz.${free.length ? ` Noch frei: ${free.length}.` : ' Alle Karten haben einen Owner.'}</p>`}
+      <${SearchBox} s=${search}/>
+      ${dealMode && html`<p class="hint" role="status">Tippe auf eine Karte: ${order.map((p, i) => (i === 0 ? 'du' : p.name)).join(' → ')} → frei. Die Karten bleiben an ihrem Platz.${freeTotal ? ` Noch frei: ${freeTotal}.` : ' Alle Karten haben einen Owner.'}</p>`}
+      ${search.q && deck.length === 0 && html`<${NoHit} s=${search}/>`}
       ${dealMode && html`<${CatSections} cards=${deck} persons=${persons} onOpen=${open} markId=${markId}/>`}
       ${!dealMode && free.length > 0 && html`
         <section class="section">
           <h2 class="sec-title warn">Noch nicht verteilt <span class="count warn">${free.length}</span></h2>
           <${Grid} cards=${free} persons=${persons} onOpen=${open} markId=${markId}/>
         </section>`}
-      ${!dealMode && free.length === 0 && total > 0 && html`<p class="ok-state">Alle Karten haben einen Owner.</p>`}
+      ${!dealMode && freeTotal === 0 && total > 0 && !search.q && html`<p class="ok-state">Alle Karten haben einen Owner.</p>`}
       ${!dealMode && dealt.length > 0 && html`<h2 class="group-title">Verteilt</h2>`}
       ${!dealMode && html`<${CatSections} cards=${dealt} persons=${persons} onOpen=${open} markId=${markId}/>`}
     </div>`;
@@ -144,17 +159,22 @@ function DeckView({ cards, persons, onOpen, onCycle, dealMode, setDealMode, dgOn
 
 // ---------- Ansicht: Parkplatz ----------
 function ParkedView({ cards, persons, onOpen }) {
-  const parked = cards.filter((c) => c.status === 'parked');
-  const dg = parked.filter((c) => c.is_dg).length;
+  const search = useSearch();
+  const allParked = cards.filter((c) => c.status === 'parked');
+  const dg = allParked.filter((c) => c.is_dg).length;
+  const parked = allParked.filter((c) => matches(c, search.q));
   const byCatSort = (a, b) => (CAT_ORDER.indexOf(a.cat) - CAT_ORDER.indexOf(b.cat)) || bySort(a, b);
   return html`
     <div class="view">
       <h2 class="sec-title">Parkplatz</h2>
       <div class="summary">
-        <span class="big-num">${parked.length}</span>
+        <span class="big-num">${allParked.length}</span>
         <span class="sum-text">Karten auf dem Parkplatz · ${dg} Daily ${dg === 1 ? 'Grind' : 'Grinds'}</span>
       </div>
-      <p class="muted">Geparkte Karten brauchen wir gerade nicht. Öffne eine Karte, um die Notiz oder die Gruppe zu ändern oder sie zurück ins Deck zu holen.</p>
+      <div class="toolbar"><span class="toolbar-end"><${SearchToggle} s=${search}/></span></div>
+      <${SearchBox} s=${search}/>
+      ${search.q && parked.length === 0 && html`<${NoHit} s=${search}/>`}
+      ${!search.q && html`<p class="muted">Geparkte Karten brauchen wir gerade nicht. Öffne eine Karte, um die Notiz oder die Gruppe zu ändern oder sie zurück ins Deck zu holen.</p>`}
       ${PARK_GROUPS.map((g) => {
         // Lebensereignisse bekommen einen eigenen Abschnitt (vor „Betrifft uns nicht“) – außer sie sollen bald ins Deck.
         const list = parked.filter((c) => (c.park_group || null) === g.key && (c.cat !== 'wild' || g.key === 'soon')).sort(byCatSort);
